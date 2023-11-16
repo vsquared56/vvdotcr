@@ -1,0 +1,16 @@
+# Starter pipeline
+
+
+trigger:
+- main
+
+pool:
+  name: default
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- task: AzureStaticWebApp@0
+  inputs:
+    verbose: true
