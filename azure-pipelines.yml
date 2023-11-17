@@ -5,7 +5,10 @@ trigger:
 - main
 
 pool:
-  name: default
+  name: linux
+
+variables:
+- group: azure_deployment
 
 steps:
 - script: echo Hello, world!
@@ -14,3 +17,4 @@ steps:
 - task: AzureStaticWebApp@0
   inputs:
     verbose: true
+    azure_static_web_apps_api_token: $(azure_deployment_token)
