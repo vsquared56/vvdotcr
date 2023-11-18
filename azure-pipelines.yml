@@ -18,3 +18,5 @@ steps:
   inputs:
     verbose: true
     azure_static_web_apps_api_token: $(azure_deployment_token)
+    skip_app_build: true
+    skip_api_build: true
