@@ -19,5 +19,5 @@ steps:
     verbose: true
     azure_static_web_apps_api_token: $(azure_deployment_token)
     skip_app_build: true
-    app_location: '/'
+    app_location: 'src'
     api_location: 'api'
