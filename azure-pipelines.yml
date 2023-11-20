@@ -3,6 +3,7 @@
 
 trigger:
 - main
+- develop
 
 pool:
   name: linux
@@ -11,9 +12,6 @@ variables:
 - group: azure_deployment
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
 - task: AzureStaticWebApp@0
   inputs:
     verbose: true
