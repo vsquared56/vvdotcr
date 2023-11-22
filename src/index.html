@@ -5,13 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="styles.css" />
     <title>Vanilla JavaScript App</title>
+    <script src="https://unpkg.com/htmx.org@1.9.9"></script>
   </head>
 
   <body>
     <main>
       <h1>Vanilla JavaScript App</h1>
-      <p>Loading content from the API: <b id="message"></b></b></p>
       <p>Posting content to the API: <b id="postdata"></b></b></p>
+      <!-- have a button POST a click via AJAX -->
+      <button hx-post="/api/fileupload" hx-swap="outerHTML">
+        Click Me to load content from the API!
+      </button>
     </main>
   </body>
 
