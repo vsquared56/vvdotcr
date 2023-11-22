@@ -11,6 +11,7 @@
     <main>
       <h1>Vanilla JavaScript App</h1>
       <p>Loading content from the API: <b id="message"></b></b></p>
+      <p>Posting content to the API: <b id="postdata"></b></b></p>
     </main>
   </body>
 
@@ -22,4 +23,16 @@
       document.querySelector("#message").innerHTML = message.text
     })();
   </script>
+
+<script>
+  (async function () {
+    let response = await fetch("api/fileupload", {
+      method: "POST",
+      body: "This is a POST body."
+    });
+    let message = await response.json();
+
+    document.querySelector("#postdata").innerHTML = message.text
+  })();
+</script>
 </html>
