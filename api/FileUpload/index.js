@@ -5,7 +5,7 @@ const {
 } = require("@azure/storage-blob");
 
 const streamifier = require('streamifier');
-const multipart = require('streamifier');
+const multipart = require('multipart');
 
 const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
 const STORAGE_KEY = process.env.STORAGE_KEY;
