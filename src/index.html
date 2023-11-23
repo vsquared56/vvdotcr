@@ -13,7 +13,7 @@
       <h1>Vanilla JavaScript App</h1>
       <p>Posting content to the API: <b id="postdata"></b></b></p>
       <!-- have a button POST a click via AJAX -->
-      <button hx-post="/api/fileupload" hx-swap="outerHTML">
+      <button hx-post="/api/getmessage" hx-swap="outerHTML">
         Click Me to load content from the API!
       </button>
 
@@ -31,25 +31,4 @@
       </script>
     </main>
   </body>
-
-  <script>
-    (async function () {
-      let response = await fetch(`api/message`);
-      let message = await response.json();
-
-      document.querySelector("#message").innerHTML = message.text
-    })();
-  </script>
-
-<script>
-  (async function () {
-    let response = await fetch("api/fileupload", {
-      method: "POST",
-      body: "This is a POST body."
-    });
-    let message = await response.json();
-
-    document.querySelector("#postdata").innerHTML = message.text
-  })();
-</script>
 </html>
