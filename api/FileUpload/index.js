@@ -1,10 +1,11 @@
-import {
+const {
   BlobServiceClient,
   StorageSharedKeyCredential,
   newPipeline
-} from "@azure/storage-blob";
-import * as streamifier from "streamifier";
-import * as multipart from "parse-multipart";
+} = require("@azure/storage-blob");
+
+const streamifier = require('streamifier');
+const multipart = require('streamifier');
 
 const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
 const STORAGE_KEY = process.env.STORAGE_KEY;
