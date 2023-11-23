@@ -16,6 +16,19 @@
       <button hx-post="/api/fileupload" hx-swap="outerHTML">
         Click Me to load content from the API!
       </button>
+
+      <form id='form' hx-encoding='multipart/form-data' hx-post='/api/fileupload'>
+        <input type='file' name='file'>
+        <button>
+            Upload
+        </button>
+        <progress id='progress' value='0' max='100'></progress>
+      </form>
+      <script>
+        htmx.on('#form', 'htmx:xhr:progress', function(evt) {
+          htmx.find('#progress').setAttribute('value', evt.detail.loaded/evt.detail.total * 100)
+        });
+      </script>
     </main>
   </body>
 
