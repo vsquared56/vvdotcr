@@ -37,7 +37,7 @@ module.exports = async function (context, req) {
   const containerClient =
     blobServiceClient.getContainerClient(STORAGE_CONTAINER);
   const blockBlobClient = containerClient.getBlockBlobClient(fileName);
-  const uploadBlobResopnse = await blockBlobClient.uploadStream(
+  const uploadBlobResponse = await blockBlobClient.uploadStream(
     streamifier.createReadStream(new Buffer(fileData)),
     fileData.length,
     5,
