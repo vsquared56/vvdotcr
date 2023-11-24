@@ -48,6 +48,11 @@ module.exports = async function (context, req) {
     }
   );
 
+  context.bindings.cosmos = {
+    id: fileName,
+    imageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/${fileName}`
+  }
+
   context.res = {
     body: { imageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/${fileName}` }
   };

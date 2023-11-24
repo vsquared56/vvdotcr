@@ -14,6 +14,16 @@
       "type": "http",
       "direction": "out",
       "name": "res"
+    },
+    {
+      "type": "cosmosDBTrigger",
+      "name": "cosmos",
+      "direction": "out",
+      "leaseCollectionName": "leases",
+      "connection": "COSMOS_DB_CONNECTION_STRING",
+      "databaseName": "vvdotcr-dev",
+      "containerName": "vvdotcr-fileupload-dev",
+      "createIfNotExists": false
     }
   ]
 }
