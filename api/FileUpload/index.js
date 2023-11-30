@@ -59,7 +59,7 @@ module.exports = async function (context, req) {
     id: fileName,
     originalFileName: originalFileName,
     originalFileType: contentType,
-    uploadUserAgent: req.headers.user-agent,
+    uploadUserAgent: req.headers['user-agent'],
     uploadXFF: req.headers['x-forwarded-for'],
     createDate: createDate,
     modifyDate: createDate,
