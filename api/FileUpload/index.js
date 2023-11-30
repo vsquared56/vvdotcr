@@ -5,6 +5,7 @@ const {
 } = require("@azure/storage-blob");
 const { CosmosClient } = require("@azure/cosmos");
 
+const crypto = require('crypto');
 const streamifier = require('streamifier');
 const multipart = require('parse-multipart');
 
@@ -26,7 +27,8 @@ module.exports = async function (context, req) {
 
   const fileData = parts[0].data;
   // Append a date string to the front to make every file name unique
-  const fileName = Date.now() + parts[0].filename;
+  const originalFileName =  parts[0].filename;
+  const fileName = crypto.randomUUID(),
   const contentType = parts[0].type;
 
   // Set auth credentials for upload
@@ -51,9 +53,16 @@ module.exports = async function (context, req) {
       }
     }
   );
-
+  
+  const createDate = Date.now();
   const item= {
     id: fileName,
+    originalFileName: originalFileName,
+    originalFileType: contentType,
+    uploadUserAgent: req.headers.user-agent,
+    uploadXFF: req.headers['x-forwarded-for'],
+    createDate: createDate,
+    modifyDate: createDate,
     imageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/${fileName}`
   }
 
