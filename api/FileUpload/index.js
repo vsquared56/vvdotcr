@@ -28,7 +28,7 @@ module.exports = async function (context, req) {
   const fileData = parts[0].data;
   // Append a date string to the front to make every file name unique
   const originalFileName =  parts[0].filename;
-  const fileName = crypto.randomUUID(),
+  const fileName = crypto.randomUUID();
   const contentType = parts[0].type;
 
   // Set auth credentials for upload
