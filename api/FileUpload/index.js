@@ -52,7 +52,8 @@ module.exports = async function (context, req) {
         error: "Invalid file type.",
         contentType: contentType,
         originalFileName: originalFileName,
-        originalFileExtension: originalFileExtension
+        originalFileExtension: originalFileExtension,
+        files: files
       }
     };
   }
