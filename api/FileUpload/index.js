@@ -30,6 +30,7 @@ module.exports = async function (context, req) {
   const contentType = files[0].mimeType;
   const originalFileName = files[0].filename;
   const originalFileExtension = path.extname(originalFileName).toLowerCase().replace(/^\./, '');
+  const originalFileSize = files[0].bufferFile.length;
 
   if (files.length != 1) {
     context.res = {
@@ -41,7 +42,7 @@ module.exports = async function (context, req) {
       }
     };
   }
-  else if (files[0].bufferFile.length >= 2*1024*1024 ) {
+  else if (originalFileSize >= 2*1024*1024 ) {
     context.res = {
       status: 400,
       body: {
@@ -76,7 +77,7 @@ module.exports = async function (context, req) {
     const blobServiceClient = new BlobServiceClient(STORAGE_URL, pipeline);
     const containerClient =
       blobServiceClient.getContainerClient(STORAGE_CONTAINER);
-    const blockBlobClient = containerClient.getBlockBlobClient(fileName);
+    const blockBlobClient = containerClient.getBlockBlobClient(`originals/${fileName}`);
     const uploadBlobResponse = await blockBlobClient.uploadStream(
       streamifier.createReadStream(new Buffer(fileData)),
       fileData.length,
@@ -93,11 +94,12 @@ module.exports = async function (context, req) {
       id: fileName,
       originalFileName: originalFileName,
       originalFileType: contentType,
+      originalFileSize: originalFileSize,
       uploadUserAgent: req.headers['user-agent'],
       uploadXFF: req.headers['x-forwarded-for'],
       createDate: createDate,
       modifyDate: createDate,
-      imageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/${fileName}`
+      originalImageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`
     }
 
     const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
@@ -112,7 +114,7 @@ module.exports = async function (context, req) {
 
     context.res = {
       body: {
-        imageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/${fileName}`,
+        imageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`,
         cosmosResource: resource
       }
     };
