@@ -64,7 +64,7 @@ module.exports = async function (context, req) {
   }
   else {
     const fileData = files[0].bufferFile;
-    const fileName = fileId;
+    const fileName = `${fileId}.${originalFileExtension}`;
     
     // Set auth credentials for upload
     const sharedKeyCredential = new StorageSharedKeyCredential(
@@ -91,7 +91,8 @@ module.exports = async function (context, req) {
 
     const createDate = Date.now();
     const item = {
-      id: fileName,
+      id: fileId,
+      fileName: fileName,
       originalFileName: originalFileName,
       originalFileType: contentType,
       originalFileSize: originalFileSize,
