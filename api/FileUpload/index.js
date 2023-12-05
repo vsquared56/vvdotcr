@@ -25,7 +25,9 @@ module.exports = async function (context, req) {
     context.res = {
       status: 400,
       body: {
-        error: "Expected only one file upload."
+        error: "Expected only one file upload.",
+        fields: fields,
+        files: files
       }
     };
   }
