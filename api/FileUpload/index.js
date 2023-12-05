@@ -7,6 +7,9 @@ const { CosmosClient } = require("@azure/cosmos");
 const parseMultipartFormData = require("@anzp/azure-function-multipart").default;
 const crypto = require('crypto');
 const streamifier = require('streamifier');
+const path = require('path'); 
+
+const ALLOWED_IMAGE_EXTENSIONS = ["png","jpg"]
 
 const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
 const STORAGE_KEY = process.env.STORAGE_KEY;
@@ -18,6 +21,11 @@ const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
 
 module.exports = async function (context, req) {
   const { fields, files } = await parseMultipartFormData(req);
+  const fileId = crypto.randomUUID();
+  const contentType = files[0].mimetype;
+  const originalFileName = files[0].filename;
+  const originalFileExtension = path.extname(originalFileName).toLowerCase();
+
   if (files.length != 1) {
     context.res = {
       status: 400,
@@ -28,14 +36,30 @@ module.exports = async function (context, req) {
       }
     };
   }
+  else if (files[0].bufferFile.data.length >= 2*1024*1024 ) {
+    context.res = {
+      status: 400,
+      body: {
+        error: "File sizes above 2MB are not supported.",
+        size: files[0].bufferFile.data.length
+      }
+    };
+  }
+  else if (!(ALLOWED_IMAGE_EXTENSIONS.includes(originalFileExtension)) || (contentType != `image/${originalFileExtension}`)) {
+    context.res = {
+      status: 400,
+      body: {
+        error: "Invalid file type.",
+        contentType: contentType,
+        originalFileName: originalFileName,
+        originalFileExtension: originalFileExtension
+      }
+    };
+  }
   else {
-
     const fileData = files[0].bufferFile;
-    // Append a date string to the front to make every file name unique
-    const originalFileName = files[0].filename;
-    const fileName = crypto.randomUUID();
-    const contentType = files[0].mimetype;
-
+    const fileName = fileId;
+    
     // Set auth credentials for upload
     const sharedKeyCredential = new StorageSharedKeyCredential(
       STORAGE_ACCOUNT,
