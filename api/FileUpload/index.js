@@ -36,7 +36,7 @@ module.exports = async function (context, req) {
       }
     };
   }
-  else if (files[0].bufferFile.data.length >= 2*1024*1024 ) {
+  else if (files[0].bufferFile.length >= 2*1024*1024 ) {
     context.res = {
       status: 400,
       body: {
