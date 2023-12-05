@@ -17,9 +17,6 @@ const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
 const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
 
 module.exports = async function (context, req) {
-  // Get the image data from the request
-  const bodyBuffer = Buffer.from(req.body);
-
   const { fields, files } = await parseMultipartFormData(req);
   if (files.length != 1) {
     context.res = {
