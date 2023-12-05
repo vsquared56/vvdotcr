@@ -41,7 +41,7 @@ module.exports = async function (context, req) {
       status: 400,
       body: {
         error: "File sizes above 2MB are not supported.",
-        size: files[0].bufferFile.data.length
+        size: files[0].bufferFile.length
       }
     };
   }
