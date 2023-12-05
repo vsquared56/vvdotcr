@@ -9,7 +9,7 @@ const crypto = require('crypto');
 const streamifier = require('streamifier');
 const path = require('path'); 
 
-const ALLOWED_IMAGE_EXTENSIONS = ["png","jpg"]
+const ALLOWED_IMAGE_EXTENSIONS = ["png","jpg","jpeg"] //TODO: fix handling content types that don't match extensions
 
 const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
 const STORAGE_KEY = process.env.STORAGE_KEY;
@@ -24,7 +24,7 @@ module.exports = async function (context, req) {
   const fileId = crypto.randomUUID();
   const contentType = files[0].mimetype;
   const originalFileName = files[0].filename;
-  const originalFileExtension = path.extname(originalFileName).toLowerCase();
+  const originalFileExtension = path.extname(originalFileName).toLowerCase().replace(/^\./, '');
 
   if (files.length != 1) {
     context.res = {
