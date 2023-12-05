@@ -9,7 +9,12 @@ const crypto = require('crypto');
 const streamifier = require('streamifier');
 const path = require('path'); 
 
-const ALLOWED_IMAGE_EXTENSIONS = ["png","jpg","jpeg"] //TODO: fix handling content types that don't match extensions
+//Maps file extensions to MIME types
+const ALLOWED_IMAGE_TYPES = {
+  "png" : "image/png",
+  "jpg" : "image/jpeg",
+  "jpeg" : "image/jpeg"
+}
 
 const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
 const STORAGE_KEY = process.env.STORAGE_KEY;
@@ -22,7 +27,7 @@ const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
 module.exports = async function (context, req) {
   const { fields, files } = await parseMultipartFormData(req);
   const fileId = crypto.randomUUID();
-  const contentType = files[0].mimetype;
+  const contentType = files[0].mimeType;
   const originalFileName = files[0].filename;
   const originalFileExtension = path.extname(originalFileName).toLowerCase().replace(/^\./, '');
 
@@ -45,15 +50,14 @@ module.exports = async function (context, req) {
       }
     };
   }
-  else if (!(ALLOWED_IMAGE_EXTENSIONS.includes(originalFileExtension)) || (contentType != `image/${originalFileExtension}`)) {
+  else if (!(originalFileExtension in ALLOWED_IMAGE_TYPES) || (ALLOWED_IMAGE_TYPES[originalFileExtension] != contentType)) {
     context.res = {
       status: 400,
       body: {
         error: "Invalid file type.",
         contentType: contentType,
         originalFileName: originalFileName,
-        originalFileExtension: originalFileExtension,
-        files: files
+        originalFileExtension: originalFileExtension
       }
     };
   }
