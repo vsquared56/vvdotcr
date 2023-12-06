@@ -42,11 +42,11 @@ module.exports = async function (context, req) {
       }
     };
   }
-  else if (originalFileSize >= 2*1024*1024 ) {
+  else if (originalFileSize >= 8*1024*1024 ) {
     context.res = {
       status: 400,
       body: {
-        error: "File sizes above 2MB are not supported.",
+        error: "File sizes above 8MB are not supported.",
         size: files[0].bufferFile.length
       }
     };
@@ -96,11 +96,18 @@ module.exports = async function (context, req) {
       originalFileName: originalFileName,
       originalFileType: contentType,
       originalFileSize: originalFileSize,
+      originalComment: null,
       uploadUserAgent: req.headers['user-agent'],
       uploadXFF: req.headers['x-forwarded-for'],
+      uploadIP: null,
       createDate: createDate,
       modifyDate: createDate,
-      originalImageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`
+      publishDate: null,
+      publishedBy: null,
+      isPublished: false,
+      originalImageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`,
+      thumbnailImageUrl: null,
+      largeImageUrl: null
     }
 
     const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
