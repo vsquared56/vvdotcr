@@ -4,6 +4,7 @@
 trigger:
 - main
 - develop
+- feature/*
 
 pool:
   name: linux
@@ -12,6 +13,15 @@ variables:
 - group: azure_deployment
 
 steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.x'
+
+- task: Npm@1
+  inputs:
+    command: 'install'
+    workingDir: 'api'
+
 - task: AzureStaticWebApp@0
   inputs:
     verbose: true

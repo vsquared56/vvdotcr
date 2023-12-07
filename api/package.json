@@ -6,6 +6,10 @@
     "start": "func start",
     "test": "echo \"No tests yet...\""
   },
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@anzp/azure-function-multipart": "^3.1.0",
+    "@azure/cosmos": "^4.0.0",
+    "@azure/storage-blob": "^12.17.0",
+    "streamifier": "^0.1.1"
+  }
 }

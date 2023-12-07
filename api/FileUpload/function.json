@@ -6,10 +6,9 @@
       "direction": "in",
       "name": "req",
       "methods": [
-        "get",
         "post"
       ],
-      "route": "message"
+      "route": "fileupload"
     },
     {
       "type": "http",
