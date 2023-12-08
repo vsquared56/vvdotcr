@@ -5,6 +5,7 @@ const {
 } = require("@azure/storage-blob");
 const { CosmosClient } = require("@azure/cosmos");
 const parseMultipartFormData = require("@anzp/azure-function-multipart").default;
+const Handlebars = require("handlebars");
 const crypto = require('crypto');
 const streamifier = require('streamifier');
 const path = require('path'); 
@@ -43,6 +44,7 @@ module.exports = async function (context, req) {
     };
   }
   else if (originalFileSize >= 8*1024*1024 ) {
+    const templateContent = fs.readFileSync(context.executionContext.functionDirectory + '\\configAPI.json')
     context.res = {
       status: 400,
       body: {
