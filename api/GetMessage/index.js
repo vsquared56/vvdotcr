@@ -4,7 +4,7 @@ module.exports = async function (context, req) {
   //joining path of directory 
   const directoryPath = context.executionContext.functionDirectory;
 
-  const fileContent = fs.readFileSync(context.executionContext.functionDirectory + '\\sample.dat')
+  const fileContent = fs.readFileSync(context.executionContext.functionDirectory + '/sample.dat')
   context.res = {
     // status: 200, /* Defaults to 200 */
     body: {
