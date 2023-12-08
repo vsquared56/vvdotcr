@@ -1,16 +1,17 @@
 const fs = require('fs');
+const path = require("path");
+const handlebars = require("handlebars");
 
 module.exports = async function (context, req) {
-  //joining path of directory 
-  const directoryPath = context.executionContext.functionDirectory;
+  const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sample.hbs');
 
-  const fileContent = fs.readFileSync(context.executionContext.functionDirectory + '/sample.dat')
+  const templateContent = fs.readFileSync(directoryPath).toString();
+  var template = handlebars.compile(templateContent);
+
   context.res = {
     // status: 200, /* Defaults to 200 */
     body: {
-      text: "This data is returned from the API!",
-      request: req,
-      fileContent: fileContent,
+      text: template({ name: "Vlad" }),
       directoryPath: directoryPath
     },
   };
