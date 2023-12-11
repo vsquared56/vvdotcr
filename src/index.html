@@ -1,34 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="styles.css" />
-    <title>Vanilla JavaScript App</title>
-    <script src="https://unpkg.com/htmx.org@1.9.9"></script>
-  </head>
 
-  <body>
-    <main>
-      <h1>Vanilla JavaScript App</h1>
-      <p>Posting content to the API: <b id="postdata"></b></b></p>
-      <!-- have a button POST a click via AJAX -->
-      <button hx-post="/api/message" hx-swap="outerHTML">
-        Click Me to load content from the API!
-      </button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Vanilla JavaScript App</title>
+  <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+  <style>
+    body {
+      background: #34495E;
+    }
 
-      <form id='form' hx-encoding='multipart/form-data' hx-post='/api/fileupload'>
-        <input name='file' type='file' accept='image/*'>
-        <button>
-            Upload
-        </button>
-        <progress id='progress' value='0' max='100'></progress>
-      </form>
-      <script>
-        htmx.on('#form', 'htmx:xhr:progress', function(evt) {
-          htmx.find('#progress').setAttribute('value', evt.detail.loaded/evt.detail.total * 100)
-        });
-      </script>
-    </main>
-  </body>
+    img.htmx-settling img {
+      opacity: 0;
+    }
+
+    img.htmx-indicator {
+      transition: opacity 300ms ease-in;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>Vanilla JavaScript App</h1>
+    <p>Posting content to the API: <b id="postdata"></b></b></p>
+    <!-- have a button POST a click via AJAX -->
+    <button hx-post="/api/message" hx-swap="outerHTML">
+      Click Me to load content from the API!
+    </button>
+    <div hx-get="/api/fileupload" hx-trigger="load">
+      <img alt="Result loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
+    </div>
+  </main>
+</body>
+
 </html>

@@ -12,7 +12,8 @@ module.exports = async function (context, req) {
     // status: 200, /* Defaults to 200 */
     body: {
       text: template({ name: "Vlad" }),
-      directoryPath: directoryPath
+      directoryPath: directoryPath,
+      request: req
     },
   };
 };
