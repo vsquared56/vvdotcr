@@ -35,7 +35,7 @@ module.exports = async function (context, req) {
   
     context.res = {
       status: 200,
-      body: template({ name: "Vlad" })
+      body: template()
     };
   }
   else if (req.method === "POST") {
@@ -47,34 +47,33 @@ module.exports = async function (context, req) {
     const originalFileSize = files[0].bufferFile.length;
 
     if (files.length != 1) {
+      const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_try_again.hbs');
+      const templateContent = fs.readFileSync(directoryPath).toString();
+      var template = handlebars.compile(templateContent);
+
       context.res = {
-        status: 400,
-        body: {
-          error: "Expected only one file upload.",
-          fields: fields,
-          files: files
-        }
+        status: 200,
+        body: template({ error: "Only one file upload is allowed at a time." })
       };
     }
-    else if (originalFileSize >= 8 * 1024 * 1024) {
-      const templateContent = fs.readFileSync(context.executionContext.functionDirectory + '\\configAPI.json')
+    else if (originalFileSize >= 2 * 1024 * 1024) {
+      const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_try_again.hbs');
+      const templateContent = fs.readFileSync(directoryPath).toString();
+      var template = handlebars.compile(templateContent);
+
       context.res = {
-        status: 400,
-        body: {
-          error: "File sizes above 8MB are not supported.",
-          size: files[0].bufferFile.length
-        }
+        status: 200,
+        body: template({ error: "Images must be below 2MB." })
       };
     }
     else if (!(originalFileExtension in ALLOWED_IMAGE_TYPES) || (ALLOWED_IMAGE_TYPES[originalFileExtension] != contentType)) {
+      const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_try_again.hbs');
+      const templateContent = fs.readFileSync(directoryPath).toString();
+      var template = handlebars.compile(templateContent);
+
       context.res = {
-        status: 400,
-        body: {
-          error: "Invalid file type.",
-          contentType: contentType,
-          originalFileName: originalFileName,
-          originalFileExtension: originalFileExtension
-        }
+        status: 200,
+        body: template({ error: "Image is not an allowed type." })
       };
     }
     else {
