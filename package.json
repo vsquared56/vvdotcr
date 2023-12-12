@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/HannahZhuSWE/vanilla-api#readme",
   "devDependencies": {
+    "@azure/static-web-apps-cli": "^1.1.6",
     "@playwright/test": "^1.23.2"
   }
 }

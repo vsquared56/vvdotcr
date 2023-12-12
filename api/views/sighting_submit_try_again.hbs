@@ -1,0 +1,15 @@
+<div id="sighting_submission">
+  <div id="sighting_submission_error">{{error}}</div>
+  <form id='form' hx-encoding='multipart/form-data' hx-post='/api/fileupload'>
+    <input name='file' type='file' accept='image/*'>
+    <button>
+      Upload
+    </button>
+    <progress id='progress' value='0' max='100'></progress>
+  </form>
+  <script>
+    htmx.on('#form', 'htmx:xhr:progress', function (evt) {
+      htmx.find('#progress').setAttribute('value', evt.detail.loaded / evt.detail.total * 100)
+    });
+  </script>
+</div>
