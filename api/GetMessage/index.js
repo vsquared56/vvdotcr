@@ -36,7 +36,7 @@ export default async (context, req) => {
     const xff = "67.173.22.116:42104, 13.89.171.4:3475";
     const xffArr = xff.replace(/\s/g, "").split(",")
     var clientIp = null;
-    i = xffArr.length - 1;
+    var i = xffArr.length - 1;
     do {
       const matches = xffArr[i].match(regex);
       if (matches && matches.length == 4) {
