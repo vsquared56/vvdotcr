@@ -66,14 +66,14 @@ export default async (context, req) => {
         body: template({ error: "Only one file upload is allowed at a time." })
       };
     }
-    else if (originalFileSize >= 2 * 1024 * 1024) {
+    else if (originalFileSize >= 20 * 1024 * 1024) {
       const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_try_again.hbs');
       const templateContent = fs.readFileSync(directoryPath).toString();
       var template = handlebars.compile(templateContent);
 
       context.res = {
         status: 200,
-        body: template({ error: "Images must be below 2MB." })
+        body: template({ error: "Images must be below 20 MB." })
       };
     }
     else if (!(originalFileExtension in ALLOWED_IMAGE_TYPES) || (ALLOWED_IMAGE_TYPES[originalFileExtension] != contentType)) {
