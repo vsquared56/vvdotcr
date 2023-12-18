@@ -11,6 +11,8 @@ import parseMultipartFormData from "@anzp/azure-function-multipart";
 import streamifier from "streamifier"
 import handlebars from "handlebars";
 
+import parseXff from "../shared/parse-xff.js";
+
 //Maps file extensions to MIME types
 const ALLOWED_IMAGE_TYPES = {
   "png": "image/png",
@@ -27,6 +29,15 @@ const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
 const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
 
 export default async (context, req) => {
+
+  var clientIp = null;
+  if (req.headers.hasOwnProperty("x-forwarded-for")) {
+    clientIp = await parseXff(req.headers["x-forwarded-for"]);
+  }
+  else {
+    clientIp = null;
+  }
+
   if (req.method === "GET") {
     const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit.hbs');
     const templateContent = fs.readFileSync(directoryPath).toString();
@@ -112,7 +123,7 @@ export default async (context, req) => {
         originalComment: null,
         uploadUserAgent: req.headers['user-agent'],
         uploadXFF: req.headers['x-forwarded-for'],
-        uploadIP: null,
+        uploadIP: clientIp,
         createDate: createDate,
         modifyDate: createDate,
         publishDate: null,
