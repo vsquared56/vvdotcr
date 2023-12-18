@@ -1,16 +1,15 @@
-const {
+import * as crypto from "crypto";
+import * as fs from "fs";
+import * as path from "path";
+import {
   BlobServiceClient,
   StorageSharedKeyCredential,
   newPipeline
-} = require("@azure/storage-blob");
-const { CosmosClient } = require("@azure/cosmos");
-const parseMultipartFormData = require("@anzp/azure-function-multipart").default;
-const Handlebars = require("handlebars");
-const crypto = require('crypto');
-const streamifier = require('streamifier');
-const fs = require('fs');
-const path = require("path");
-const handlebars = require("handlebars");
+} from "@azure/storage-blob";
+import { CosmosClient } from "@azure/cosmos";
+import parseMultipartFormData from "@anzp/azure-function-multipart";
+import streamifier from "streamifier"
+import handlebars from "handlebars";
 
 //Maps file extensions to MIME types
 const ALLOWED_IMAGE_TYPES = {
@@ -27,7 +26,7 @@ const STORAGE_URL = `https://${STORAGE_ACCOUNT}.blob.core.windows.net`;
 const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
 const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
 
-module.exports = async function (context, req) {
+export default async (context, req) => {
   if (req.method === "GET") {
     const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit.hbs');
     const templateContent = fs.readFileSync(directoryPath).toString();
@@ -39,7 +38,7 @@ module.exports = async function (context, req) {
     };
   }
   else if (req.method === "POST") {
-    const { fields, files } = await parseMultipartFormData(req);
+    const { fields, files } = await parseMultipartFormData.default(req);
     const fileId = crypto.randomUUID();
     const contentType = files[0].mimeType;
     const originalFileName = files[0].filename;

@@ -1,13 +1,13 @@
-const fs = require('fs');
-const path = require("path");
-const handlebars = require("handlebars");
-const { CosmosClient } = require("@azure/cosmos");
-const ipRangeCheck = require("ip-range-check");
+import * as fs from "fs";
+import * as path from "path";
+import { CosmosClient } from "@azure/cosmos";
+import ipRangeCheck from "ip-range-check"
+import handlebars from "handlebars";
 
 const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
 const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
 
-module.exports = async function (context, req) {
+export default async (context, req) => {
   const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sample.hbs');
 
   const templateContent = fs.readFileSync(directoryPath).toString();
