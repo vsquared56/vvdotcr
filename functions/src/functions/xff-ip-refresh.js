@@ -3,7 +3,7 @@ import { CosmosClient } from '@azure/cosmos';
 import fetch from 'node-fetch';
 
 app.timer('xff-ip-refresh', {
-    schedule: '0 */1 * * * *',
+    schedule: '0 0 1 * *',
     handler: async (myTimer, context) => {
         const cosmosClient = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
         const { database } = await cosmosClient.databases.createIfNotExists({ id: process.env.COSMOS_DB_DATABASE_NAME });
