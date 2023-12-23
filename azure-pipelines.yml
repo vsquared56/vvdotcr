@@ -20,6 +20,27 @@ steps:
 - task: Npm@1
   inputs:
     command: 'install'
+    workingDir: 'functions'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/functions'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: AzureFunctionApp@2
+  inputs:
+    azureSubscription: 'Azure Visual Studio Subscription'
+    appType: 'functionAppLinux'
+    appName: 'vvdotcr-backend-functions-dev'
+    package: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
+    runtimeStack: 'NODE|16'
+
+- task: Npm@1
+  inputs:
+    command: 'install'
     workingDir: 'api'
 
 - task: AzureStaticWebApp@0
