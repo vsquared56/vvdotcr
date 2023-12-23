@@ -30,7 +30,7 @@ steps:
     archiveFile: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
     replaceExistingArchive: true
 
-- task: AzureFunctionApp@2
+- task: AzureFunctionApp@1
   inputs:
     azureSubscription: 'Azure Visual Studio Subscription'
     appType: 'functionAppLinux'
