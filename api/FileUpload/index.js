@@ -1,16 +1,17 @@
-const {
+import * as crypto from "crypto";
+import * as fs from "fs";
+import * as path from "path";
+import {
   BlobServiceClient,
   StorageSharedKeyCredential,
   newPipeline
-} = require("@azure/storage-blob");
-const { CosmosClient } = require("@azure/cosmos");
-const parseMultipartFormData = require("@anzp/azure-function-multipart").default;
-const Handlebars = require("handlebars");
-const crypto = require('crypto');
-const streamifier = require('streamifier');
-const fs = require('fs');
-const path = require("path");
-const handlebars = require("handlebars");
+} from "@azure/storage-blob";
+import { CosmosClient } from "@azure/cosmos";
+import parseMultipartFormData from "@anzp/azure-function-multipart";
+import streamifier from "streamifier"
+import handlebars from "handlebars";
+
+import parseXff from "../shared/parse-xff.js";
 
 //Maps file extensions to MIME types
 const ALLOWED_IMAGE_TYPES = {
@@ -27,7 +28,16 @@ const STORAGE_URL = `https://${STORAGE_ACCOUNT}.blob.core.windows.net`;
 const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
 const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
 
-module.exports = async function (context, req) {
+export default async (context, req) => {
+
+  var clientIp = null;
+  if (req.headers.hasOwnProperty("x-forwarded-for")) {
+    clientIp = await parseXff(req.headers["x-forwarded-for"]);
+  }
+  else {
+    clientIp = null;
+  }
+
   if (req.method === "GET") {
     const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit.hbs');
     const templateContent = fs.readFileSync(directoryPath).toString();
@@ -39,7 +49,7 @@ module.exports = async function (context, req) {
     };
   }
   else if (req.method === "POST") {
-    const { fields, files } = await parseMultipartFormData(req);
+    const { fields, files } = await parseMultipartFormData.default(req);
     const fileId = crypto.randomUUID();
     const contentType = files[0].mimeType;
     const originalFileName = files[0].filename;
@@ -56,14 +66,14 @@ module.exports = async function (context, req) {
         body: template({ error: "Only one file upload is allowed at a time." })
       };
     }
-    else if (originalFileSize >= 2 * 1024 * 1024) {
+    else if (originalFileSize >= 20 * 1024 * 1024) {
       const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_try_again.hbs');
       const templateContent = fs.readFileSync(directoryPath).toString();
       var template = handlebars.compile(templateContent);
 
       context.res = {
         status: 200,
-        body: template({ error: "Images must be below 2MB." })
+        body: template({ error: "Images must be below 20 MB." })
       };
     }
     else if (!(originalFileExtension in ALLOWED_IMAGE_TYPES) || (ALLOWED_IMAGE_TYPES[originalFileExtension] != contentType)) {
@@ -113,7 +123,7 @@ module.exports = async function (context, req) {
         originalComment: null,
         uploadUserAgent: req.headers['user-agent'],
         uploadXFF: req.headers['x-forwarded-for'],
-        uploadIP: null,
+        uploadIP: clientIp,
         createDate: createDate,
         modifyDate: createDate,
         publishDate: null,

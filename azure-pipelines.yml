@@ -1,6 +1,3 @@
-# Starter pipeline
-
-
 trigger:
 - main
 - develop
@@ -11,18 +8,47 @@ pool:
 
 variables:
 - group: azure_deployment
+- name: nodeVersion
+  value: 16
 
 steps:
 - task: NodeTool@0
+  displayName: 'Use Node $(nodeVersion).x'
   inputs:
-    versionSpec: '16.x'
+    versionSpec: '$(nodeVersion).x'
 
 - task: Npm@1
+  displayName: 'Install Azure functions dependencies'
+  inputs:
+    command: 'ci'
+    workingDir: 'functions'
+
+- task: ArchiveFiles@2
+  displayName: 'Zip Azure functions'
+  inputs:
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/functions'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: AzureFunctionApp@1
+  displayName: 'Deploy Azure functions'
+  inputs:
+    azureSubscription: 'Azure Visual Studio Subscription'
+    appType: 'functionAppLinux'
+    appName: 'vvdotcr-backend-functions-dev'
+    package: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
+    runtimeStack: 'NODE|$(nodeVersion)'
+
+- task: Npm@1
+  displayName: 'Install API dependencies'
   inputs:
     command: 'install'
     workingDir: 'api'
 
 - task: AzureStaticWebApp@0
+  displayName: 'Deploy Azure Static Web App'
   inputs:
     verbose: true
     azure_static_web_apps_api_token: $(azure_deployment_token)

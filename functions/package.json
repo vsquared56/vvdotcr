@@ -1,18 +1,19 @@
 {
-  "name": "api",
+  "name": "",
   "version": "1.0.0",
   "type": "module",
   "description": "",
+  "main": "src/functions/*.js",
   "scripts": {
     "start": "func start",
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
-    "@anzp/azure-function-multipart": "^3.1.0",
     "@azure/cosmos": "^4.0.0",
-    "@azure/storage-blob": "^12.17.0",
-    "handlebars": "^4.7.8",
-    "ip-range-check": "^0.2.0",
-    "streamifier": "^0.1.1"
+    "@azure/functions": "^4.0.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "azure-functions-core-tools": "^4.x"
   }
 }
