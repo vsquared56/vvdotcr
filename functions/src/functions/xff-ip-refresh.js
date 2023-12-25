@@ -3,7 +3,7 @@ import { CosmosClient } from '@azure/cosmos';
 import fetch from 'node-fetch';
 
 app.timer('xff-ip-refresh', {
-    schedule: '0 0 1 * *',
+    schedule: '0 0 * * 0',
     handler: async (myTimer, context) => {
         const cosmosClient = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
         const { database } = await cosmosClient.databases.createIfNotExists({ id: process.env.COSMOS_DB_DATABASE_NAME });
@@ -30,7 +30,7 @@ app.timer('xff-ip-refresh', {
             const { resource } = await container.items.upsert(item);
         }
 
-        const azResponse = await fetch('https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20231211.json');
+        const azResponse = await fetch('https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20231218.json');
         const azData = await azResponse.json();
         if (azData.values.length > 0) {
             const azureASM = azData.values.filter(x => x.name === 'AppServiceManagement');
