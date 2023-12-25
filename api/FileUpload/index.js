@@ -6,6 +6,7 @@ import {
   StorageSharedKeyCredential,
   newPipeline
 } from "@azure/storage-blob";
+import { ServiceBusClient } from "@azure/service-bus";
 import { CosmosClient } from "@azure/cosmos";
 import parseMultipartFormData from "@anzp/azure-function-multipart";
 import streamifier from "streamifier"
@@ -27,6 +28,7 @@ const STORAGE_URL = `https://${STORAGE_ACCOUNT}.blob.core.windows.net`;
 
 const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
 const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
+const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
 
 export default async (context, req) => {
 
@@ -143,6 +145,14 @@ export default async (context, req) => {
         }
       });
       const { resource } = await container.items.create(item);
+
+      const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
+      const sbSender = sbClient.createSender('new-file-uploads');
+      try {
+        await sbSender.sendMessages({body: fileId});
+      } finally {
+        await sbClient.close();
+      }
 
       context.res = {
         body: {
