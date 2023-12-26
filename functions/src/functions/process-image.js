@@ -1,5 +1,11 @@
 import { app } from '@azure/functions';
 import { CosmosClient } from '@azure/cosmos';
+import {
+    BlobServiceClient,
+    StorageSharedKeyCredential,
+    newPipeline
+} from "@azure/storage-blob";
+import sharp from "sharp";
 
 app.serviceBusQueue('process-image', {
     connection: 'SERVICE_BUS_CONNECTION_STRING',
@@ -14,7 +20,7 @@ app.serviceBusQueue('process-image', {
                 paths: "/id"
             }
         });
-        console.log(message);
+
         const { resource } = await container.item(message, message).read();
         if (resource === undefined) {
             throw new Error(`Error reading file upload document ${message} from CosmosDB`);
@@ -23,9 +29,32 @@ app.serviceBusQueue('process-image', {
             item = resource;
         }
 
+        // Set auth credentials for upload
+        const STORAGE_URL = `https://${process.env.STORAGE_ACCOUNT}.blob.core.windows.net`;
+        const sharedKeyCredential = new StorageSharedKeyCredential(
+            process.env.STORAGE_ACCOUNT,
+            process.env.STORAGE_KEY
+        );
+        const pipeline = newPipeline(sharedKeyCredential);
+
+        // Download the files
+        const blobServiceClient = new BlobServiceClient(STORAGE_URL, pipeline);
+        const containerClient =
+            blobServiceClient.getContainerClient(process.env.STORAGE_CONTAINER);
+        const downloadBlobClient = containerClient.getBlobClient(`originals/${item.fileName}`);
+        const downloadBlobResponse = await downloadBlobClient.downloadToBuffer();
+
+        const resizedBuffer = await sharp(downloadBlobResponse)
+        .resize(300)
+        .jpeg()
+        .toBuffer();
+
+        const uploadBlobClient = containerClient.getBlockBlobClient(`resized/${item.id}.jpeg`);
+        const uploadBlobResponse = await uploadBlobClient.uploadData(resizedBuffer);
+
         item.modifyDate = Date.now();
 
         const { upsert } = await container.items.upsert(item);
-        
+
     },
 });
