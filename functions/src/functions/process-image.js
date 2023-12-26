@@ -40,7 +40,7 @@ app.serviceBusQueue('process-image', {
         // Download the files
         const blobServiceClient = new BlobServiceClient(STORAGE_URL, pipeline);
         const containerClient =
-            blobServiceClient.getContainerClient(process.env.STORAGE_CONTAINER);
+            blobServiceClient.getContainerClient("vvdotc-fileupload-dev");
         const downloadBlobClient = containerClient.getBlobClient(`originals/${item.fileName}`);
         const downloadBlobResponse = await downloadBlobClient.downloadToBuffer();
 

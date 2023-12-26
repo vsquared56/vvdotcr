@@ -23,7 +23,7 @@ const ALLOWED_IMAGE_TYPES = {
 
 const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
 const STORAGE_KEY = process.env.STORAGE_KEY;
-const STORAGE_CONTAINER = process.env.STORAGE_CONTAINER;
+const STORAGE_CONTAINER = "vvdotc-fileupload-dev";
 const STORAGE_URL = `https://${STORAGE_ACCOUNT}.blob.core.windows.net`;
 
 const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
