@@ -1,6 +1,7 @@
 import * as crypto from "crypto";
 import * as fs from "fs";
 import * as path from "path";
+import fetch from 'node-fetch';
 import {
   BlobServiceClient,
   StorageSharedKeyCredential,
@@ -44,7 +45,7 @@ export default async (context, req) => {
     const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit.hbs');
     const templateContent = fs.readFileSync(directoryPath).toString();
     var template = handlebars.compile(templateContent);
-  
+
     context.res = {
       status: 200,
       body: template()
@@ -114,6 +115,17 @@ export default async (context, req) => {
           }
         }
       );
+      const originalImageUrl = `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`;
+
+      const visionResponse = await fetch(`${process.env.VISION_API_ENDPOINT}/vision/v3.1/tag`, {
+        headers: {
+          "Content-Type": "application/json",
+          "Ocp-Apim-Subscription-Key": process.env.VISION_API_KEY
+        },
+        method: "POST",
+        body: JSON.stringify({ url: originalImageUrl })
+      })
+      const visionData = await visionResponse.json();
 
       const createDate = Date.now();
       const item = {
@@ -131,9 +143,10 @@ export default async (context, req) => {
         publishDate: null,
         publishedBy: null,
         isPublished: false,
-        originalImageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`,
+        originalImageUrl: originalImageUrl,
         thumbnailImageUrl: null,
-        largeImageUrl: null
+        largeImageUrl: null,
+        visionData: visionData
       }
 
       const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
@@ -149,7 +162,7 @@ export default async (context, req) => {
       const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
       const sbSender = sbClient.createSender('new-file-uploads');
       try {
-        await sbSender.sendMessages({body: fileId});
+        await sbSender.sendMessages({ body: fileId });
       } finally {
         await sbClient.close();
       }
