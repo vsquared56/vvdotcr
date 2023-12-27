@@ -10,8 +10,9 @@ import {
 import { ServiceBusClient } from "@azure/service-bus";
 import { CosmosClient } from "@azure/cosmos";
 import parseMultipartFormData from "@anzp/azure-function-multipart";
-import streamifier from "streamifier"
+import streamifier from "streamifier";
 import handlebars from "handlebars";
+import sharp from "sharp";
 
 import parseXff from "../shared/parse-xff.js";
 
@@ -93,86 +94,106 @@ export default async (context, req) => {
       const fileData = files[0].bufferFile;
       const fileName = `${fileId}.${originalFileExtension}`;
 
-      // Set auth credentials for upload
-      const sharedKeyCredential = new StorageSharedKeyCredential(
-        STORAGE_ACCOUNT,
-        STORAGE_KEY
-      );
-      const pipeline = newPipeline(sharedKeyCredential);
+      const fileMetadata = await sharp(fileData).metadata();
 
-      // Upload the file
-      const blobServiceClient = new BlobServiceClient(STORAGE_URL, pipeline);
-      const containerClient =
-        blobServiceClient.getContainerClient(STORAGE_CONTAINER);
-      const blockBlobClient = containerClient.getBlockBlobClient(`originals/${fileName}`);
-      const uploadBlobResponse = await blockBlobClient.uploadStream(
-        streamifier.createReadStream(new Buffer(fileData)),
-        fileData.length,
-        5,
-        {
-          blobHTTPHeaders: {
-            blobContentType: contentType
+      if (fileMetadata.width < 600 || fileMetadata.height < 600) {
+        const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_try_again.hbs');
+        const templateContent = fs.readFileSync(directoryPath).toString();
+        var template = handlebars.compile(templateContent);
+        context.res = {
+          status: 200,
+          body: template({ error: "Images must be at least 600x600." })
+        };
+      } else {
+
+        // Set auth credentials for upload
+        const sharedKeyCredential = new StorageSharedKeyCredential(
+          STORAGE_ACCOUNT,
+          STORAGE_KEY
+        );
+        const pipeline = newPipeline(sharedKeyCredential);
+
+        // Upload the file
+        const blobServiceClient = new BlobServiceClient(STORAGE_URL, pipeline);
+        const containerClient =
+          blobServiceClient.getContainerClient(STORAGE_CONTAINER);
+        const blockBlobClient = containerClient.getBlockBlobClient(`originals/${fileName}`);
+        const uploadBlobResponse = await blockBlobClient.uploadStream(
+          streamifier.createReadStream(fileData),
+          fileData.length,
+          5,
+          {
+            blobHTTPHeaders: {
+              blobContentType: contentType
+            }
           }
+        );
+        const originalImageUrl = `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`;
+
+        // Send the image to the Azure Vision API
+        const visionResponse = await fetch(`${process.env.VISION_API_ENDPOINT}/vision/v3.1/tag`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Ocp-Apim-Subscription-Key": process.env.VISION_API_KEY
+          },
+          method: "POST",
+          body: JSON.stringify({ url: originalImageUrl })
+        })
+        const visionData = await visionResponse.json();
+
+        // Set DB item
+        const createDate = Date.now();
+        const item = {
+          id: fileId,
+          fileName: fileName,
+          originalFileName: originalFileName,
+          originalFileType: contentType,
+          originalFileSize: originalFileSize,
+          originalHeight: fileMetadata.height,
+          originalWidth: fileMetadata.width,
+          originalComment: null,
+          uploadUserAgent: req.headers['user-agent'],
+          uploadXFF: req.headers['x-forwarded-for'],
+          uploadIP: clientIp,
+          createDate: createDate,
+          modifyDate: createDate,
+          publishDate: null,
+          publishedBy: null,
+          isPublished: false,
+          originalImageUrl: originalImageUrl,
+          thumbnailImageUrl: null,
+          largeImageUrl: null,
+          visionData: visionData
         }
-      );
-      const originalImageUrl = `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`;
 
-      const visionResponse = await fetch(`${process.env.VISION_API_ENDPOINT}/vision/v3.1/tag`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Ocp-Apim-Subscription-Key": process.env.VISION_API_KEY
-        },
-        method: "POST",
-        body: JSON.stringify({ url: originalImageUrl })
-      })
-      const visionData = await visionResponse.json();
+        // Save image data to CosmosDB
+        const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
+        const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
+        const { container } = await database.containers.createIfNotExists({
+          id: "vvdotcr-fileupload-dev",
+          partitionKey: {
+            paths: "/id"
+          }
+        });
+        const { resource } = await container.items.create(item);
 
-      const createDate = Date.now();
-      const item = {
-        id: fileId,
-        fileName: fileName,
-        originalFileName: originalFileName,
-        originalFileType: contentType,
-        originalFileSize: originalFileSize,
-        originalComment: null,
-        uploadUserAgent: req.headers['user-agent'],
-        uploadXFF: req.headers['x-forwarded-for'],
-        uploadIP: clientIp,
-        createDate: createDate,
-        modifyDate: createDate,
-        publishDate: null,
-        publishedBy: null,
-        isPublished: false,
-        originalImageUrl: originalImageUrl,
-        thumbnailImageUrl: null,
-        largeImageUrl: null,
-        visionData: visionData
+        // Send a Service Bus Message
+        const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
+        const sbSender = sbClient.createSender('new-file-uploads');
+        try {
+          await sbSender.sendMessages({ body: fileId });
+        } finally {
+          await sbClient.close();
+        }
+
+        // Respond
+        context.res = {
+          body: {
+            imageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`,
+            cosmosResource: resource
+          }
+        };
       }
-
-      const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
-      const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
-      const { container } = await database.containers.createIfNotExists({
-        id: "vvdotcr-fileupload-dev",
-        partitionKey: {
-          paths: "/id"
-        }
-      });
-      const { resource } = await container.items.create(item);
-
-      const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
-      const sbSender = sbClient.createSender('new-file-uploads');
-      try {
-        await sbSender.sendMessages({ body: fileId });
-      } finally {
-        await sbClient.close();
-      }
-
-      context.res = {
-        body: {
-          imageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`,
-          cosmosResource: resource
-        }
-      };
     }
   }
 };
