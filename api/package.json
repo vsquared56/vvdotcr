@@ -14,7 +14,6 @@
     "@azure/storage-blob": "^12.17.0",
     "handlebars": "^4.7.8",
     "ip-range-check": "^0.2.0",
-    "node-fetch": "^3.3.2",
     "sharp": "^0.33.1",
     "streamifier": "^0.1.1"
   }

@@ -1,7 +1,6 @@
 import * as crypto from "crypto";
 import * as fs from "fs";
 import * as path from "path";
-import fetch from 'node-fetch';
 import {
   BlobServiceClient,
   StorageSharedKeyCredential,
@@ -129,17 +128,6 @@ export default async (context, req) => {
           }
         );
         const originalImageUrl = `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`;
-
-        // Send the image to the Azure Vision API
-        const visionResponse = await fetch(`${process.env.VISION_API_ENDPOINT}/vision/v3.1/tag`, {
-          headers: {
-            "Content-Type": "application/json",
-            "Ocp-Apim-Subscription-Key": process.env.VISION_API_KEY
-          },
-          method: "POST",
-          body: JSON.stringify({ url: originalImageUrl })
-        })
-        const visionData = await visionResponse.json();
 
         // Set DB item
         const createDate = Date.now();

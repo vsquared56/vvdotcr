@@ -5,6 +5,7 @@ import {
     StorageSharedKeyCredential,
     newPipeline
 } from "@azure/storage-blob";
+import fetch from 'node-fetch';
 import sharp from "sharp";
 
 app.serviceBusQueue('process-image', {
@@ -45,15 +46,28 @@ app.serviceBusQueue('process-image', {
         const downloadBlobResponse = await downloadBlobClient.downloadToBuffer();
 
         const resizedBuffer = await sharp(downloadBlobResponse)
-        .resize(300)
-        .jpeg()
-        .toBuffer();
+            .resize(600)
+            .jpeg()
+            .toBuffer();
 
         const uploadBlobClient = containerClient.getBlockBlobClient(`resized/${item.id}.jpeg`);
         const uploadBlobResponse = await uploadBlobClient.uploadData(resizedBuffer);
+        const thumbnailImageUrl = `${STORAGE_URL}/${STORAGE_CONTAINER}/resized/${item.id}.jpeg`;
+
+        // Send the image to the Azure Vision API
+        const visionResponse = await fetch(`${process.env.VISION_API_ENDPOINT}/vision/v3.1/tag`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Ocp-Apim-Subscription-Key": process.env.VISION_API_KEY
+            },
+            method: "POST",
+            body: JSON.stringify({ url: thumbnailImageUrl })
+        })
+        const visionData = await visionResponse.json();
 
         item.modifyDate = Date.now();
-        item.submissionStatus = "resized"
+        item.submissionStatus = "resized";
+        item.thumbnailImageUrl = thumbnailImageUrl;
 
         const { upsert } = await container.items.upsert(item);
 
