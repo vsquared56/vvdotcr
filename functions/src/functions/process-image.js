@@ -53,6 +53,7 @@ app.serviceBusQueue('process-image', {
         const uploadBlobResponse = await uploadBlobClient.uploadData(resizedBuffer);
 
         item.modifyDate = Date.now();
+        item.submissionStatus = "resized"
 
         const { upsert } = await container.items.upsert(item);
 

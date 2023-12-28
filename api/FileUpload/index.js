@@ -54,7 +54,7 @@ export default async (context, req) => {
   }
   else if (req.method === "POST") {
     const { fields, files } = await parseMultipartFormData.default(req);
-    const fileId = crypto.randomUUID();
+    const submissionId = crypto.randomUUID();
     const contentType = files[0].mimeType;
     const originalFileName = files[0].filename;
     const originalFileExtension = path.extname(originalFileName).toLowerCase().replace(/^\./, '');
@@ -92,7 +92,7 @@ export default async (context, req) => {
     }
     else {
       const fileData = files[0].bufferFile;
-      const fileName = `${fileId}.${originalFileExtension}`;
+      const fileName = `${submissionId}.${originalFileExtension}`;
 
       const fileMetadata = await sharp(fileData).metadata();
 
@@ -143,8 +143,10 @@ export default async (context, req) => {
 
         // Set DB item
         const createDate = Date.now();
+        const submissionStatus = "saved";
         const item = {
-          id: fileId,
+          id: submissionId,
+          submissionStatus: submissionStatus,
           fileName: fileName,
           originalFileName: originalFileName,
           originalFileType: contentType,
@@ -163,7 +165,7 @@ export default async (context, req) => {
           originalImageUrl: originalImageUrl,
           thumbnailImageUrl: null,
           largeImageUrl: null,
-          visionData: visionData
+          visionData: null
         }
 
         // Save image data to CosmosDB
@@ -181,17 +183,18 @@ export default async (context, req) => {
         const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
         const sbSender = sbClient.createSender('new-file-uploads');
         try {
-          await sbSender.sendMessages({ body: fileId });
+          await sbSender.sendMessages({ body: submissionId });
         } finally {
           await sbClient.close();
         }
 
-        // Respond
+        const templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_status_recheck.hbs');
+        const templateContent = fs.readFileSync(templatePath).toString();
+        var template = handlebars.compile(templateContent);
+
         context.res = {
-          body: {
-            imageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`,
-            cosmosResource: resource
-          }
+          status: 200,
+          body: template({ submissionId: submissionId, submissionStatus: submissionStatus })
         };
       }
     }
