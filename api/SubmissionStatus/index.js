@@ -47,7 +47,7 @@ export default async (context, req) => {
     templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', templateFile);
     templateContent = fs.readFileSync(templatePath).toString();
     template = handlebars.compile(templateContent);
-    response = template({ submissionId: submissionId, submissionStatus: submissionStatus, visionData: resource.visionData });
+    response = template({ submissionId: submissionId, submissionStatus: submissionStatus, imageData: JSON.stringify({visionData: resource.visionData, imageLocation: resource.imageLocation}) });
   }
 
   context.res = {

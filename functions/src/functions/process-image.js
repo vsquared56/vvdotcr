@@ -5,6 +5,7 @@ import {
     StorageSharedKeyCredential,
     newPipeline
 } from "@azure/storage-blob";
+import exifr from "exifr";
 import fetch from 'node-fetch';
 import sharp from "sharp";
 
@@ -55,14 +56,19 @@ app.serviceBusQueue('process-image', {
         const downloadBlobClient = containerClient.getBlobClient(`originals/${item.fileName}`);
         const downloadBlobResponse = await downloadBlobClient.downloadToBuffer();
 
+        // Resize to 600px
         const resizedBuffer = await sharp(downloadBlobResponse)
             .resize(600)
             .jpeg()
             .toBuffer();
 
+        // Upload the resized image to Blob storage
         const uploadBlobClient = containerClient.getBlockBlobClient(`resized/${item.id}.jpeg`);
         const uploadBlobResponse = await uploadBlobClient.uploadData(resizedBuffer);
         const thumbnailImageUrl = `${STORAGE_URL}/${STORAGE_CONTAINER}/resized/${item.id}.jpeg`;
+
+        // Parse location from EXIF data
+        const imageLocation = exifr.gps(downloadBlobResponse)
 
         // Send the image to the Azure Vision API
         const visionResponse = await fetch(`${VISION_API_ENDPOINT}/vision/v3.1/tag`, {
@@ -79,6 +85,7 @@ app.serviceBusQueue('process-image', {
         item.submissionStatus = "resized";
         item.thumbnailImageUrl = thumbnailImageUrl;
         item.visionData = visionData;
+        item.imageLocation = imageLocation;
 
         const { upsert } = await container.items.upsert(item);
 

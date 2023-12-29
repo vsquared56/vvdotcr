@@ -153,6 +153,7 @@ export default async (context, req) => {
           originalImageUrl: originalImageUrl,
           thumbnailImageUrl: null,
           largeImageUrl: null,
+          imageLocation: null,
           visionData: null
         }
 
