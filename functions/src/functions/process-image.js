@@ -68,7 +68,7 @@ app.serviceBusQueue('process-image', {
         const thumbnailImageUrl = `${STORAGE_URL}/${STORAGE_CONTAINER}/resized/${item.id}.jpeg`;
 
         // Parse location from EXIF data
-        const imageLocation = exifr.gps(downloadBlobResponse)
+        const imageLocation = exifr.gps(downloadBlobResponse);
 
         // Send the image to the Azure Vision API
         const visionResponse = await fetch(`${VISION_API_ENDPOINT}/vision/v3.1/tag`, {
