@@ -8,15 +8,26 @@ import {
 import fetch from 'node-fetch';
 import sharp from "sharp";
 
+const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
+const STORAGE_KEY = process.env.STORAGE_KEY;
+const STORAGE_CONTAINER = "vvdotcr-fileupload-dev";
+const STORAGE_URL = `https://${STORAGE_ACCOUNT}.blob.core.windows.net`;
+
+const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
+const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
+const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
+const VISION_API_ENDPOINT = process.env.VISION_API_ENDPOINT;
+const VISION_API_KEY = process.env.VISION_API_KEY;
+
 app.serviceBusQueue('process-image', {
     connection: 'SERVICE_BUS_CONNECTION_STRING',
     queueName: 'new-file-uploads',
     handler: async (message, context) => {
         var item;
-        const cosmosClient = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
-        const { database } = await cosmosClient.databases.createIfNotExists({ id: process.env.COSMOS_DB_DATABASE_NAME });
+        const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
+        const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
         const { container } = await database.containers.createIfNotExists({
-            id: "vvdotcr-fileupload-dev",
+            id: STORAGE_CONTAINER,
             partitionKey: {
                 paths: "/id"
             }
@@ -31,17 +42,16 @@ app.serviceBusQueue('process-image', {
         }
 
         // Set auth credentials for upload
-        const STORAGE_URL = `https://${process.env.STORAGE_ACCOUNT}.blob.core.windows.net`;
         const sharedKeyCredential = new StorageSharedKeyCredential(
-            process.env.STORAGE_ACCOUNT,
-            process.env.STORAGE_KEY
+            STORAGE_ACCOUNT,
+            STORAGE_KEY
         );
         const pipeline = newPipeline(sharedKeyCredential);
 
         // Download the files
         const blobServiceClient = new BlobServiceClient(STORAGE_URL, pipeline);
         const containerClient =
-            blobServiceClient.getContainerClient("vvdotc-fileupload-dev");
+            blobServiceClient.getContainerClient(STORAGE_CONTAINER);
         const downloadBlobClient = containerClient.getBlobClient(`originals/${item.fileName}`);
         const downloadBlobResponse = await downloadBlobClient.downloadToBuffer();
 
@@ -55,10 +65,10 @@ app.serviceBusQueue('process-image', {
         const thumbnailImageUrl = `${STORAGE_URL}/${STORAGE_CONTAINER}/resized/${item.id}.jpeg`;
 
         // Send the image to the Azure Vision API
-        const visionResponse = await fetch(`${process.env.VISION_API_ENDPOINT}/vision/v3.1/tag`, {
+        const visionResponse = await fetch(`${VISION_API_ENDPOINT}/vision/v3.1/tag`, {
             headers: {
                 "Content-Type": "application/json",
-                "Ocp-Apim-Subscription-Key": process.env.VISION_API_KEY
+                "Ocp-Apim-Subscription-Key": VISION_API_KEY
             },
             method: "POST",
             body: JSON.stringify({ url: thumbnailImageUrl })
@@ -68,6 +78,7 @@ app.serviceBusQueue('process-image', {
         item.modifyDate = Date.now();
         item.submissionStatus = "resized";
         item.thumbnailImageUrl = thumbnailImageUrl;
+        item.visionData = visionData;
 
         const { upsert } = await container.items.upsert(item);
 

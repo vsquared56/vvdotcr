@@ -4,16 +4,17 @@ import handlebars from "handlebars";
 
 import { CosmosClient } from "@azure/cosmos";
 
+const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
+const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
+
 export default async (context, req) => {
   const submissionId = req.query.submissionId;
+  const recheckCount = parseInt(req.query.recheckCount);
   var submissionStatus;
+  var templateFile;
 
-  const templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_status_recheck.hbs');
-  const templateContent = fs.readFileSync(templatePath).toString();
-  var template = handlebars.compile(templateContent);
-
-  const cosmosClient = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
-  const { database } = await cosmosClient.databases.createIfNotExists({ id: process.env.COSMOS_DB_DATABASE_NAME });
+  const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
+  const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
   const { container } = await database.containers.createIfNotExists({
     id: "vvdotcr-fileupload-dev",
     partitionKey: {
@@ -28,8 +29,29 @@ export default async (context, req) => {
     submissionStatus = resource.submissionStatus;
   }
 
+  var templatePath, templateContent, template, response;
+  if (submissionStatus === "saved") {
+    if (recheckCount >= 6) {
+      templateFile = "sighting_submit_status_timeout.hbs";
+    } else {
+      templateFile = "sighting_submit_status_recheck.hbs";
+    }
+    templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', templateFile);
+    templateContent = fs.readFileSync(templatePath).toString();
+    template = handlebars.compile(templateContent);
+    //Exponential backoff for retry requests
+    response = template({ submissionId: submissionId, submissionStatus: submissionStatus, recheckCount: (recheckCount + 1), recheckInterval: Math.pow(1.5, recheckCount) });
+  }
+  else if (submissionStatus === "resized") {
+    templateFile = "sighting_submit_status_submitted.hbs";
+    templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', templateFile);
+    templateContent = fs.readFileSync(templatePath).toString();
+    template = handlebars.compile(templateContent);
+    response = template({ submissionId: submissionId, submissionStatus: submissionStatus, visionData: resource.visionData });
+  }
+
   context.res = {
     status: 200,
-    body: template({ submissionId: submissionId, submissionStatus: submissionStatus })
+    body: response
   };
 };
