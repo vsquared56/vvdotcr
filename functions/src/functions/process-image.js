@@ -67,9 +67,6 @@ app.serviceBusQueue('process-image', {
         const uploadBlobResponse = await uploadBlobClient.uploadData(resizedBuffer);
         const thumbnailImageUrl = `${STORAGE_URL}/${STORAGE_CONTAINER}/resized/${item.id}.jpeg`;
 
-        // Parse location from EXIF data
-        const imageLocation = exifr.gps(downloadBlobResponse);
-
         // Send the image to the Azure Vision API
         const visionResponse = await fetch(`${VISION_API_ENDPOINT}/vision/v3.1/tag`, {
             headers: {
@@ -81,13 +78,30 @@ app.serviceBusQueue('process-image', {
         })
         const visionData = await visionResponse.json();
 
-        item.modifyDate = Date.now();
-        item.submissionStatus = "resized";
+        // Parse location from EXIF data
+        var submissionStatus;
+        const locationData = await exifr.gps(downloadBlobResponse);
+        var imageLocation;
+
+        if (locationData == null) {
+            submissionStatus = "locationRequest";
+            item.imageLocation = null;
+        } else {
+            submissionStatus = "accepted";
+            item.imageLocation = {
+                latitude: imageLocation.latitude,
+                longitude: imageLocation.longitude,
+                accuracy: null,
+                timestamp: null,
+                source: "exif"
+            };
+        }
+        
+        item.submissionStatus = submissionStatus;
         item.thumbnailImageUrl = thumbnailImageUrl;
         item.visionData = visionData;
-        item.imageLocation = imageLocation;
+        item.modifyDate = Date.now();
 
         const { upsert } = await container.items.upsert(item);
-
     },
 });

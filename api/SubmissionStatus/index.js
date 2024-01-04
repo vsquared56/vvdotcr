@@ -13,6 +13,7 @@ export default async (context, req) => {
   var submissionStatus;
   var templateFile;
 
+  var item;
   const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
   const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
   const { container } = await database.containers.createIfNotExists({
@@ -41,13 +42,18 @@ export default async (context, req) => {
     template = handlebars.compile(templateContent);
     //Exponential backoff for retry requests
     response = template({ submissionId: submissionId, submissionStatus: submissionStatus, recheckCount: (recheckCount + 1), recheckInterval: Math.pow(1.5, recheckCount) });
-  }
-  else if (submissionStatus === "resized") {
-    templateFile = "sighting_submit_status_submitted.hbs";
+  } else if (submissionStatus === "accepted") {
+    templateFile = "sighting_submit_status_accepted.hbs";
     templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', templateFile);
     templateContent = fs.readFileSync(templatePath).toString();
     template = handlebars.compile(templateContent);
     response = template({ submissionId: submissionId, submissionStatus: submissionStatus, imageData: JSON.stringify({visionData: resource.visionData, imageLocation: resource.imageLocation}) });
+  } else if (submissionStatus === "locationRequest") {
+    templateFile = "sighting_submit_location_request.hbs";
+    templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', templateFile);
+    templateContent = fs.readFileSync(templatePath).toString();
+    template = handlebars.compile(templateContent);
+    response = template({ submissionId: submissionId, submissionStatus: submissionStatus});
   }
 
   context.res = {
