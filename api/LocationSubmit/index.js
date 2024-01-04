@@ -41,6 +41,8 @@ export default async (context, req) => {
     item.imageLocation = imageLocation;
     item.submissionStatus = 'accepted';
     item.modifyDate = Date.now();
+
+    const { upsert } = await container.items.upsert(item);
   }
 
   var templateFile = 'sighting_submit_status_submitted.hbs';
