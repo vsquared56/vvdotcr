@@ -1,13 +1,6 @@
 <div id="sighting_submission">
   <div id="sighting_submission_error">Can we get your location?</div>
   <script>
-    htmx.logger = function (elt, event, data) {
-      if (console) {
-        console.log("INFO:", event, elt, data);
-      }
-    }
-    htmx.logAll();
-
     function locationError(err) {
       console.log(err);
       htmx.find('#submitLocation').setAttribute('disabled', true);
@@ -37,15 +30,20 @@
     }
 
   </script>
-  <form id='location' hx-post='/api/location-submit?submissionId={{submissionId}}'>
+  <form id='location'>
     <input id='latitude' name='latitude' type='hidden'>
     <input id='longitude' name='longitude' type='hidden'>
     <input id='accuracy' name='accuracy' type='hidden'>
     <input id='timestamp' name='timestamp' type='hidden'>
-    <button id='submitLocation' hx-on:htmx:confirm="confirmLocation(event);">
+    <button id='submitLocation'
+      hx-post='/api/location-submit?submissionId={{submissionId}}'
+      hx-on:htmx:confirm='confirmLocation(event);'
+      hx-target='#sighting_submission'>
       Submit my location
     </button>
-    <button>
+    <button id='submitWithoutLocation'
+      hx-post='/api/location-submit?submissionId={{submissionId}}'
+      hx-target='#sighting_submission'>
       Submit without a location.
     </button>
   </form>

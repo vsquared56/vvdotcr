@@ -10,6 +10,8 @@ const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
 export default async (context, req) => {
   const submissionId = req.query.submissionId;
 
+  var item;
+  var submissionStatus;
   const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
   const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
   const { container } = await database.containers.createIfNotExists({
@@ -35,17 +37,18 @@ export default async (context, req) => {
       longitude: isNaN(longitude) ? null : longitude,
       accuracy: isNaN(accuracy) ? null : accuracy,
       timestamp: isNaN(timestamp) ? null : timestamp,
-      source: "browser"
+      source: 'browser'
     };
+    submissionStatus = 'accepted';
 
     item.imageLocation = imageLocation;
-    item.submissionStatus = 'accepted';
+    item.submissionStatus = submissionStatus;
     item.modifyDate = Date.now();
 
     const { upsert } = await container.items.upsert(item);
   }
 
-  var templateFile = 'sighting_submit_status_submitted.hbs';
+  var templateFile = 'sighting_submit_status_accepted.hbs';
 
   var templatePath, templateContent, template, response;
   templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', templateFile);
