@@ -14,7 +14,7 @@
         accuracy: position.coords.accuracy,
         timestamp: position.timestamp
       }
-      console.log(positionInfo);
+
       htmx.find('#latitude').setAttribute('value', position.coords.latitude);
       htmx.find('#longitude').setAttribute('value', position.coords.longitude);
       htmx.find('#accuracy').setAttribute('value', position.coords.accuracy);
