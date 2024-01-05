@@ -33,7 +33,7 @@ export default async (context, req) => {
 
   var templatePath, templateContent, template, response;
   if (submissionStatus === "saved") {
-    if (recheckCount >= 6) {
+    if (recheckCount >= 8) {
       templateFile = "sighting_submit_status_timeout.hbs";
     } else {
       templateFile = "sighting_submit_status_recheck.hbs";
