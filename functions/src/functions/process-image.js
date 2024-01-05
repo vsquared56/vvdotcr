@@ -81,7 +81,6 @@ app.serviceBusQueue('process-image', {
         // Parse location from EXIF data
         var submissionStatus;
         const locationData = await exifr.gps(downloadBlobResponse);
-        var imageLocation;
 
         if (locationData == null) {
             submissionStatus = "locationRequest";
@@ -89,8 +88,8 @@ app.serviceBusQueue('process-image', {
         } else {
             submissionStatus = "accepted";
             item.imageLocation = {
-                latitude: imageLocation.latitude,
-                longitude: imageLocation.longitude,
+                latitude: locationData.latitude,
+                longitude: locationData.longitude,
                 accuracy: null,
                 timestamp: null,
                 source: "exif"
