@@ -100,6 +100,7 @@ app.serviceBusQueue('process-image', {
         item.thumbnailImageUrl = thumbnailImageUrl;
         item.visionData = visionData;
         item.modifyDate = Date.now();
+        item.processingLatency = item.modifyDate - item.createDate;
 
         const { upsert } = await container.items.upsert(item);
     },

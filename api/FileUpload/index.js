@@ -147,6 +147,7 @@ export default async (context, req) => {
           uploadIP: clientIp,
           createDate: createDate,
           modifyDate: createDate,
+          processingLatency: null,
           publishDate: null,
           publishedBy: null,
           isPublished: false,
