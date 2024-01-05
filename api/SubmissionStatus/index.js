@@ -27,7 +27,8 @@ export default async (context, req) => {
     throw new Error('Error reading submission data from CosmosDB');
   }
   else {
-    submissionStatus = resource.submissionStatus;
+    item = resource;
+    submissionStatus = item.submissionStatus;
   }
 
   var templatePath, templateContent, template, response;
@@ -47,7 +48,7 @@ export default async (context, req) => {
     templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', templateFile);
     templateContent = fs.readFileSync(templatePath).toString();
     template = handlebars.compile(templateContent);
-    response = template({ submissionId: submissionId, submissionStatus: submissionStatus, imageData: JSON.stringify({visionData: resource.visionData, imageLocation: resource.imageLocation}) });
+    response = template({ submissionId: submissionId, submissionStatus: submissionStatus, imageData: JSON.stringify(item) });
   } else if (submissionStatus === "locationRequest") {
     templateFile = "sighting_submit_location_request.hbs";
     templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', templateFile);
