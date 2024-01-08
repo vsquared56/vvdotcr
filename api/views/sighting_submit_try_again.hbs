@@ -7,9 +7,12 @@
     </button>
     <progress id='progress' value='0' max='100'></progress>
   </form>
-  <!--<script>
+  <script>
     htmx.on('#form', 'htmx:xhr:progress', function (evt) {
-      htmx.find('#progress').setAttribute('value', evt.detail.loaded / evt.detail.total * 100)
+      htmx.find('#progress').setAttribute('value', evt.detail.loaded / evt.detail.total * 100);
+      if (evt.detail.loaded == evt.detail.total) {
+        htmx.off('#form', 'htmx:xhr:progress');
+      }
     });
-  </script>-->
+  </script>
 </div>
