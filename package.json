@@ -1,23 +1,13 @@
 {
-  "name": "vanilla-api",
+  "name": "vvdotcr",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "swa start src --api-location api",
-    "playwright_test": "playwright test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/HannahZhuSWE/vanilla-api.git"
+    "start": "swa start src --api-location api"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/HannahZhuSWE/vanilla-api/issues"
-  },
-  "homepage": "https://github.com/HannahZhuSWE/vanilla-api#readme",
   "devDependencies": {
     "@azure/static-web-apps-cli": "^1.1.6"
   }
