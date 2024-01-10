@@ -1,6 +1,6 @@
 <div id="sighting_submission">
   <form id='form' hx-encoding='multipart/form-data' hx-post='/api/fileupload'>
-    <input name='file' type='file' accept='image/*'>
+    <input name='file' type='file' accept='image/jpeg,image/png'>
     <button>
       Upload
     </button>
@@ -8,7 +8,10 @@
   </form>
   <script>
     htmx.on('#form', 'htmx:xhr:progress', function (evt) {
-      htmx.find('#progress').setAttribute('value', evt.detail.loaded / evt.detail.total * 100)
+      htmx.find('#progress').setAttribute('value', evt.detail.loaded / evt.detail.total * 100);
+      if (evt.detail.loaded == evt.detail.total) {
+        htmx.off('#form', 'htmx:xhr:progress', this);
+      }
     });
   </script>
 </div>

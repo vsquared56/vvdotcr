@@ -9,7 +9,10 @@
   </form>
   <script>
     htmx.on('#form', 'htmx:xhr:progress', function (evt) {
-      htmx.find('#progress').setAttribute('value', evt.detail.loaded / evt.detail.total * 100)
+      htmx.find('#progress').setAttribute('value', evt.detail.loaded / evt.detail.total * 100);
+      if (evt.detail.loaded == evt.detail.total) {
+        htmx.off('#form', 'htmx:xhr:progress', this);
+      }
     });
   </script>
 </div>

@@ -2,11 +2,14 @@ import { app } from '@azure/functions';
 import { CosmosClient } from '@azure/cosmos';
 import fetch from 'node-fetch';
 
+const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
+const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
+
 app.timer('xff-ip-refresh', {
     schedule: '0 0 * * 0',
     handler: async (myTimer, context) => {
-        const cosmosClient = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
-        const { database } = await cosmosClient.databases.createIfNotExists({ id: process.env.COSMOS_DB_DATABASE_NAME });
+        const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
+        const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
         const { container } = await database.containers.createIfNotExists({
             id: "vvdotcr-settings-dev",
             partitionKey: {

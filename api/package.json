@@ -10,9 +10,11 @@
   "dependencies": {
     "@anzp/azure-function-multipart": "^3.1.0",
     "@azure/cosmos": "^4.0.0",
+    "@azure/service-bus": "^7.9.3",
     "@azure/storage-blob": "^12.17.0",
     "handlebars": "^4.7.8",
     "ip-range-check": "^0.2.0",
+    "sharp": "^0.33.1",
     "streamifier": "^0.1.1"
   }
 }

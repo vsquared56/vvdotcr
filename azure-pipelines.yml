@@ -9,7 +9,7 @@ pool:
 variables:
 - group: azure_deployment
 - name: nodeVersion
-  value: 16
+  value: 18
 
 steps:
 - task: NodeTool@0

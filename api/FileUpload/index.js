@@ -6,10 +6,12 @@ import {
   StorageSharedKeyCredential,
   newPipeline
 } from "@azure/storage-blob";
+import { ServiceBusClient } from "@azure/service-bus";
 import { CosmosClient } from "@azure/cosmos";
 import parseMultipartFormData from "@anzp/azure-function-multipart";
-import streamifier from "streamifier"
+import streamifier from "streamifier";
 import handlebars from "handlebars";
+import sharp from "sharp";
 
 import parseXff from "../shared/parse-xff.js";
 
@@ -22,11 +24,12 @@ const ALLOWED_IMAGE_TYPES = {
 
 const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
 const STORAGE_KEY = process.env.STORAGE_KEY;
-const STORAGE_CONTAINER = process.env.STORAGE_CONTAINER;
+const STORAGE_CONTAINER = "vvdotcr-fileupload-dev";
 const STORAGE_URL = `https://${STORAGE_ACCOUNT}.blob.core.windows.net`;
 
 const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
 const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
+const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
 
 export default async (context, req) => {
 
@@ -42,7 +45,7 @@ export default async (context, req) => {
     const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit.hbs');
     const templateContent = fs.readFileSync(directoryPath).toString();
     var template = handlebars.compile(templateContent);
-  
+
     context.res = {
       status: 200,
       body: template()
@@ -50,7 +53,7 @@ export default async (context, req) => {
   }
   else if (req.method === "POST") {
     const { fields, files } = await parseMultipartFormData.default(req);
-    const fileId = crypto.randomUUID();
+    const submissionId = crypto.randomUUID();
     const contentType = files[0].mimeType;
     const originalFileName = files[0].filename;
     const originalFileExtension = path.extname(originalFileName).toLowerCase().replace(/^\./, '');
@@ -88,68 +91,102 @@ export default async (context, req) => {
     }
     else {
       const fileData = files[0].bufferFile;
-      const fileName = `${fileId}.${originalFileExtension}`;
+      const fileName = `${submissionId}.${originalFileExtension}`;
 
-      // Set auth credentials for upload
-      const sharedKeyCredential = new StorageSharedKeyCredential(
-        STORAGE_ACCOUNT,
-        STORAGE_KEY
-      );
-      const pipeline = newPipeline(sharedKeyCredential);
+      const fileMetadata = await sharp(fileData).metadata();
 
-      // Upload the file
-      const blobServiceClient = new BlobServiceClient(STORAGE_URL, pipeline);
-      const containerClient =
-        blobServiceClient.getContainerClient(STORAGE_CONTAINER);
-      const blockBlobClient = containerClient.getBlockBlobClient(`originals/${fileName}`);
-      const uploadBlobResponse = await blockBlobClient.uploadStream(
-        streamifier.createReadStream(new Buffer(fileData)),
-        fileData.length,
-        5,
-        {
-          blobHTTPHeaders: {
-            blobContentType: contentType
+      if (fileMetadata.width < 600 || fileMetadata.height < 600) {
+        const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_try_again.hbs');
+        const templateContent = fs.readFileSync(directoryPath).toString();
+        var template = handlebars.compile(templateContent);
+        context.res = {
+          status: 200,
+          body: template({ error: "Images must be at least 600x600." })
+        };
+      } else {
+
+        // Set auth credentials for upload
+        const sharedKeyCredential = new StorageSharedKeyCredential(
+          STORAGE_ACCOUNT,
+          STORAGE_KEY
+        );
+        const pipeline = newPipeline(sharedKeyCredential);
+
+        // Upload the file
+        const blobServiceClient = new BlobServiceClient(STORAGE_URL, pipeline);
+        const containerClient =
+          blobServiceClient.getContainerClient(STORAGE_CONTAINER);
+        const blockBlobClient = containerClient.getBlockBlobClient(`originals/${fileName}`);
+        const uploadBlobResponse = await blockBlobClient.uploadStream(
+          streamifier.createReadStream(fileData),
+          fileData.length,
+          5,
+          {
+            blobHTTPHeaders: {
+              blobContentType: contentType
+            }
           }
-        }
-      );
+        );
+        const originalImageUrl = `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`;
 
-      const createDate = Date.now();
-      const item = {
-        id: fileId,
-        fileName: fileName,
-        originalFileName: originalFileName,
-        originalFileType: contentType,
-        originalFileSize: originalFileSize,
-        originalComment: null,
-        uploadUserAgent: req.headers['user-agent'],
-        uploadXFF: req.headers['x-forwarded-for'],
-        uploadIP: clientIp,
-        createDate: createDate,
-        modifyDate: createDate,
-        publishDate: null,
-        publishedBy: null,
-        isPublished: false,
-        originalImageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`,
-        thumbnailImageUrl: null,
-        largeImageUrl: null
+        // Set DB item
+        const createDate = Date.now();
+        const submissionStatus = "saved";
+        const item = {
+          id: submissionId,
+          submissionStatus: submissionStatus,
+          fileName: fileName,
+          originalFileName: originalFileName,
+          originalFileType: contentType,
+          originalFileSize: originalFileSize,
+          originalHeight: fileMetadata.height,
+          originalWidth: fileMetadata.width,
+          originalComment: null,
+          uploadUserAgent: req.headers['user-agent'],
+          uploadXFF: req.headers['x-forwarded-for'],
+          uploadIP: clientIp,
+          createDate: createDate,
+          modifyDate: createDate,
+          processingLatency: null,
+          publishDate: null,
+          publishedBy: null,
+          isPublished: false,
+          originalImageUrl: originalImageUrl,
+          thumbnailImageUrl: null,
+          largeImageUrl: null,
+          imageLocation: null,
+          visionData: null
+        }
+
+        // Save image data to CosmosDB
+        const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
+        const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
+        const { container } = await database.containers.createIfNotExists({
+          id: "vvdotcr-fileupload-dev",
+          partitionKey: {
+            paths: "/id"
+          }
+        });
+        const { resource } = await container.items.create(item);
+
+        // Send a Service Bus Message
+        const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
+        const sbSender = sbClient.createSender('new-file-uploads');
+        try {
+          await sbSender.sendMessages({ body: submissionId });
+        } finally {
+          await sbClient.close();
+        }
+
+        const templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_status_recheck.hbs');
+        const templateContent = fs.readFileSync(templatePath).toString();
+        var template = handlebars.compile(templateContent);
+
+        context.res = {
+          status: 200,
+          body: template({ submissionId: submissionId, submissionStatus: submissionStatus, recheckCount: 0, recheckInterval: 1 })
+        };
       }
-
-      const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
-      const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
-      const { container } = await database.containers.createIfNotExists({
-        id: "vvdotcr-fileupload-dev",
-        partitionKey: {
-          paths: "/id"
-        }
-      });
-      const { resource } = await container.items.create(item);
-
-      context.res = {
-        body: {
-          imageUrl: `${STORAGE_URL}/${STORAGE_CONTAINER}/originals/${fileName}`,
-          cosmosResource: resource
-        }
-      };
     }
   }
 };
