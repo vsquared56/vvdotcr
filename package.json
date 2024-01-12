@@ -9,8 +9,14 @@
   "keywords": [],
   "author": "",
   "devDependencies": {
-    "@azure/static-web-apps-cli": "^1.1.6",
-    "lerna": "^8.0.2"
+    "@azure/static-web-apps-cli": "^1.1.6"
   },
-  "dependencies": {}
+  "workspaces": {
+    "packages": [
+      "./packages/common",
+      "./packages/functions",
+      "./packages/swa/api"
+    ]
+  },
+  "packageManager": "yarn@4.0.2"
 }
