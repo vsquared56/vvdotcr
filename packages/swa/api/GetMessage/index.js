@@ -4,11 +4,7 @@ import handlebars from "handlebars";
 
 import parseXff from "../shared/parse-xff.js";
 
-import test from "@vvdotcr/common";
-
 export default async (context, req) => {
-  test();
-
   const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sample.hbs');
 
   const templateContent = fs.readFileSync(directoryPath).toString();
