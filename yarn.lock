@@ -902,7 +902,6 @@ __metadata:
   resolution: "@vvdotcr/api@workspace:packages/swa/api"
   dependencies:
     "@anzp/azure-function-multipart": "npm:^3.1.0"
-    "@azure/cosmos": "npm:^4.0.0"
     "@azure/service-bus": "npm:^7.9.3"
     "@vvdotcr/common": "npm:^1.0.0"
     handlebars: "npm:^4.7.8"
@@ -916,7 +915,6 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vvdotcr/backend-functions@workspace:packages/functions"
   dependencies:
-    "@azure/cosmos": "npm:^4.0.0"
     "@azure/functions": "npm:^4.0.0"
     "@vvdotcr/common": "npm:^1.0.0"
     azure-functions-core-tools: "npm:^4.x"
@@ -930,6 +928,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vvdotcr/common@workspace:packages/common"
   dependencies:
+    "@azure/cosmos": "npm:^4.0.0"
     "@azure/storage-blob": "npm:^12.17.0"
   languageName: unknown
   linkType: soft

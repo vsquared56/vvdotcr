@@ -2,9 +2,8 @@ import * as crypto from "crypto";
 import * as fs from "fs";
 import * as path from "path";
 import { ServiceBusClient } from "@azure/service-bus";
-import { CosmosClient } from "@azure/cosmos";
+
 import parseMultipartFormData from "@anzp/azure-function-multipart";
-import streamifier from "streamifier";
 import handlebars from "handlebars";
 import sharp from "sharp";
 
@@ -18,8 +17,6 @@ const ALLOWED_IMAGE_TYPES = {
   "jpeg": "image/jpeg"
 }
 
-const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
-const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
 const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
 
 export default async (context, req) => {
@@ -128,15 +125,7 @@ export default async (context, req) => {
         }
 
         // Save image data to CosmosDB
-        const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
-        const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
-        const { container } = await database.containers.createIfNotExists({
-          id: "vvdotcr-fileupload-dev",
-          partitionKey: {
-            paths: "/id"
-          }
-        });
-        const { resource } = await container.items.create(item);
+        await utils.saveSighting(item);
 
         // Send a Service Bus Message
         const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);

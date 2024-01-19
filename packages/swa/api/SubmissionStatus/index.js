@@ -2,10 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import handlebars from "handlebars";
 
-import { CosmosClient } from "@azure/cosmos";
-
-const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
-const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
+import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
   const submissionId = req.query.submissionId;
@@ -13,23 +10,8 @@ export default async (context, req) => {
   var submissionStatus;
   var templateFile;
 
-  var item;
-  const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
-  const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
-  const { container } = await database.containers.createIfNotExists({
-    id: "vvdotcr-fileupload-dev",
-    partitionKey: {
-      paths: "/id"
-    }
-  });
-  const { resource } = await container.item(submissionId, submissionId).read();
-  if (resource === undefined || !resource.hasOwnProperty('submissionStatus')) {
-    throw new Error('Error reading submission data from CosmosDB');
-  }
-  else {
-    item = resource;
-    submissionStatus = item.submissionStatus;
-  }
+  var item = await utils.getSighting(submissionId);
+  submissionStatus = item.submissionStatus;
 
   var templatePath, templateContent, template, response;
   if (submissionStatus === "saved") {

@@ -1,15 +1,10 @@
 import { app } from '@azure/functions';
-import { CosmosClient } from '@azure/cosmos';
 import exifr from "exifr";
 import fetch from 'node-fetch';
 import sharp from "sharp";
 
 import * as utils from "@vvdotcr/common";
 
-const STORAGE_CONTAINER = "vvdotcr-fileupload-dev";
-
-const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
-const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
 const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
 const VISION_API_ENDPOINT = process.env.VISION_API_ENDPOINT;
 const VISION_API_KEY = process.env.VISION_API_KEY;
@@ -18,24 +13,7 @@ app.serviceBusQueue('process-image', {
     connection: 'SERVICE_BUS_CONNECTION_STRING',
     queueName: 'new-file-uploads',
     handler: async (message, context) => {
-        var item;
-        const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
-        const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
-        const { container } = await database.containers.createIfNotExists({
-            id: STORAGE_CONTAINER,
-            partitionKey: {
-                paths: "/id"
-            }
-        });
-
-        const { resource } = await container.item(message, message).read();
-        if (resource === undefined) {
-            throw new Error(`Error reading file upload document ${message} from CosmosDB`);
-        }
-        else {
-            item = resource;
-        }
-
+        const item = await utils.getSighting(message);
         const originalSighting = await utils.downloadSighting(item.fileName);
 
         // Resize to 600px
@@ -82,6 +60,6 @@ app.serviceBusQueue('process-image', {
         item.modifyDate = Date.now();
         item.processingLatency = item.modifyDate - item.createDate;
 
-        const { upsert } = await container.items.upsert(item);
+        await utils.saveSighting(item);
     },
 });

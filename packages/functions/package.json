@@ -9,7 +9,6 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
-    "@azure/cosmos": "^4.0.0",
     "@azure/functions": "^4.0.0",
     "@vvdotcr/common": "^1.0.0",
     "exifr": "^7.1.3",

@@ -2,51 +2,33 @@ import * as fs from "fs";
 import * as path from "path";
 import handlebars from "handlebars";
 
-import { CosmosClient } from "@azure/cosmos";
-
-const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
-const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
+import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
   const submissionId = req.query.submissionId;
-
-  var item;
   var submissionStatus;
-  const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
-  const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
-  const { container } = await database.containers.createIfNotExists({
-    id: "vvdotcr-fileupload-dev",
-    partitionKey: {
-      paths: "/id"
-    }
-  });
-  const { resource } = await container.item(submissionId, submissionId).read();
-  if (resource === undefined) {
-    throw new Error(`Error reading file upload document ${message} from CosmosDB`);
-  }
-  else {
-    item = resource;
-    const form = req.parseFormBody();
-    const latitude = parseFloat(form.get('latitude').value.toString());
-    const longitude = parseFloat(form.get('longitude').value.toString());
-    const accuracy = parseFloat(form.get('accuracy').value.toString());
-    const timestamp = parseInt(form.get('timestamp').value.toString());
+  var item = await utils.getSighting(submissionId);
 
-    const imageLocation = {
-      latitude: isNaN(latitude) ? null : latitude,
-      longitude: isNaN(longitude) ? null : longitude,
-      accuracy: isNaN(accuracy) ? null : accuracy,
-      timestamp: isNaN(timestamp) ? null : timestamp,
-      source: 'browser'
-    };
-    submissionStatus = 'accepted';
+  const form = req.parseFormBody();
+  const latitude = parseFloat(form.get('latitude').value.toString());
+  const longitude = parseFloat(form.get('longitude').value.toString());
+  const accuracy = parseFloat(form.get('accuracy').value.toString());
+  const timestamp = parseInt(form.get('timestamp').value.toString());
 
-    item.imageLocation = imageLocation;
-    item.submissionStatus = submissionStatus;
-    item.modifyDate = Date.now();
+  const imageLocation = {
+    latitude: isNaN(latitude) ? null : latitude,
+    longitude: isNaN(longitude) ? null : longitude,
+    accuracy: isNaN(accuracy) ? null : accuracy,
+    timestamp: isNaN(timestamp) ? null : timestamp,
+    source: 'browser'
+  };
+  submissionStatus = 'accepted';
 
-    const { upsert } = await container.items.upsert(item);
-  }
+  item.imageLocation = imageLocation;
+  item.submissionStatus = submissionStatus;
+  item.modifyDate = Date.now();
+
+  await utils.saveSighting(item);
 
   var templateFile = 'sighting_submit_status_accepted.hbs';
 
