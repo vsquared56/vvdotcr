@@ -8,7 +8,6 @@ import handlebars from "handlebars";
 import sharp from "sharp";
 
 import * as utils from "@vvdotcr/common";
-import parseXff from "../shared/parse-xff.js";
 
 //Maps file extensions to MIME types
 const ALLOWED_IMAGE_TYPES = {
@@ -23,7 +22,7 @@ export default async (context, req) => {
 
   var clientIp = null;
   if (req.headers.hasOwnProperty("x-forwarded-for")) {
-    clientIp = await parseXff(req.headers["x-forwarded-for"]);
+    clientIp = await utils.parseXff(req.headers["x-forwarded-for"]);
   }
   else {
     clientIp = null;

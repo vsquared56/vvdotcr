@@ -905,7 +905,6 @@ __metadata:
     "@azure/service-bus": "npm:^7.9.3"
     "@vvdotcr/common": "npm:^1.0.0"
     handlebars: "npm:^4.7.8"
-    ip-range-check: "npm:^0.2.0"
     sharp: "npm:^0.33.1"
     streamifier: "npm:^0.1.1"
   languageName: unknown
@@ -930,6 +929,7 @@ __metadata:
   dependencies:
     "@azure/cosmos": "npm:^4.0.0"
     "@azure/storage-blob": "npm:^12.17.0"
+    ip-range-check: "npm:^0.2.0"
   languageName: unknown
   linkType: soft
 

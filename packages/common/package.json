@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@azure/cosmos": "^4.0.0",
-    "@azure/storage-blob": "^12.17.0"
+    "@azure/storage-blob": "^12.17.0",
+    "ip-range-check": "^0.2.0"
   }
 }

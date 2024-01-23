@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import handlebars from "handlebars";
 
-import parseXff from "../shared/parse-xff.js";
+import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
   const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sample.hbs');
@@ -12,7 +12,7 @@ export default async (context, req) => {
 
   var clientIp = null;
   if (req.headers.hasOwnProperty("x-forwarded-for")) {
-    clientIp = await parseXff(req.headers["x-forwarded-for"]);
+    clientIp = await utils.parseXff(req.headers["x-forwarded-for"]);
   }
   else {
     clientIp = null;
