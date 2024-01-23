@@ -57,7 +57,6 @@ app.serviceBusQueue('process-image', {
         item.submissionStatus = submissionStatus;
         item.thumbnailImageUrl = thumbnailImageUrl;
         item.visionData = visionData;
-        item.modifyDate = Date.now();
         item.processingLatency = item.modifyDate - item.createDate;
 
         await utils.saveSighting(item);

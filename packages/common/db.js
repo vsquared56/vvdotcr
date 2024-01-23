@@ -36,6 +36,7 @@ export async function saveSighting(sighting) {
             paths: "/id"
         }
     });
+    sighting.modifyDate = Date.now();
     const { upsert } = await container.items.upsert(sighting);
 }
 

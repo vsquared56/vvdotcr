@@ -26,7 +26,6 @@ export default async (context, req) => {
 
   item.imageLocation = imageLocation;
   item.submissionStatus = submissionStatus;
-  item.modifyDate = Date.now();
 
   await utils.saveSighting(item);
 
