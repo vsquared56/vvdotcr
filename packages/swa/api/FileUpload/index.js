@@ -1,10 +1,8 @@
 import * as crypto from "crypto";
-import * as fs from "fs";
 import * as path from "path";
 import { ServiceBusClient } from "@azure/service-bus";
 
 import parseMultipartFormData from "@anzp/azure-function-multipart";
-import handlebars from "handlebars";
 import sharp from "sharp";
 
 import * as utils from "@vvdotcr/common";
@@ -19,7 +17,7 @@ const ALLOWED_IMAGE_TYPES = {
 const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
 
 export default async (context, req) => {
-
+  var response;
   var clientIp = null;
   if (req.headers.hasOwnProperty("x-forwarded-for")) {
     clientIp = await utils.parseXff(req.headers["x-forwarded-for"]);
@@ -29,14 +27,11 @@ export default async (context, req) => {
   }
 
   if (req.method === "GET") {
-    const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit.hbs');
-    const templateContent = fs.readFileSync(directoryPath).toString();
-    var template = handlebars.compile(templateContent);
-
-    context.res = {
-      status: 200,
-      body: template()
-    };
+    response = utils.renderTemplate(
+      'sighting_submit',
+      null,
+      context
+    );
   }
   else if (req.method === "POST") {
     const { fields, files } = await parseMultipartFormData.default(req);
@@ -47,34 +42,25 @@ export default async (context, req) => {
     const originalFileSize = files[0].bufferFile.length;
 
     if (files.length != 1) {
-      const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_try_again.hbs');
-      const templateContent = fs.readFileSync(directoryPath).toString();
-      var template = handlebars.compile(templateContent);
-
-      context.res = {
-        status: 200,
-        body: template({ error: "Only one file upload is allowed at a time." })
-      };
+      response = utils.renderTemplate(
+        'sighting_submit_try_again',
+        { error: "Only one file upload is allowed at a time." },
+        context
+      );
     }
     else if (originalFileSize >= 20 * 1024 * 1024) {
-      const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_try_again.hbs');
-      const templateContent = fs.readFileSync(directoryPath).toString();
-      var template = handlebars.compile(templateContent);
-
-      context.res = {
-        status: 200,
-        body: template({ error: "Images must be below 20 MB." })
-      };
+      response = utils.renderTemplate(
+        'sighting_submit_try_again',
+        { error: "Images must be below 20 MB." },
+        context
+      );
     }
     else if (!(originalFileExtension in ALLOWED_IMAGE_TYPES) || (ALLOWED_IMAGE_TYPES[originalFileExtension] != contentType)) {
-      const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_try_again.hbs');
-      const templateContent = fs.readFileSync(directoryPath).toString();
-      var template = handlebars.compile(templateContent);
-
-      context.res = {
-        status: 200,
-        body: template({ error: "Image is not an allowed type." })
-      };
+      response = utils.renderTemplate(
+        'sighting_submit_try_again',
+        { error: "Image is not an allowed type." },
+        context
+      );
     }
     else {
       const fileData = files[0].bufferFile;
@@ -83,15 +69,12 @@ export default async (context, req) => {
       const fileMetadata = await sharp(fileData).metadata();
 
       if (fileMetadata.width < 600 || fileMetadata.height < 600) {
-        const directoryPath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_try_again.hbs');
-        const templateContent = fs.readFileSync(directoryPath).toString();
-        var template = handlebars.compile(templateContent);
-        context.res = {
-          status: 200,
-          body: template({ error: "Images must be at least 600x600." })
-        };
+        response = utils.renderTemplate(
+          'sighting_submit_try_again',
+          { error: "Images must be at least 600x600." },
+          context
+        );
       } else {
-
         const originalImageUrl = await utils.uploadSighting(`originals/${fileName}`, fileData);
 
         // Set DB item
@@ -135,15 +118,17 @@ export default async (context, req) => {
           await sbClient.close();
         }
 
-        const templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', 'sighting_submit_status_recheck.hbs');
-        const templateContent = fs.readFileSync(templatePath).toString();
-        var template = handlebars.compile(templateContent);
-
-        context.res = {
-          status: 200,
-          body: template({ submissionId: submissionId, submissionStatus: submissionStatus, recheckCount: 0, recheckInterval: 1 })
-        };
+        response = utils.renderTemplate(
+          'sighting_submit_status_recheck',
+          { submissionId: submissionId, submissionStatus: submissionStatus, recheckCount: 0, recheckInterval: 1 },
+          context
+        );
       }
     }
   }
+
+  context.res = {
+    status: 200,
+    body: response
+  };
 };

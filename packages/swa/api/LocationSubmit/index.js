@@ -1,10 +1,7 @@
-import * as fs from "fs";
-import * as path from "path";
-import handlebars from "handlebars";
-
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  var response;
   const submissionId = req.query.submissionId;
   var submissionStatus;
   var item = await utils.getSighting(submissionId);
@@ -28,14 +25,11 @@ export default async (context, req) => {
   item.submissionStatus = submissionStatus;
 
   await utils.saveSighting(item);
-
-  var templateFile = 'sighting_submit_status_accepted.hbs';
-
-  var templatePath, templateContent, template, response;
-  templatePath = path.join(context.executionContext.functionDirectory, '..', 'views', templateFile);
-  templateContent = fs.readFileSync(templatePath).toString();
-  template = handlebars.compile(templateContent);
-  response = template({ submissionId: submissionId, submissionStatus: submissionStatus, imageData: JSON.stringify(item) });
+  response = utils.renderTemplate(
+    'sighting_submit_status_accepted',
+    { submissionId: submissionId, submissionStatus: submissionStatus, imageData: JSON.stringify(item) },
+    context
+  );
 
   context.res = {
     status: 200,
