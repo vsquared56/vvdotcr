@@ -914,6 +914,7 @@ __metadata:
   resolution: "@vvdotcr/backend-functions@workspace:packages/functions"
   dependencies:
     "@azure/functions": "npm:^4.0.0"
+    "@azure/service-bus": "npm:^7.9.3"
     "@vvdotcr/common": "npm:^1.0.0"
     azure-functions-core-tools: "npm:^4.x"
     exifr: "npm:^7.1.3"

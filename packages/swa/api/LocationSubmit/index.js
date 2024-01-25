@@ -1,4 +1,8 @@
+import { ServiceBusClient } from "@azure/service-bus";
+
 import * as utils from "@vvdotcr/common";
+
+const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
 
 export default async (context, req) => {
   var response;
@@ -19,17 +23,26 @@ export default async (context, req) => {
     timestamp: isNaN(timestamp) ? null : timestamp,
     source: 'browser'
   };
-  submissionStatus = 'accepted';
+  submissionStatus = 'pendingAutomaticApproval';
 
   item.imageLocation = imageLocation;
   item.submissionStatus = submissionStatus;
 
   await utils.saveSighting(item);
   response = utils.renderTemplate(
-    'sighting_submit_status_accepted',
-    { submissionId: submissionId, submissionStatus: submissionStatus, imageData: JSON.stringify(item) },
+    'sighting_submit_status_recheck',
+    { submissionId: submissionId, submissionStatus: submissionStatus, imageData: JSON.stringify(item), recheckCount: 0, recheckInterval: 1 },
     context
   );
+
+  // Send a Service Bus Message
+  const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
+  const sbSender = sbClient.createSender('new-sightings-to-validate');
+  try {
+    await sbSender.sendMessages({ body: item.id });
+  } finally {
+    await sbClient.close();
+  }
 
   context.res = {
     status: 200,

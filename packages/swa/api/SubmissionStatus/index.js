@@ -7,7 +7,7 @@ export default async (context, req) => {
   const item = await utils.getSighting(submissionId);
   const submissionStatus = item.submissionStatus;
 
-  if (submissionStatus === 'saved') {
+  if (submissionStatus === 'saved' || submissionStatus === 'pendingAutomaticApproval') {
     if (recheckCount >= 8) {
       response = utils.renderTemplate(
         'sighting_submit_status_timeout',

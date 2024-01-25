@@ -1,4 +1,5 @@
 import { app } from '@azure/functions';
+import { ServiceBusClient } from "@azure/service-bus";
 import exifr from "exifr";
 import fetch from 'node-fetch';
 import sharp from "sharp";
@@ -44,7 +45,7 @@ app.serviceBusQueue('process-image', {
             submissionStatus = "locationRequest";
             item.imageLocation = null;
         } else {
-            submissionStatus = "accepted";
+            submissionStatus = "pendingAutomaticApproval";
             item.imageLocation = {
                 latitude: locationData.latitude,
                 longitude: locationData.longitude,
@@ -60,5 +61,14 @@ app.serviceBusQueue('process-image', {
         item.processingLatency = item.modifyDate - item.createDate;
 
         await utils.saveSighting(item);
+
+        // Send a Service Bus Message
+        const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
+        const sbSender = sbClient.createSender('new-sightings-to-validate');
+        try {
+          await sbSender.sendMessages({ body: item.id });
+        } finally {
+          await sbClient.close();
+        }
     },
 });
