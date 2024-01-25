@@ -17,16 +17,20 @@ steps:
   inputs:
     versionSpec: '$(nodeVersion).x'
 
-- task: Npm@1
-  displayName: 'Install Azure functions dependencies'
+- task: Bash@3
   inputs:
-    command: 'ci'
-    workingDir: 'functions'
+    targetType: 'inline'
+    script: 'corepack enable'
+
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: 'yarn install'
 
 - task: ArchiveFiles@2
   displayName: 'Zip Azure functions'
   inputs:
-    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/functions'
+    rootFolderOrFile: '$(System.DefaultWorkingDirectory)/packages/functions'
     includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
@@ -41,12 +45,6 @@ steps:
     package: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
     runtimeStack: 'NODE|$(nodeVersion)'
 
-- task: Npm@1
-  displayName: 'Install API dependencies'
-  inputs:
-    command: 'install'
-    workingDir: 'api'
-
 - task: AzureStaticWebApp@0
   displayName: 'Deploy Azure Static Web App'
   inputs:
@@ -54,5 +52,5 @@ steps:
     azure_static_web_apps_api_token: $(azure_deployment_token)
     skip_app_build: true
     skip_api_build: true
-    app_location: 'src'
-    api_location: 'api'
+    app_location: 'packages/swa/src'
+    api_location: 'packages/swa/api'

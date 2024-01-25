@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "@vvdotcr/backend-functions",
   "version": "1.0.0",
   "type": "module",
   "description": "",
@@ -9,9 +9,8 @@
     "test": "echo \"No tests yet...\""
   },
   "dependencies": {
-    "@azure/cosmos": "^4.0.0",
     "@azure/functions": "^4.0.0",
-    "@azure/storage-blob": "^12.17.0",
+    "@vvdotcr/common": "^1.0.0",
     "exifr": "^7.1.3",
     "node-fetch": "^3.3.2",
     "sharp": "^0.33.1"
