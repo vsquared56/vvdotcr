@@ -51,7 +51,6 @@ export default async (context, req) => {
       { submissionId: submissionId, submissionStatus: submissionStatus, imageData: JSON.stringify(item) },
       context
     );
-    console.log("HERE");
   } else if (submissionStatus === 'locationRequest') {
     response = utils.renderTemplate(
       'sighting_submit_location_request',

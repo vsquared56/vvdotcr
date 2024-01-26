@@ -17,7 +17,11 @@ app.serviceBusQueue('submission-approval', {
         if (item.imageLocation === null) {
             item.submissionStatus = 'needsManualApproval';
             item.automaticApprovalDenied = 'missingLocation';
-        } else {
+        } else if (item.imageLocation.source === 'browser' && item.imageLocation.accuracy > 250) {
+            item.submissionStatus = 'needsManualApproval';
+            item.automaticApprovalDenied = 'inaccurateBrowserLocation';
+        }
+        else {
             item.submissionStatus = 'approved';
             item.publishDate = Date.now();
             item.publishedBy = "automaticApproval";
