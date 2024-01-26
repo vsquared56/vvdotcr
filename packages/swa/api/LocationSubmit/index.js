@@ -31,7 +31,13 @@ export default async (context, req) => {
   await utils.saveSighting(item);
   response = utils.renderTemplate(
     'sighting_submit_status_recheck',
-    { submissionId: submissionId, submissionStatus: submissionStatus, imageData: JSON.stringify(item), recheckCount: 0, recheckInterval: 1 },
+    {
+      submissionId: submissionId,
+      pendingResizing: false,
+      pendingAutomaticApproval: true,
+      recheckCount: 0,
+      recheckInterval: 1
+    },
     context
   );
 
