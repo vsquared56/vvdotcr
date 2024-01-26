@@ -15,9 +15,12 @@ app.serviceBusQueue('submission-approval', {
         const item = await utils.getSighting(message);
 
         if (item.imageLocation === null) {
-            item.submissionStatus = "needsManualApproval";
+            item.submissionStatus = 'needsManualApproval';
+            item.automaticApprovalDenied = 'missingLocation';
         } else {
-            item.submissionStatus = "approved";
+            item.submissionStatus = 'approved';
+            item.publishDate = Date.now();
+            item.publishedBy = "automaticApproval";
         }
         
         await utils.saveSighting(item);

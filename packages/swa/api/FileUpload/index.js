@@ -98,6 +98,7 @@ export default async (context, req) => {
           processingLatency: null,
           publishDate: null,
           publishedBy: null,
+          automaticApprovalDenied: null,
           isPublished: false,
           originalImageUrl: originalImageUrl,
           thumbnailImageUrl: null,
