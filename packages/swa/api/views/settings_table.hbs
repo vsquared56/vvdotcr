@@ -1,0 +1,26 @@
+<style>
+    table {
+        table-layout: fixed;
+        width: 70%;
+        border: 1px solid red;
+    }
+
+    td {
+        border: 1px solid blue;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
+<table id="settings_table">
+    <thead>
+        <tr>
+            <th>Setting Name</th>
+            <th>Value</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody hx-target="closest tr" hx-swap="outerHTML">
+        {{{settingsItems}}}
+    </tbody>
+</table>

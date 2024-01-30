@@ -63,6 +63,28 @@ export async function getSetting(name) {
     }
 }
 
+export async function getAllSettings() {
+    const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
+    const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
+    const COSMOS_DB_CONTAINER_NAME = "vvdotcr-settings-dev";
+
+    const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
+    const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
+    const { container } = await database.containers.createIfNotExists({
+        id: COSMOS_DB_CONTAINER_NAME,
+        partitionKey: {
+            paths: "/id"
+        }
+    });
+
+    const querySpec = {
+        query: "SELECT * FROM c"
+    };
+    const { resources } = await container.items.query(querySpec).fetchAll();
+    
+    return resources;
+}
+
 export async function saveSetting(name, value) {
     const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
     const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
@@ -78,7 +100,7 @@ export async function saveSetting(name, value) {
     });
 
     const item = {
-        id: "name",
+        id: name,
         modifyDate: Date.now(),
         value: value
     }
