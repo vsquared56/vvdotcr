@@ -24,7 +24,7 @@ app.serviceBusQueue('process-image', {
             .toBuffer();
 
         // Upload the resized image to Blob storage
-        const thumbnailImageUrl = await utils.uploadSighting(`resized/${item.id}.jpeg`, resizedBuffer);
+        const thumbnailImageUrl = await utils.uploadSighting(`resized/${item.id}.jpeg`, 'public', resizedBuffer);
 
         // Send the image to the Azure Vision API
         const visionResponse = await fetch(`${VISION_API_ENDPOINT}/vision/v3.1/tag`, {

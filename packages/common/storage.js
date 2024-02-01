@@ -23,10 +23,18 @@ export async function downloadSighting(filename) {
     return downloadBlobResponse;
 }
 
-export async function uploadSighting(filePath, buffer) {
+export async function uploadSighting(filePath, type, buffer) {
     const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
     const STORAGE_KEY = process.env.STORAGE_KEY;
-    const STORAGE_CONTAINER = "vvdotcr-fileupload-dev";
+    var storage_container;
+    if (type === "original") {
+        storage_container = "vvdotcr-sightings-originals-dev";
+    } else if (type === "public") {
+        storage_container = "vvdotcr-sightings-public-dev";
+    } else {
+        throw new Error("Unsupported sighting file type, must be one of 'original' or 'public'");
+    }
+
     const STORAGE_URL = `https://${STORAGE_ACCOUNT}.blob.core.windows.net`;
 
     // Set auth credentials for upload
