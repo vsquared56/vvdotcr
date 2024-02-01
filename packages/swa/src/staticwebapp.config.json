@@ -12,13 +12,6 @@
     },
     {
       "route": "/api/settings*",
-      "methods": ["GET", "POST", "DELETE"],
-      "allowedRoles": [
-        "administrator"
-      ]
-    },
-    {
-      "route": "/api/settings/*",
       "methods": ["GET", "PUT", "POST", "DELETE"],
       "allowedRoles": [
         "administrator"
