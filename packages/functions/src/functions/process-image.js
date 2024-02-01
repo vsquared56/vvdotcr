@@ -54,7 +54,7 @@ app.serviceBusQueue('process-image', {
                 source: "exif"
             };
         }
-        
+
         item.submissionStatus = submissionStatus;
         item.thumbnailImageUrl = thumbnailImageUrl;
         item.visionData = visionData;
@@ -62,13 +62,15 @@ app.serviceBusQueue('process-image', {
 
         await utils.saveSighting(item);
 
-        // Send a Service Bus Message
-        const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
-        const sbSender = sbClient.createSender('new-sightings-to-validate');
-        try {
-          await sbSender.sendMessages({ body: item.id });
-        } finally {
-          await sbClient.close();
+        if (submissionStatus === "pendingAutomaticApproval") {
+            // Send a Service Bus Message
+            const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
+            const sbSender = sbClient.createSender('new-sightings-to-validate');
+            try {
+                await sbSender.sendMessages({ body: item.id });
+            } finally {
+                await sbClient.close();
+            }
         }
-    },
+    }
 });
