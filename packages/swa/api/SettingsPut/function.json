@@ -8,7 +8,7 @@
       "methods": [
         "put"
       ],
-      "route": "settings/{settingId?}"
+      "route": "settings/{settingId}"
     },
     {
       "type": "http",
