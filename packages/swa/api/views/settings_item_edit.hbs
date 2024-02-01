@@ -5,6 +5,9 @@
     <button hx-get="/api/settings/{{settingName}}">
       Cancel
     </button>
+    <button hx-delete="/api/settings/{{settingName}}">
+      Delete
+    </button>
     <button hx-put="/api/settings/{{settingName}}" hx-include="closest tr">
       Save
     </button>
