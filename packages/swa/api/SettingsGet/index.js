@@ -6,7 +6,11 @@ export default async (context, req) => {
   const edit = req.params.edit;
   const settingId = req.params.settingId;
 
-  if (settingId) {
+  if (settingId === 'new') {
+    response = utils.renderTemplate('settings_item_new', null, context);
+  } else if (settingId === 'add') {
+    response = utils.renderTemplate('settings_item_add', null, context);
+  } else if (settingId) {
     const settingValue = await utils.getSetting(settingId);
     if (edit) {
       response = utils.renderTemplate(

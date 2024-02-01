@@ -22,5 +22,12 @@
     </thead>
     <tbody hx-target="closest tr" hx-swap="outerHTML">
         {{{settingsItems}}}
+        <tr>
+            <td colspan = 3>
+                <button class="btn btn-danger" hx-get="/api/settings/new" >
+                Add Setting
+                </button>
+            </td>
+        </tr>
     </tbody>
 </table>
