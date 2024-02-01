@@ -11,6 +11,8 @@
   "dependencies": {
     "@azure/functions": "^4.0.0",
     "@azure/service-bus": "^7.9.3",
+    "@turf/boolean-intersects": "^6.5.0",
+    "@turf/circle": "^6.5.0",
     "@vvdotcr/common": "^1.0.0",
     "exifr": "^7.1.3",
     "node-fetch": "^3.3.2",
