@@ -25,11 +25,10 @@
 <body>
   <main>
     <h1>Admin Section</h1>
-    <p>Settings: <b id="postdata"></b></b></p>
-    <!-- have a button POST a click via AJAX -->
-    <button hx-get="/api/settings" hx-swap="outerHTML">
-      Click Me to load settings
-    </button>
+    <p>Settings</p>
+    <div hx-get="/api/settings" hx-trigger="load">
+      <img alt="Result loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
+    </div>
   </main>
 </body>
 
