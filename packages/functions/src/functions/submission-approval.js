@@ -17,7 +17,7 @@ app.serviceBusQueue('submission-approval', {
         const item = await utils.getSighting(message);
         const minLocationAccuracy = await utils.getSetting("min_location_accuracy_meters");
 
-        if (item.imageLocation === null) {
+        if (item.imageLocation === null || item.imageLocation.latitude === null || item.imageLocation.longitude === null) {
             item.submissionStatus = 'needsManualApproval';
             item.automaticApprovalDenied = 'missingLocation';
         } else if (item.imageLocation.source === 'browser' && item.imageLocation.accuracy > minLocationAccuracy) {
