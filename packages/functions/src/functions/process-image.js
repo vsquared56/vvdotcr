@@ -15,7 +15,7 @@ app.serviceBusQueue('process-image', {
     queueName: 'new-file-uploads',
     handler: async (message, context) => {
         const item = await utils.getSighting(message);
-        const originalSighting = await utils.downloadSighting(item.fileName);
+        const originalSighting = await utils.downloadOriginalSighting(item.fileName);
 
         // Resize to 600px
         const resizedBuffer = await sharp(originalSighting)
