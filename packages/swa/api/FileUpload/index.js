@@ -75,7 +75,7 @@ export default async (context, req) => {
           context
         );
       } else {
-        const originalImageUrl = await utils.uploadSighting(`originals/${fileName}`, fileData);
+        const originalImageUrl = await utils.uploadSighting(`originals/${fileName}`, 'original', fileData);
 
         // Set DB item
         const createDate = Date.now();
@@ -98,6 +98,7 @@ export default async (context, req) => {
           processingLatency: null,
           publishDate: null,
           publishedBy: null,
+          automaticApprovalDenied: null,
           isPublished: false,
           originalImageUrl: originalImageUrl,
           thumbnailImageUrl: null,

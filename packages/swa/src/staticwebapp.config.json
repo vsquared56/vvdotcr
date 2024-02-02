@@ -1,5 +1,29 @@
 {
-    "platform": {
-      "apiRuntime": "node:18"
+  "platform": {
+    "apiRuntime": "node:18"
+  },
+  "routes": [
+    {
+      "route": "/admin*",
+      "rewrite": "/admin.html",
+      "allowedRoles": [
+        "administrator"
+      ]
+    },
+    {
+      "route": "/api/settings*",
+      "methods": ["GET", "PUT", "POST", "DELETE"],
+      "allowedRoles": [
+        "administrator"
+      ]
+    },
+    {
+      "route": "/login",
+      "redirect": "/.auth/login/aad"
+    },
+    {
+      "route": "/.auth/login/github",
+      "statusCode": 404
     }
-  }
+  ]
+}

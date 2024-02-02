@@ -1,0 +1,15 @@
+<tr hx-trigger='cancel' class='editing' hx-get="/api/setting/?settingId={{settingId}}">
+  <td>{{settingName}}</td>
+  <td><input name='value' value='{{{settingValue}}}'></td>
+  <td>
+    <button hx-get="/api/settings/{{settingName}}">
+      Cancel
+    </button>
+    <button hx-delete="/api/settings/{{settingName}}">
+      Delete
+    </button>
+    <button hx-put="/api/settings/{{settingName}}" hx-include="closest tr">
+      Save
+    </button>
+  </td>
+</tr>

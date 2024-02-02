@@ -1,4 +1,5 @@
 import { app } from '@azure/functions';
+import { ServiceBusClient } from "@azure/service-bus";
 import exifr from "exifr";
 import fetch from 'node-fetch';
 import sharp from "sharp";
@@ -14,7 +15,7 @@ app.serviceBusQueue('process-image', {
     queueName: 'new-file-uploads',
     handler: async (message, context) => {
         const item = await utils.getSighting(message);
-        const originalSighting = await utils.downloadSighting(item.fileName);
+        const originalSighting = await utils.downloadOriginalSighting(item.fileName);
 
         // Resize to 600px
         const resizedBuffer = await sharp(originalSighting)
@@ -23,7 +24,7 @@ app.serviceBusQueue('process-image', {
             .toBuffer();
 
         // Upload the resized image to Blob storage
-        const thumbnailImageUrl = await utils.uploadSighting(`resized/${item.id}.jpeg`, resizedBuffer);
+        const thumbnailImageUrl = await utils.uploadSighting(`resized/${item.id}.jpeg`, 'public', resizedBuffer);
 
         // Send the image to the Azure Vision API
         const visionResponse = await fetch(`${VISION_API_ENDPOINT}/vision/v3.1/tag`, {
@@ -44,7 +45,7 @@ app.serviceBusQueue('process-image', {
             submissionStatus = "locationRequest";
             item.imageLocation = null;
         } else {
-            submissionStatus = "accepted";
+            submissionStatus = "pendingAutomaticApproval";
             item.imageLocation = {
                 latitude: locationData.latitude,
                 longitude: locationData.longitude,
@@ -53,12 +54,23 @@ app.serviceBusQueue('process-image', {
                 source: "exif"
             };
         }
-        
+
         item.submissionStatus = submissionStatus;
         item.thumbnailImageUrl = thumbnailImageUrl;
         item.visionData = visionData;
         item.processingLatency = item.modifyDate - item.createDate;
 
         await utils.saveSighting(item);
-    },
+
+        if (submissionStatus === "pendingAutomaticApproval") {
+            // Send a Service Bus Message
+            const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
+            const sbSender = sbClient.createSender('new-sightings-to-validate');
+            try {
+                await sbSender.sendMessages({ body: item.id });
+            } finally {
+                await sbClient.close();
+            }
+        }
+    }
 });

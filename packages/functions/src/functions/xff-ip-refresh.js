@@ -16,7 +16,7 @@ app.timer('xff-ip-refresh', {
             await utils.saveSetting("cloudflare_ip_blocks", cloudflareIPBlocks);
         }
 
-        const azResponse = await fetch('https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20240108.json');
+        const azResponse = await fetch('https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20240122.json');
         const azData = await azResponse.json();
         if (azData.values.length > 0) {
             const azureASM = azData.values.filter(x => x.name === 'AppServiceManagement');

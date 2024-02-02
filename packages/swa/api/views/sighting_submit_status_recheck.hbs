@@ -1,5 +1,11 @@
 <div id="sighting_submission" hx-get="/api/submission-status?submissionId={{submissionId}}&recheckCount={{recheckCount}}" hx-trigger="every {{recheckInterval}}s" hx-swap="outerHTML">
   <div id="sighting_submission_id">{{submissionId}}</div>
     Image saved... rechecking status every {{recheckInterval}} seconds...
-  <div id="sighting_submission_status">Current status: {{submissionStatus}}</div>
+  <div id="sighting_submission_status">
+    {{#if pendingResizing}}
+    Current status: pending resizing.
+    {{else if pendingAutomaticApproval}}
+    Current status: pending automatic approval.
+    {{/if}}
+  </div>
 </div>

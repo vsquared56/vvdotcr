@@ -1,0 +1,12 @@
+<tr hx-trigger='cancel' class='editing' hx-get="/api/settings">
+  <td><input name='name' value='setting_name'</td>
+  <td><input name='value' value='"Some JSON"'></td>
+  <td>
+    <button hx-get="/api/settings/add">
+      Cancel
+    </button>
+    <button hx-post="/api/settings" hx-include="closest tr">
+      Save
+    </button>
+  </td>
+</tr>
