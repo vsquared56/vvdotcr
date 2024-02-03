@@ -43,6 +43,7 @@ app.serviceBusQueue('submission-approval', {
                 item.automaticApprovalDenied = 'geolocked';
             } else {
                 item.submissionStatus = 'approved';
+                item.isPublished = true;
                 item.publishDate = Date.now();
                 item.publishedBy = "automaticApproval";
             }
