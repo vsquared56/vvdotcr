@@ -41,11 +41,11 @@ export async function getPaginatedSightings(count, page) {
     if (page) {
         const offset = count * page;
         querySpec = {
-            query: `SELECT * FROM c ORDER BY c.createDate DESC OFFSET ${offset} LIMIT ${count}`
+            query: `SELECT * FROM c WHERE c.isPublished ORDER BY c.createDate DESC OFFSET ${offset} LIMIT ${count}`
         };
     } else {
         querySpec = {
-            query: `SELECT * FROM c ORDER BY c.createDate DESC`
+            query: `SELECT * FROM c WHERE c.isPublished ORDER BY c.createDate DESC`
         };
     }
 
