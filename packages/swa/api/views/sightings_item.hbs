@@ -1,10 +1,10 @@
-<div class="sighting"></div>
-  <div class="sighting_description">{{sightingId}}</div>
-  <div class="sighting_image"><img src='{{sightingImage}}' /></div>
-  {{#if loadMore}}
-  <div class="sighting-load-more"
-     hx-get="/api/sightings/{{nextPage}}"
-     hx-swap="outerHTML"
-     hx-trigger="revealed">Loading more sightings...</div>
-  {{/if}}
+<div class="sighting">
+  <div class="sighting-description">{{sightingId}}</div>
+  <img class="sighting-img" src='{{sightingImage}}' />
 </div>
+{{#if loadMore}}
+<div class="sighting-load-more"
+  hx-get="/api/sightings/{{nextPage}}"
+  hx-swap="outerHTML"
+  hx-trigger="revealed">Loading more sightings...</div>
+{{/if}}
