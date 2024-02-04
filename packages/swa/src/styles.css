@@ -32,6 +32,10 @@ img.htmx-indicator {
   transition: opacity 300ms ease-in;
 }
 
+.sighting-submit {
+  padding-bottom: 2rem;
+}
+
 .sightings {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
