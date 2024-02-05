@@ -23,7 +23,7 @@ export async function getSighting(id) {
     }
 }
 
-export async function getPaginatedSightings(count, page) {
+export async function getPaginatedSightings(count, includeUnpublished, page) {
     const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
     const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
     const COSMOS_DB_CONTAINER_NAME = "vvdotcr-sightings-dev";
@@ -37,15 +37,20 @@ export async function getPaginatedSightings(count, page) {
         }
     });
 
-    var querySpec;
+    var querySpec, whereClause;
+    if (includeUnpublished) {
+        whereClause = "";
+    } else {
+        whereClause = "WHERE c.isPublished";
+    }
     if (page) {
         const offset = count * page;
         querySpec = {
-            query: `SELECT * FROM c WHERE c.isPublished ORDER BY c.createDate DESC OFFSET ${offset} LIMIT ${count}`
+            query: `SELECT * FROM c ${whereClause} ORDER BY c.createDate DESC OFFSET ${offset} LIMIT ${count}`
         };
     } else {
         querySpec = {
-            query: `SELECT * FROM c WHERE c.isPublished ORDER BY c.createDate DESC`
+            query: `SELECT * FROM c ${whereClause} ORDER BY c.createDate DESC`
         };
     }
 
