@@ -2,9 +2,8 @@ import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
   var response = "";
-  const page = req.params.page ? parseInt(req.params.page) : 0;
+  const page = req.query.page ? parseInt(req.query.page) : 0;
   const sightings = await utils.getPaginatedSightings(2, page);
-
 
   if (!sightings.items) {
     response = utils.renderTemplate(

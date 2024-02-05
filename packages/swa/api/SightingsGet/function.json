@@ -8,7 +8,7 @@
       "methods": [
         "get"
       ],
-      "route": "sightings/{page:int?}"
+      "route": "sightings/{sightingId:guid?}"
     },
     {
       "type": "http",
