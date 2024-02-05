@@ -10,14 +10,25 @@ export default async (context, req) => {
     const sighting = await utils.getSighting(sightingId);
     var sightingProperties = "";
     for (const property in sighting) {
-      sightingProperties += utils.renderTemplate(
-        'admin_sightings_item_property',
-        {
-          propertyName: property,
-          propertyValue: JSON.stringify(sighting[property])
-        },
-        context
-      );
+      var propertyValue;
+
+      if (!property.match(/_.*/)) { //Ignore internal CosmosDB properties
+        if (property.match(/.*Date/) && sighting[property]) {
+          propertyValue = (new Date(sighting[property])).toLocaleString();
+        } else if (typeof sighting[property] === 'string' || sighting[property] instanceof String) {
+          propertyValue = sighting[property];
+        } else {
+          propertyValue = JSON.stringify(sighting[property]);
+        }
+        sightingProperties += utils.renderTemplate(
+          'admin_sightings_item_property',
+          {
+            propertyName: property,
+            propertyValue: propertyValue
+          },
+          context
+        );
+      }
     }
     response = utils.renderTemplate(
       'admin_sightings_item_edit',
