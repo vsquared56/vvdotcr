@@ -18,14 +18,22 @@ steps:
     versionSpec: '$(nodeVersion).x'
 
 - task: Bash@3
+  displayName: 'Corepack enable'
   inputs:
     targetType: 'inline'
     script: 'corepack enable'
 
 - task: Bash@3
+  displayName: 'Install dependencies'
   inputs:
     targetType: 'inline'
     script: 'yarn install'
+
+- task: Bash@3
+  displayName: 'yarn build'
+  inputs:
+    targetType: 'inline'
+    script: 'yarn build'
 
 - task: ArchiveFiles@2
   displayName: 'Zip Azure functions'
@@ -52,5 +60,5 @@ steps:
     azure_static_web_apps_api_token: $(azure_deployment_token)
     skip_app_build: true
     skip_api_build: true
-    app_location: 'packages/swa/src'
+    app_location: 'packages/swa/public'
     api_location: 'packages/swa/api'
