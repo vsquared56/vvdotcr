@@ -1,0 +1,11 @@
+{{#if loadMore}}
+<div class="sighting"
+     hx-get="/api/sightings?page={{nextPage}}"
+     hx-trigger="revealed"
+     hx-swap="afterend">
+{{else}}
+<div class="sighting">
+{{/if}}
+  <div class="sighting-description">{{sightingId}}</div>
+  <img class="sighting-img" src="{{sightingImage}}" />
+</div>

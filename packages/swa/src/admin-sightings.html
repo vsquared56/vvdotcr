@@ -5,18 +5,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="styles.css" />
-  <title>vv.cr Admin</title>
+  <title>vv.cr</title>
   <script src="https://unpkg.com/htmx.org@1.9.9"></script>
 </head>
 
 <body>
   <main>
-    <h1>Admin Section</h1>
-    <p>Settings</p>
-    <div hx-get="/api/settings" hx-trigger="load">
-      <img alt="Result loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
+    <h1>vv.cr</h1>
+    <div id="sightings-modal">
     </div>
-    <a href="./admin-sightings.html">Sightings</a>
+    <div class="sightings" hx-get="/api/panel/sightings" hx-trigger="load">
+      <img alt="Sightings loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
+    </div>
   </main>
 </body>
 

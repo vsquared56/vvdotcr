@@ -20,6 +20,7 @@ app.serviceBusQueue('process-image', {
         // Resize to 600px
         const resizedBuffer = await sharp(originalSighting)
             .resize(600)
+            .rotate()
             .jpeg()
             .toBuffer();
 

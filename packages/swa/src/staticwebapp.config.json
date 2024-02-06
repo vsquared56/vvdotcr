@@ -4,14 +4,33 @@
   },
   "routes": [
     {
-      "route": "/admin*",
+      "route": "/admin",
       "rewrite": "/admin.html",
       "allowedRoles": [
         "administrator"
       ]
     },
     {
+      "route": "/admin.html",
+      "allowedRoles": [
+        "administrator"
+      ]
+    },
+    {
+      "route": "/admin-sightings.html",
+      "allowedRoles": [
+        "administrator"
+      ]
+    },
+    {
       "route": "/api/settings*",
+      "methods": ["GET", "PUT", "POST", "DELETE"],
+      "allowedRoles": [
+        "administrator"
+      ]
+    },
+    {
+      "route": "/api/panel*",
       "methods": ["GET", "PUT", "POST", "DELETE"],
       "allowedRoles": [
         "administrator"
