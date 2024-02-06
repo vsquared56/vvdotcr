@@ -30,6 +30,12 @@ steps:
     script: 'yarn install'
 
 - task: Bash@3
+  displayName: 'Clean public folder'
+  inputs:
+    targetType: 'inline'
+    script: 'yarn clean'
+
+- task: Bash@3
   displayName: 'yarn build'
   inputs:
     targetType: 'inline'
