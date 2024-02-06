@@ -7,7 +7,7 @@
     "build-css": "tailwindcss -i ./packages/swa/src/input.css -o ./packages/swa/public/styles.css",
     "copy": "copyfiles --up 3 ./packages/swa/src/**/*.html ./packages/swa/src/**/*.json ./packages/swa/src/images/* ./packages/swa/public",
     "build": "yarn run copy && yarn run build-css",
-    "start-swa": "swa start packages/swa/src --api-location packages/swa/api",
+    "start-swa": "swa start packages/swa/public --api-location packages/swa/api",
     "start-functions": "func host start --script-root packages/functions",
     "start": "yarn run build && concurrently \"yarn run start-swa\" \"yarn run start-functions\""
   },
@@ -17,6 +17,7 @@
     "@azure/static-web-apps-cli": "^1.1.6",
     "concurrently": "^8.2.2",
     "copyfiles": "^2.4.1",
+    "daisyui": "^4.6.1",
     "tailwindcss": "^3.4.1"
   },
   "workspaces": {
