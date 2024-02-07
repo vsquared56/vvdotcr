@@ -1,12 +1,12 @@
-<div id="submission-error" hx-target="this" hx-swap="outerHTML">
-  <input type="checkbox" id="submission-error-modal" class="modal-toggle" checked="true" />
+<div id="submission-status" hx-target="this" hx-swap="outerHTML">
+  <input type="checkbox" id="submission-status-modal" class="modal-toggle" checked="true" />
   <div class="modal" role="dialog">
     <div class="modal-box">
       <h3 class="font-bold text-lg">Congrats!  Your sighting was accepted!</h3>
       <p class="py-4">{{submissionId}}</p>
       <p class="py-4">Image details: {{imageData}}</p>
       <div class="modal-action">
-        <label for="submission-error-modal" class="btn btn-primary" hx-get="/api/fileupload?finished=true">OK!</label>
+        <label for="submission-status-modal" class="btn btn-primary" hx-get="/api/fileupload?finished=true">OK!</label>
       </div>
     </div>
   </div>

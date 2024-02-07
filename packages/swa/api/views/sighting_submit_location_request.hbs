@@ -1,4 +1,4 @@
-<div id="submission-dialog" hx-target="this" hx-swap="outerHTML">
+<div id="submission-status" hx-target="this" hx-swap="outerHTML">
   <script>
     function locationError(err) {
       console.log(err);
@@ -29,7 +29,7 @@
     }
 
   </script>
-  <input type="checkbox" id="submission-dialog-modal" class="modal-toggle" checked="true" />
+  <input type="checkbox" id="submission-status-modal" class="modal-toggle" checked="true" />
   <div class="modal" role="dialog">
     <div class="modal-box">
       <h3 class="font-bold text-lg">Can we get your location?</h3>
