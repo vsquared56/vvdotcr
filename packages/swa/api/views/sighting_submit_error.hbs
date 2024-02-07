@@ -2,9 +2,8 @@
   <input type="checkbox" id="submission-error-modal" class="modal-toggle" checked="true" />
   <div class="modal" role="dialog">
     <div class="modal-box">
-      <h3 class="font-bold text-lg">Your submission will need manual approval!</h3>
-      <p class="py-4">{{submissionId}}</p>
-      <p class="py-4">{{imageData}}</p>
+      <h3 class="font-bold text-lg">Submission error!</h3>
+      <p class="py-4">{{error}}</p>
       <div class="modal-action">
         <label for="submission-error-modal" class="btn" hx-get="/api/fileupload?finished=true">OK!</label>
       </div>

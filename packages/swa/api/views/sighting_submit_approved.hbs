@@ -1,6 +1,13 @@
-<div class="sighting-submit">
-  <div class="sighting-submission-id">{{submissionId}}</div>
-    Your submission has been accepted.
-  <div class="sighting-submission-status">Current status: {{submissionStatus}}</div>
-  <div class="sighting-submission-details">{{imageData}}</div>
+<div id="submission-error" hx-target="this" hx-swap="outerHTML">
+  <input type="checkbox" id="submission-error-modal" class="modal-toggle" checked="true" />
+  <div class="modal" role="dialog">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Congrats!  Your sighting was accepted!</h3>
+      <p class="py-4">Your submission timed out.  {{submissionId}}</p>
+      <p class="py-4">Image details: {{imageData}}</p>
+      <div class="modal-action">
+        <label for="submission-error-modal" class="btn" hx-get="/api/fileupload?finished=true">OK!</label>
+      </div>
+    </div>
+  </div>
 </div>

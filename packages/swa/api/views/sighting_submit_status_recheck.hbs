@@ -1,11 +1,17 @@
-<div class="sighting-submit" hx-get="/api/submission-status?submissionId={{submissionId}}&recheckCount={{recheckCount}}" hx-trigger="every {{recheckInterval}}s" hx-swap="outerHTML">
-  <div class="sighting-submission-id">{{submissionId}}</div>
-    Image saved... rechecking status every {{recheckInterval}} seconds...
-  <div class="sighting-submission-status">
-    {{#if pendingResizing}}
-    Current status: pending resizing.
-    {{else if pendingAutomaticApproval}}
-    Current status: pending automatic approval.
-    {{/if}}
+<div id="submission-status"
+     hx-get="/api/submission-status?submissionId={{submissionId}}&recheckCount={{recheckCount}}"
+     hx-trigger="every {{recheckInterval}}s"
+     hx-swap="outerHTML">
+  <input type="checkbox" id="my_modal_6" class="modal-toggle" checked="true" />
+  <div class="modal" role="dialog">
+    <div class="modal-box">
+      <h3 class="font-bold text-lg">Processing! {{submissionId}}</h3>
+      <p class="py-4">Image saved... rechecking status every {{recheckInterval}} seconds...</p>
+      {{#if pendingResizing}}
+      <p class="py-4">Current status: pending resizing.</p>
+      {{else if pendingAutomaticApproval}}
+      <p class="py-4">Current status: pending automatic approval.</p>
+      {{/if}}
+    </div>
   </div>
 </div>
