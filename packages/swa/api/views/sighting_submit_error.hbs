@@ -1,7 +1,7 @@
-<div id="submission-status" hx-target="this" hx-swap="outerHTML">
+<div id="submission-status">
   <input type="checkbox" id="submission-status-modal" class="modal-toggle" checked="true" />
   <div class="modal" role="dialog">
-    <div class="modal-box">
+    <div class="modal-box" hx-target="this" hx-swap="outerHTML">
       <h3 class="font-bold text-lg">Submission error!</h3>
       <p class="py-4">{{error}}</p>
       <div class="modal-action">

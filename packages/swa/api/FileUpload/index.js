@@ -128,7 +128,7 @@ export default async (context, req) => {
         }
 
         response = utils.renderTemplate(
-          'sighting_submit_status_recheck',
+          'sighting_submit_submitted',
           { submissionId: submissionId, submissionStatus: submissionStatus, recheckCount: 0, recheckInterval: 1 },
           context
         );
