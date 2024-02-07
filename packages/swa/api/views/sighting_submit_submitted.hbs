@@ -7,11 +7,7 @@
          hx-swap="outerHTML">
       <h3 class="font-bold text-lg">Processing! {{submissionId}}</h3>
       <p class="py-4">Image saved... rechecking status every {{recheckInterval}} seconds...</p>
-      {{#if pendingResizing}}
-      <p class="py-4">Current status: pending resizing.</p>
-      {{else if pendingAutomaticApproval}}
-      <p class="py-4">Current status: pending automatic approval.</p>
-      {{/if}}
+      <p class="py-4">Current status: just saved.</p>
     </div>
   </div>
 </div>
