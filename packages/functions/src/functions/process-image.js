@@ -16,27 +16,28 @@ app.serviceBusQueue('process-image', {
     handler: async (message, context) => {
         const item = await utils.getSighting(message);
         const originalSighting = await utils.downloadOriginalSighting(item.fileName);
-
-        // Resize to 600px
-        const resizedBuffer = await sharp(originalSighting)
-            .resize(600)
-            .rotate()
-            .jpeg()
-            .toBuffer();
-
-        // Upload the resized image to Blob storage
-        const thumbnailImageUrl = await utils.uploadSighting(`resized/${item.id}.jpeg`, 'public', resizedBuffer);
-
-        // Send the image to the Azure Vision API
-        const visionResponse = await fetch(`${VISION_API_ENDPOINT}/vision/v3.1/tag`, {
+        
+        // Get image data from the Azure Vision API
+        const visionResponse = await fetch(`${VISION_API_ENDPOINT}/computervision/imageanalysis:analyze?api-version=2023-10-01&features=smartCrops,objects,tags&smartcrops-aspect-ratios=1.0`, {
             headers: {
-                "Content-Type": "application/json",
+                "Content-Type": "application/octet-stream",
                 "Ocp-Apim-Subscription-Key": VISION_API_KEY
             },
             method: "POST",
-            body: JSON.stringify({ url: thumbnailImageUrl })
+            body: originalSighting
         })
         const visionData = await visionResponse.json();
+
+        // Crop the image with Sharp using the vision data bounding box
+        const cropBoundingBox = visionData.smartCropsResult.values[0].boundingBox;
+        const croppedBuffer = await sharp(originalSighting)
+            .extract({ left: cropBoundingBox.x, top: cropBoundingBox.y, width: cropBoundingBox.w, height: cropBoundingBox.h })
+            .rotate()
+            .resize(600)
+            .jpeg()
+            .toBuffer();
+
+        const thumbnailImageUrl = await utils.uploadSighting(`thumb/${item.id}.jpeg`, 'public', croppedBuffer);
 
         // Parse location from EXIF data
         var submissionStatus;
