@@ -1,11 +1,13 @@
 {{#if loadMore}}
-<div class="card w-96 bg-base-100 shadow-xl"
+<div class="card w-96 bg-base-300 shadow-xl"
      hx-get="/api/sightings?page={{nextPage}}"
      hx-trigger="revealed"
      hx-swap="afterend">
 {{else}}
-<div class="card w-96 bg-base-100 shadow-xl">
+<div class="card w-96 bg-base-300 shadow-xl">
 {{/if}}
-  <div class="sighting-description">{{sightingId}}</div>
-  <img class="sighting-img" src="{{sightingImage}}" />
+  <figure class="px-10 pt-10"><img class="sighting-img" src="{{sightingImage}}" /></figure>
+  <div class="card-body items-center text-center">
+    <p>{{sightingId}}</p>
+  </div>
 </div>

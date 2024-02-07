@@ -20,26 +20,27 @@
       </div>
     </div>
 
-    <div class="divider"></div> 
+    <div class="divider"></div>
 
-    <div id="sighting-submit"
-         class="collapse bg-base-200"
-         hx-get="/api/fileupload"
-         hx-trigger="click"
-         hx-swap="outerHTML">
-      <input type="checkbox" /> 
-      <div class="collapse-title text-xl font-medium">
-        Submit a new sighting!
+    <div class="px-12">
+      <div id="sighting-submit" class="collapse bg-base-200" hx-get="/api/fileupload" hx-trigger="click"
+        hx-swap="outerHTML">
+        <input type="checkbox" />
+        <div class="collapse-title text-xl font-medium">
+          Submit a new sighting!
+        </div>
+        <div class="collapse-content">
+          <p>Loading...</p>
+        </div>
       </div>
-      <div class="collapse-content"> 
-        <p>Loading...</p>
+
+      <div class="divider"></div>
+
+      <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8 place-items-center"
+        hx-get="/api/sightings" hx-trigger="load">
+        <img alt="Sightings loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
       </div>
-    </div>
 
-    <div class="divider"></div> 
-
-    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8" hx-get="/api/sightings" hx-trigger="load">
-      <img alt="Sightings loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
     </div>
   </main>
 </body>
