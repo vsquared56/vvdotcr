@@ -1,0 +1,16 @@
+<div id="sighting-info">
+  <input type="checkbox" id="sighting-info-modal" class="modal-toggle" checked="true" />
+  <div class="modal" role="dialog">
+    <div class="modal-box" hx-target="this" hx-swap="outerHTML">
+      <h3 class="font-bold text-lg">This is a sighting modal.</h3>
+        <figure class="px-10 pt-10">
+          <img class="sighting-img" src="{{sightingImage}}" />
+        </figure>
+  <div class="card-body items-center text-center">
+    <p>{{sightingDate}}</p>
+      <div class="modal-action">
+        <label for="sighting-info-modal" class="btn btn-primary">OK!</label>
+      </div>
+    </div>
+  </div>
+</div>
