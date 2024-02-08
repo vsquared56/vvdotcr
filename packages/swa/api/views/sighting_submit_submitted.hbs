@@ -1,13 +1,8 @@
-<div id="submission-status">
-  <input type="checkbox" id="submission-status-modal" class="modal-toggle" checked="true" />
-  <div class="modal" role="dialog">
-    <div class="modal-box"
-         hx-get="/api/submission-status?submissionId={{submissionId}}&recheckCount={{recheckCount}}"
-         hx-trigger="every {{recheckInterval}}s"
-         hx-swap="outerHTML">
-      <h3 class="font-bold text-lg">Processing! {{submissionId}}</h3>
-      <p class="py-4">Image saved... rechecking status every {{recheckInterval}} seconds...</p>
-      <p class="py-4">Current status: just saved.</p>
-    </div>
+<dialog id="submission-status" class="modal" hx-on::load="htmx.find('#submission-status').showModal()">
+  <div class="modal-box" hx-get="/api/submission-status?submissionId={{submissionId}}&recheckCount={{recheckCount}}"
+    hx-trigger="every {{recheckInterval}}s" hx-swap="outerHTML">
+    <h3 class="font-bold text-lg">Processing! {{submissionId}}</h3>
+    <p class="py-4">Image saved... rechecking status every {{recheckInterval}} seconds...</p>
+    <p class="py-4">Current status: just saved.</p>
   </div>
-</div>
+</dialog>
