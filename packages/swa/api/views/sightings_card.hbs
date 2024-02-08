@@ -6,8 +6,7 @@
 {{else}}
 <div class="card w-full min-w-80 max-w-120 bg-base-300 shadow-xl">
 {{/if}}
-  <figure class="px-10 pt-10"
-          hx-get="/api/sightings/{{sightingId}}"
+  <figure hx-get="/api/sightings/{{sightingId}}"
           hx-trigger="click" 
           hx-target="body"
           hx-swap="beforeend">
