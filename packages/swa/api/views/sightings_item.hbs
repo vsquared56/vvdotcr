@@ -7,7 +7,7 @@
     <div class="card-body items-center text-center">
       <p>{{sightingDate}}</p>
       <div class="modal-action">
-        <label for="sighting-info-modal" class="btn btn-primary" hx-on:click="htmx.find('#sighting-details').close();htmx.find('#sighting-details').outerHTML='';">Close</label>
+        <button class="btn btn-primary" hx-on:click="htmx.find('#sighting-details').close();htmx.find('#sighting-details').outerHTML='';">Close</button>
       </div>
     </div>
   </div>

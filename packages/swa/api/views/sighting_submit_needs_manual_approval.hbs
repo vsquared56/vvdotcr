@@ -3,6 +3,6 @@
   <p class="py-4">{{submissionId}}</p>
   <p class="py-4">{{imageData}}</p>
   <div class="modal-action">
-    <label for="submission-status-modal" class="btn btn-primary" hx-get="/api/fileupload?finished=true">OK!</label>
+    <button class="btn btn-primary" hx-get="/api/fileupload?finished=true" hx-swap="outerHTML" hx-target="#submission-status">OK!</button>
   </div>
 </div>
