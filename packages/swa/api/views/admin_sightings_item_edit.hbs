@@ -1,15 +1,25 @@
-<div id="sightings-modal" hx-swap-oob="true">
-     <div class="sighting-description">{{sighting.id}}</div>
-     <img class="sighting-img" src="{{sighting.thumbnailImageUrl}}" />
-     <table id="sightings-table">
-          <thead>
-               <tr>
-                    <th>Property Name</th>
-                    <th>Value</th>
-               </tr>
-          </thead>
-          <tbody>
-               {{{sightingProperties}}}
-          </tbody>
-     </table>
-</div>
+<dialog id="sighting-details" class="modal" hx-on::load="htmx.find('#sighting-details').showModal()">
+     <div class="modal-box max-w-max" hx-target="this" hx-swap="outerHTML">
+          <h3 class="font-bold text-lg">{{sighting.id}}</h3>
+          <div class="card-body items-center text-center">
+               <figure class="px-10 pt-10">
+                    <img class="sighting-img" src="{{sighting.largeImageUrl}}" />
+               </figure>
+               <table id="sightings-table" class="table table-fixed">
+                    <thead>
+                         <tr>
+                              <th>Property Name</th>
+                              <th>Value</th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                         {{{sightingProperties}}}
+                    </tbody>
+               </table>
+               <div class="modal-action">
+                    <button class="btn btn-primary"
+                         hx-on:click="htmx.find('#sighting-details').close();htmx.find('#sighting-details').outerHTML='';">Close</button>
+               </div>
+          </div>
+     </div>
+</dialog>

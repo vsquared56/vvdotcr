@@ -54,9 +54,10 @@ export default async (context, req) => {
       var itemCount = 1;
       for (const sighting of sightings.items) {
         response += utils.renderTemplate(
-          'admin_sightings_item',
+          'admin_sightings_card',
           {
             sighting: sighting,
+            sightingDate: (new Date(sighting.createDate)).toLocaleString(),
             loadMore: (itemCount === sightings.items.length && sightings.continuationToken !== null),
             nextPage: page + 1
           },

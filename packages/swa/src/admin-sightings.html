@@ -11,11 +11,11 @@
 
 <body>
   <main>
-    <h1>vv.cr</h1>
-    <div id="sightings-modal">
-    </div>
-    <div class="sightings" hx-get="/api/panel/sightings" hx-trigger="load">
-      <img alt="Sightings loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
+    <h1 class="text-5xl font-bold">vv.cr Admin Panel</h1>
+    <p class="text-3xl">Sightings</p>
+    <div id="sightings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8 place-items-center"
+        hx-get="/api/panel/sightings" hx-trigger="load">
+        <img alt="Sightings loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
     </div>
   </main>
 </body>
