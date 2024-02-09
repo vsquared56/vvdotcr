@@ -23,7 +23,7 @@ export default async (context, req) => {
     );
   } else {
     const page = req.query.page ? parseInt(req.query.page) : 0;
-    const sightings = await utils.getPaginatedSightings(2, false, page);
+    const sightings = await utils.getPaginatedSightings(5, false, page);
     if (!sightings.items) {
       response = utils.renderTemplate(
         'sightings_no_more',
