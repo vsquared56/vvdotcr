@@ -40,9 +40,20 @@ export default async (context, req) => {
       context
     );
   } else if (submissionStatus === 'approved') {
+    const dateOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
     response = utils.renderTemplate(
       'sighting_submit_approved',
-      { submissionId: submissionId, submissionStatus: submissionStatus, imageData: JSON.stringify(item) },
+      {
+        submissionId: submissionId,
+        submissionStatus: submissionStatus,
+        sightingImage: item.thumbnailImageUrl,
+        sightingDate: new Date(item.createDate).toLocaleDateString('en-US', dateOptions),
+        imageData: JSON.stringify(item)
+      },
       context
     );
   } else if (submissionStatus === 'needsManualApproval') {

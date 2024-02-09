@@ -3,6 +3,18 @@
   <p class="py-4">{{submissionId}}</p>
   <p class="py-4">Image details: {{imageData}}</p>
   <div class="modal-action">
-    <button class="btn btn-primary" hx-get="/api/fileupload?finished=true" hx-swap="outerHTML" hx-target="#submission-status">OK!</button>
+    <button class="btn btn-primary" hx-get="/api/fileupload?finished=true" hx-swap="outerHTML"
+      hx-target="#submission-status">OK!</button>
+  </div>
+</div>
+<div id='sightings-grid' hx-swap-oob="afterbegin">
+  <div class="card w-full min-w-80 max-w-120 bg-base-300 shadow-xl">
+    <figure hx-get="/api/sightings/{{sightingId}}" hx-trigger="click" hx-target="body" hx-swap="beforeend">
+      <img class="sighting-img" src="{{sightingImage}}" />
+    </figure>
+    <div class="card-body items-center text-center" hx-get="/api/sightings/{{sightingId}}" hx-trigger="click"
+      hx-target="body" hx-swap="beforeend">
+      <p>{{sightingDate}}</p>
+    </div>
   </div>
 </div>

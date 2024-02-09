@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
   <title>vv.cr</title>
   <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+  <script>htmx.logAll();</script>
 </head>
 
 <body>
@@ -36,7 +37,7 @@
 
       <div class="divider"></div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8 place-items-center"
+      <div id="sightings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8 place-items-center"
         hx-get="/api/sightings" hx-trigger="load">
         <img alt="Sightings loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
       </div>
