@@ -1,23 +1,9 @@
-<style>
-    table {
-        table-layout: fixed;
-        width: 70%;
-        border: 1px solid red;
-    }
-
-    td {
-        border: 1px solid blue;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-</style>
-<table id="settings_table">
+<table id="panel-settings-table" class="table table-fixed">
     <thead>
         <tr>
-            <th>Setting Name</th>
-            <th>Value</th>
-            <th></th>
+            <th class="w-1/4">Setting Name</th>
+            <th class="w-1/2">Value</th>
+            <th class="w-1/4"></th>
         </tr>
     </thead>
     <tbody hx-target="closest tr" hx-swap="outerHTML">

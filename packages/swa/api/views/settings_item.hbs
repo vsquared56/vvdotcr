@@ -1,6 +1,6 @@
 <tr>
   <td>{{settingName}}</td>
-  <td>{{{settingValue}}}</td>
+  <td class="truncate">{{{settingValue}}}</td>
   <td>
     <button class="btn btn-danger" hx-get="/api/settings/{{settingName}}/edit" hx-trigger="edit" onClick="htmx.trigger(this, 'edit')">
       Edit
