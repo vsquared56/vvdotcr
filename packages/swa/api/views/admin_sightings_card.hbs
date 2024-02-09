@@ -12,11 +12,16 @@
           hx-swap="beforeend">
     <img class="sighting-img" src="{{sighting.thumbnailImageUrl}}" />
   </figure>
+  
   <div class="card-body items-center text-center"
        hx-get="/api/panel/sightings/{{sighting.id}}/edit"
        hx-trigger="click" 
        hx-target="body"
        hx-swap="beforeend">
-    <p>{{sightingDate}}</p>
+    {{#if published}}
+    <span class="badge badge-success">Published</span><span class="badge badge-success">{{sightingDate}}</span>
+    {{else}}
+    <span class="badge badge-warning">Not published</span><span class="badge badge-warning">{{sightingDate}}</span>
+    {{/if}}
   </div>
 </div>
