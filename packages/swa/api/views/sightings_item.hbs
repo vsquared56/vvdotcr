@@ -1,14 +1,13 @@
 <dialog id="sighting-details" class="modal" hx-on::load="htmx.find('#sighting-details').showModal()">
-  <div class="modal-box" hx-target="this" hx-swap="outerHTML">
+  <div class="modal-box max-w-screen-md" hx-target="this" hx-swap="outerHTML">
     <h3 class="font-bold text-lg">This is a sighting modal.</h3>
-    <figure class="px-10 pt-10">
+    <figure class="px-5 pt-5">
       <img class="sighting-img" src="{{sightingImage}}" />
     </figure>
-    <div class="card-body items-center text-center">
-      <p>{{sightingDate}}</p>
-      <div class="modal-action">
-        <button class="btn btn-primary" hx-on:click="htmx.find('#sighting-details').close();htmx.find('#sighting-details').outerHTML='';">Close</button>
-      </div>
+    <p>{{sightingDate}}</p>
+    <div class="modal-action">
+      <button class="btn btn-primary"
+        hx-on:click="htmx.find('#sighting-details').close();htmx.find('#sighting-details').outerHTML='';">Close</button>
     </div>
   </div>
 </dialog>
