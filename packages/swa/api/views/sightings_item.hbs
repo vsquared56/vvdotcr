@@ -1,13 +1,17 @@
 <dialog id="sighting-details" class="modal" hx-on::load="htmx.find('#sighting-details').showModal()">
-  <div class="modal-box py-0 max-w-screen-xl max-h-screen flex flex-col flex-wrap max-h-screen" hx-target="this" hx-swap="outerHTML">
-    <h3 class="font-bold text-lg">This is a sighting modal.</h3>
-    <div class="flex max-h-screen">
-      <img class="sighting-img object-scale-down" src="{{sightingImage}}" />
-    </div>
-    <p>{{sightingDate}}</p>
-    <div class="modal-action">
-      <button class="btn btn-primary"
-        hx-on:click="htmx.find('#sighting-details').close();htmx.find('#sighting-details').outerHTML='';">Close</button>
+  <div class="modal-box max-w-screen-xl h-5/6 md:h-2/3 xl:h-7/12 flex overflow-hidden flex-col justify-center p-8 sm:px-12" hx-target="this" hx-swap="outerHTML">
+    <div class="flex h-screen flex-col justify-center p-8 sm:px-12">
+      <div class="flex-none bg-base-100">
+        Header
+        <button class="btn btn-circle absolute top-3 right-3"
+          hx-on:click="htmx.find('#sighting-details').close();htmx.find('#sighting-details').outerHTML='';">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <img class="m-auto max-h-full rounded-md object-scale-down drop-shadow-md" src="{{sightingImage}}" alt="" />
+      <div class="flex-none">{{sightingDate}}</div>
     </div>
   </div>
 </dialog>
