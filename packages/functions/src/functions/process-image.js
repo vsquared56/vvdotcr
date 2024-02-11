@@ -40,13 +40,12 @@ app.serviceBusQueue('process-image', {
         const thumbnailImageUrl = await utils.uploadSighting(`thumb/${item.id}.jpeg`, 'public', croppedBuffer);
 
         // Resize the image to a reasonable size
-        const resizedBuffer = await sharp(originalSighting)
+        const largeBuffer = await sharp(originalSighting)
             .rotate()
-            .resize(600)
             .jpeg()
             .toBuffer();
 
-        const resizedImageUrl = await utils.uploadSighting(`large/${item.id}.jpeg`, 'public', resizedBuffer);
+        const largeImageUrl = await utils.uploadSighting(`large/${item.id}.jpeg`, 'public', largeBuffer);
 
         // Parse location from EXIF data
         var submissionStatus;
@@ -68,7 +67,7 @@ app.serviceBusQueue('process-image', {
 
         item.submissionStatus = submissionStatus;
         item.thumbnailImageUrl = thumbnailImageUrl;
-        item.largeImageUrl = resizedImageUrl;
+        item.largeImageUrl = largeImageUrl;
         item.visionData = visionData;
         item.processingLatency = item.modifyDate - item.createDate;
 
