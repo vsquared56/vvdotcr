@@ -1,9 +1,9 @@
 <dialog id="sighting-details" class="modal" hx-on::load="htmx.find('#sighting-details').showModal()">
-  <div class="modal-box max-w-screen-md" hx-target="this" hx-swap="outerHTML">
+  <div class="modal-box py-0 max-w-screen-xl max-h-screen flex flex-col flex-wrap max-h-screen" hx-target="this" hx-swap="outerHTML">
     <h3 class="font-bold text-lg">This is a sighting modal.</h3>
-    <figure class="px-5 pt-5">
-      <img class="sighting-img" src="{{sightingImage}}" />
-    </figure>
+    <div class="flex max-h-screen">
+      <img class="sighting-img object-scale-down" src="{{sightingImage}}" />
+    </div>
     <p>{{sightingDate}}</p>
     <div class="modal-action">
       <button class="btn btn-primary"
