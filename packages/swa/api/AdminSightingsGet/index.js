@@ -31,7 +31,7 @@ export default async (context, req) => {
       }
     }
     response = utils.renderTemplate(
-      'admin_sightings_item_edit',
+      'admin_sightings_item',
       {
         sighting: sighting,
         sightingProperties: sightingProperties
