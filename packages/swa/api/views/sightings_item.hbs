@@ -39,4 +39,7 @@
       </div>
     </div>
   </div>
+  <form method="dialog" class="modal-backdrop">
+    <button hx-on:click="htmx.find('#sighting-details').close();htmx.find('#sighting-details').outerHTML='';">Close</button>
+  </form>
 </dialog>
