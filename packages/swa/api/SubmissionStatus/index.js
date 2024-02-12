@@ -45,14 +45,24 @@ export default async (context, req) => {
       month: 'long',
       day: 'numeric',
     };
+    const card = utils.renderTemplate(
+      'sightings_card',
+      {
+        sightingId: submissionId,
+        sightingImage: item.thumbnailImageUrl,
+        sightingDate: new Date(item.createDate).toLocaleDateString('en-US', dateOptions),
+        loadMore: false,
+        nextPage: null
+      },
+      context
+    );
     response = utils.renderTemplate(
       'sighting_submit_approved',
       {
         submissionId: submissionId,
         submissionStatus: submissionStatus,
-        sightingImage: item.thumbnailImageUrl,
-        sightingDate: new Date(item.createDate).toLocaleDateString('en-US', dateOptions),
-        imageData: JSON.stringify(item)
+        imageData: JSON.stringify(item),
+        card: card
       },
       context
     );
