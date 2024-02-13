@@ -2,6 +2,7 @@
      hx-get="/api/submission-status?submissionId={{submissionId}}&recheckCount={{recheckCount}}"
      hx-trigger="every {{recheckInterval}}s" hx-swap="outerHTML">
   <h3 class="font-bold text-lg">Processing! {{submissionId}}</h3>
+  <span class="loading loading-spinner loading-lg"></span>
   <p class="py-4">Image saved... rechecking status every {{recheckInterval}} seconds...</p>
   {{#if pendingResizing}}
   <p class="py-4">Current status: pending resizing.</p>
