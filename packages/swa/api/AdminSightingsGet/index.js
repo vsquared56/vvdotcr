@@ -35,9 +35,9 @@ export default async (context, req) => {
           {
             sighting: sighting,
             sightingDate: (new Date(sighting.createDate)).toLocaleString(),
-            published: sighting.submissionStatus === "approved",
             loadMore: (itemCount === sightings.items.length && sightings.continuationToken !== null),
-            nextPage: page + 1
+            nextPage: page + 1,
+            replace: false
           },
           context
         );

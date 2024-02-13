@@ -19,10 +19,24 @@ export default async (context, req) => {
 
   await utils.saveSighting(sighting);
 
+  //Update the modal for this sighting
   response = utils.renderTemplate(
     'admin_sightings_item',
     {
       sighting: sighting
+    },
+    context
+  );
+
+  //Also replace the card behind the modal with the latest data
+  response += utils.renderTemplate(
+    'admin_sightings_card',
+    {
+      sighting: sighting,
+      sightingDate: (new Date(sighting.createDate)).toLocaleString(),
+      loadMore: false,
+      nextPage: null,
+      replace: true
     },
     context
   );
