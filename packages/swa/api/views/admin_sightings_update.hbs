@@ -13,9 +13,9 @@
           <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
             <form>
               {{#if sighting.isPublished}}
-              <li><button name="action" value="unpublish" hx-put="/api/panel/sightings/{{sighting.id}}" hx-target="#sighting-details">Unpublish sighting</button></li>
+              <li><button name="action" value="unpublish" hx-put="/api/panel/sightings/{{sighting.id}}">Unpublish sighting</button></li>
               {{else}}
-              <li><button name="action" value="publish" hx-put="/api/panel/sightings/{{sighting.id}}" hx-target="#sighting-details">Publish sighting</button></li>
+              <li><button name="action" value="publish" hx-put="/api/panel/sightings/{{sighting.id}}">Publish sighting</button></li>
               {{/if}}
               <li><button value="delete" hx-delete="/api/panel/sightings/{{sighting.id}}">Delete sighting</button></li>
             </form>

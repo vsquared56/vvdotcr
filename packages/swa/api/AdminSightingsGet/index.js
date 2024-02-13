@@ -34,8 +34,7 @@ export default async (context, req) => {
       'admin_sightings_item',
       {
         sighting: sighting,
-        sightingProperties: sightingProperties,
-        published: sighting.submissionStatus === "approved"
+        sightingProperties: sightingProperties
       },
       context
     );
