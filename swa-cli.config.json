@@ -2,7 +2,7 @@
   "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
   "configurations": {
     "vvdotcr": {
-      "appLocation": "src",
+      "appLocation": "public",
       "apiLocation": "api",
       "outputLocation": ".",
       "apiLanguage": "node",

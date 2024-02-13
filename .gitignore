@@ -1,5 +1,6 @@
 node_modules/
 .yarn/*
+public/
 !.yarn/cache
 !.yarn/patches
 !.yarn/plugins

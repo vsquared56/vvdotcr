@@ -1,0 +1,27 @@
+{{#if loadMore}}
+<div class="card w-full min-w-80 max-w-120 bg-base-300 shadow-xl"
+     hx-get="/api/panel/sightings?page={{nextPage}}"
+     hx-trigger="revealed"
+     hx-swap="afterend">
+{{else}}
+<div class="card w-full min-w-80 max-w-120 bg-base-300 shadow-xl">
+{{/if}}
+  <figure hx-get="/api/panel/sightings/{{sighting.id}}/edit"
+          hx-trigger="click" 
+          hx-target="body"
+          hx-swap="beforeend">
+    <img class="sighting-img" src="{{sighting.thumbnailImageUrl}}" />
+  </figure>
+  
+  <div class="card-body items-center text-center"
+       hx-get="/api/panel/sightings/{{sighting.id}}/edit"
+       hx-trigger="click" 
+       hx-target="body"
+       hx-swap="beforeend">
+    {{#if published}}
+    <span class="badge badge-success">Published</span><span class="badge badge-success">{{sightingDate}}</span>
+    {{else}}
+    <span class="badge badge-warning">Not published</span><span class="badge badge-warning">{{sightingDate}}</span>
+    {{/if}}
+  </div>
+</div>

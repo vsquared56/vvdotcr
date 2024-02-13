@@ -2,13 +2,13 @@
   <td>{{settingName}}</td>
   <td><input name='value' value='{{{settingValue}}}'></td>
   <td>
-    <button hx-get="/api/settings/{{settingName}}">
+    <button class="btn btn-warning" hx-get="/api/settings/{{settingName}}">
       Cancel
     </button>
-    <button hx-delete="/api/settings/{{settingName}}">
+    <button class="btn btn-error" hx-delete="/api/settings/{{settingName}}">
       Delete
     </button>
-    <button hx-put="/api/settings/{{settingName}}" hx-include="closest tr">
+    <button class="btn btn-success" hx-put="/api/settings/{{settingName}}" hx-include="closest tr">
       Save
     </button>
   </td>

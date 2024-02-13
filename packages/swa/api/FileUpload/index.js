@@ -27,11 +27,19 @@ export default async (context, req) => {
   }
 
   if (req.method === "GET") {
-    response = utils.renderTemplate(
-      'sighting_submit',
-      null,
-      context
-    );
+    if (req.query.finished) {
+      response = utils.renderTemplate(
+        'sighting_submit_finished',
+        null,
+        context
+      );
+    } else {
+      response = utils.renderTemplate(
+        'sighting_submit',
+        { retrySubmission: (req.query.retry === "true") },
+        context
+      );
+    }
   }
   else if (req.method === "POST") {
     const { fields, files } = await parseMultipartFormData.default(req);
@@ -43,21 +51,21 @@ export default async (context, req) => {
 
     if (files.length != 1) {
       response = utils.renderTemplate(
-        'sighting_submit_try_again',
+        'sighting_submit_error',
         { error: "Only one file upload is allowed at a time." },
         context
       );
     }
     else if (originalFileSize >= 20 * 1024 * 1024) {
       response = utils.renderTemplate(
-        'sighting_submit_try_again',
+        'sighting_submit_error',
         { error: "Images must be below 20 MB." },
         context
       );
     }
     else if (!(originalFileExtension in ALLOWED_IMAGE_TYPES) || (ALLOWED_IMAGE_TYPES[originalFileExtension] != contentType)) {
       response = utils.renderTemplate(
-        'sighting_submit_try_again',
+        'sighting_submit_error',
         { error: "Image is not an allowed type." },
         context
       );
@@ -70,7 +78,7 @@ export default async (context, req) => {
 
       if (fileMetadata.width < 600 || fileMetadata.height < 600) {
         response = utils.renderTemplate(
-          'sighting_submit_try_again',
+          'sighting_submit_error',
           { error: "Images must be at least 600x600." },
           context
         );
@@ -120,7 +128,7 @@ export default async (context, req) => {
         }
 
         response = utils.renderTemplate(
-          'sighting_submit_status_recheck',
+          'sighting_submit_submitted',
           { submissionId: submissionId, submissionStatus: submissionStatus, recheckCount: 0, recheckInterval: 1 },
           context
         );

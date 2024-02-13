@@ -1,5 +1,7 @@
-<div class="sighting-submit">
-  <div class="sighting-submission-error">Can we get your location?</div>
+<div class="modal-box"
+     id="modal-dialog"
+     hx-target="this"
+     hx-swap="outerHTML">
   <script>
     function locationError(err) {
       console.log(err);
@@ -30,21 +32,22 @@
     }
 
   </script>
-  <form id='location'>
-    <input id='latitude' name='latitude' type='hidden'>
-    <input id='longitude' name='longitude' type='hidden'>
-    <input id='accuracy' name='accuracy' type='hidden'>
-    <input id='timestamp' name='timestamp' type='hidden'>
-    <button id='submitLocation'
-      hx-post='/api/location-submit?submissionId={{submissionId}}'
-      hx-on:htmx:confirm='confirmLocation(event);'
-      hx-target='#sighting_submission'>
-      Submit my location
-    </button>
-    <button id='submitWithoutLocation'
-      hx-post='/api/location-submit?submissionId={{submissionId}}'
-      hx-target='#sighting_submission'>
-      Submit without a location.
-    </button>
-  </form>
+  <h3 class="font-bold text-lg">Can we get your location?</h3>
+  <p class="py-4">{{error}}</p>
+  <div class="modal-action">
+    <form id='location'>
+      <input id='latitude' name='latitude' type='hidden'>
+      <input id='longitude' name='longitude' type='hidden'>
+      <input id='accuracy' name='accuracy' type='hidden'>
+      <input id='timestamp' name='timestamp' type='hidden'>
+      <button id='submitLocation' class='btn btn-primary' hx-post='/api/location-submit?submissionId={{submissionId}}'
+        hx-on:htmx:confirm='confirmLocation(event);' hx-target='#modal-dialog'>
+        Submit my location
+      </button>
+      <button id='submitWithoutLocation' class='btn btn-neutral'
+        hx-post='/api/location-submit?submissionId={{submissionId}}' hx-target='#modal-dialog'>
+        Submit without a location.
+      </button>
+    </form>
+  </div>
 </div>

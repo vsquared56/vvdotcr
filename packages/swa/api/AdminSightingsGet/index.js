@@ -31,10 +31,11 @@ export default async (context, req) => {
       }
     }
     response = utils.renderTemplate(
-      'admin_sightings_item_edit',
+      'admin_sightings_item',
       {
         sighting: sighting,
-        sightingProperties: sightingProperties
+        sightingProperties: sightingProperties,
+        published: sighting.submissionStatus === "approved"
       },
       context
     );
@@ -54,9 +55,11 @@ export default async (context, req) => {
       var itemCount = 1;
       for (const sighting of sightings.items) {
         response += utils.renderTemplate(
-          'admin_sightings_item',
+          'admin_sightings_card',
           {
             sighting: sighting,
+            sightingDate: (new Date(sighting.createDate)).toLocaleString(),
+            published: sighting.submissionStatus === "approved",
             loadMore: (itemCount === sightings.items.length && sightings.continuationToken !== null),
             nextPage: page + 1
           },

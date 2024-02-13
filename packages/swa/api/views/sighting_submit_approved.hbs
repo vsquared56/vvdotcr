@@ -1,6 +1,12 @@
-<div class="sighting-submit">
-  <div class="sighting-submission-id">{{submissionId}}</div>
-    Your submission has been accepted.
-  <div class="sighting-submission-status">Current status: {{submissionStatus}}</div>
-  <div class="sighting-submission-details">{{imageData}}</div>
+<div class="modal-box" hx-target="this" hx-swap="outerHTML">
+  <h3 class="font-bold text-lg">Congrats! Your sighting was accepted!</h3>
+  <p class="py-4">{{submissionId}}</p>
+  <p class="py-4">Image details: {{imageData}}</p>
+  <div class="modal-action">
+    <button class="btn btn-primary" hx-get="/api/fileupload?finished=true" hx-swap="outerHTML"
+      hx-target="#submission-status">OK!</button>
+  </div>
+</div>
+<div id='sightings-grid' hx-swap-oob="afterbegin">
+  {{{card}}}
 </div>

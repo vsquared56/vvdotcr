@@ -2,10 +2,10 @@
   <td><input name='name' value='setting_name'</td>
   <td><input name='value' value='"Some JSON"'></td>
   <td>
-    <button hx-get="/api/settings/add">
+    <button class="btn btn-warning" hx-get="/api/settings/add">
       Cancel
     </button>
-    <button hx-post="/api/settings" hx-include="closest tr">
+    <button class="btn btn-success" hx-post="/api/settings" hx-include="closest tr">
       Save
     </button>
   </td>
