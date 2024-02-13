@@ -12,12 +12,13 @@
           </summary>
           <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
             <form>
+              <li><button hx-get="/api/panel/sightings/{{sighting.id}}/properties/edit" hx-target="#sighting-information">Edit properties</button></li>
               {{#if sighting.isPublished}}
               <li><button name="action" value="unpublish" hx-put="/api/panel/sightings/{{sighting.id}}" hx-target="#sighting-details">Unpublish sighting</button></li>
               {{else}}
               <li><button name="action" value="publish" hx-put="/api/panel/sightings/{{sighting.id}}" hx-target="#sighting-details">Publish sighting</button></li>
               {{/if}}
-              <li><button value="delete" hx-delete="/api/panel/sightings/{{sighting.id}}">Delete sighting</button></li>
+              <li><button hx-delete="/api/panel/sightings/{{sighting.id}}">Delete sighting</button></li>
             </form>
           </ul>
         </details>
@@ -37,17 +38,7 @@
       <div class="flex-none text-center">{{sighting.id}}</div>
       <img class="max-w-screen h-auto rounded-md object-scale-down drop-shadow-md" src="{{sighting.largeImageUrl}}" alt="" />
       <div class="flex-none text-center">{{sightingDate}}</div>
-      <table id="sightings-table" class="table table-fixed">
-        <thead>
-          <tr>
-            <th class="w-1/4">Property Name</th>
-            <th class="w-3/4">Value</th>
-          </tr>
-        </thead>
-        <tbody>
-          {{{sightingProperties}}}
-        </tbody>
-      </table>
+      <div id="sighting-information"></div>
     </div>
     <div class="flex-1"></div>
     <div class="navbar bg-base-100 min-h-8">

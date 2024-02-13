@@ -1,4 +1,9 @@
 <tr>
   <td>{{propertyName}}</td>
   <td class="truncate">{{{propertyValue}}}</td>
+  <td>
+    <button class="btn btn-primary btn-sm" hx-get="/api/panel/sightings/{{sightingId}}/properties/{{propertyName}}/edit" hx-trigger="edit" onClick="htmx.trigger(this, 'edit')">
+      Edit
+    </button>
+  </td>
 </tr>

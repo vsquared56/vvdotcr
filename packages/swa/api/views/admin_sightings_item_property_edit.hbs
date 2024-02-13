@@ -1,0 +1,12 @@
+<tr hx-trigger='cancel' class='editing' hx-get="/api/panel/sightings/{{sightingId}}/properties/{{propertyName}}">
+  <td>{{propertyName}}</td>
+  <td><input name='value' value='{{{propertyValue}}}'></td>
+  <td>
+    <button class="btn btn-sm btn-warning" hx-get="/api/panel/sightings/{{sightingId}}/properties/{{propertyName}}">
+      Cancel
+    </button>
+    <button class="btn btn-sm btn-success" hx-put="/api/panel/sightings/{{sightingId}}/properties/{{propertyName}}" hx-include="closest tr">
+      Save
+    </button>
+  </td>
+</tr>
