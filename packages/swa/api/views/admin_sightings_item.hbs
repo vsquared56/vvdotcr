@@ -3,7 +3,7 @@
     hx-target="this" hx-swap="outerHTML">
     <div class="navbar bg-base-100 min-h-8">
       <div class="navbar-start">
-        <details class="dropdown">
+        <details id="sighting-modal-menu" class="dropdown">
           <summary class="m-1 btn btn-square btn-ghost btn-sm">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
             class="inline-block w-5 h-5 stroke-current">
@@ -12,7 +12,7 @@
           </summary>
           <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
             <form>
-              <li><button hx-get="/api/panel/sightings/{{sighting.id}}/properties/edit" hx-target="#sighting-information">Edit properties</button></li>
+              <li><button hx-get="/api/panel/sightings/{{sighting.id}}/properties/edit" hx-target="#sighting-information" hx-on:click="htmx.find('#sighting-modal-menu').removeAttribute('open');">Edit properties</button></li>
               {{#if sighting.isPublished}}
               <li><button name="action" value="unpublish" hx-put="/api/panel/sightings/{{sighting.id}}" hx-target="#sighting-details">Unpublish sighting</button></li>
               {{else}}
