@@ -18,7 +18,7 @@
               {{else}}
               <li><button name="action" value="publish" hx-put="/api/panel/sightings/{{sighting.id}}" hx-target="#sighting-details">Publish sighting</button></li>
               {{/if}}
-              <li><button hx-delete="/api/panel/sightings/{{sighting.id}}">Delete sighting</button></li>
+              <li><button hx-delete="/api/panel/sightings/{{sighting.id}}" hx-target="#sighting-details" hx-confirm="Permanently delete this sighting?">Delete sighting</button></li>
             </form>
           </ul>
         </details>
