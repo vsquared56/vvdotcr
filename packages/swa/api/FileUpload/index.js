@@ -17,6 +17,8 @@ const ALLOWED_IMAGE_TYPES = {
 const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
 
 export default async (context, req) => {
+  const db = new utils.Database;
+
   var response;
   var clientIp = null;
   if (req.headers.hasOwnProperty("x-forwarded-for")) {
@@ -116,7 +118,7 @@ export default async (context, req) => {
         }
 
         // Save image data to CosmosDB
-        await utils.saveSighting(item);
+        await db.saveSighting(item);
 
         // Send a Service Bus Message
         const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);

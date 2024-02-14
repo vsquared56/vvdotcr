@@ -13,7 +13,7 @@ app.timer('xff-ip-refresh', {
         const cfData = await cfResponse.json();
         if (cfData.success == true && cfData.result.ipv4_cidrs.length > 0) {
             cloudflareIPBlocks = cfData.result.ipv4_cidrs.concat(cfData.result.ipv6_cidrs);  
-            await utils.saveSetting("cloudflare_ip_blocks", cloudflareIPBlocks);
+            await db.saveSetting("cloudflare_ip_blocks", cloudflareIPBlocks);
         }
 
         const azResponse = await fetch('https://download.microsoft.com/download/7/1/D/71D86715-5596-4529-9B13-DA13A5DE5B63/ServiceTags_Public_20240122.json');
@@ -23,12 +23,12 @@ app.timer('xff-ip-refresh', {
     
             if (azureASM.length == 1 && azureASM[0].properties.addressPrefixes.length > 0) {
                 azureIPBlocks = azureASM[0].properties.addressPrefixes;
-                await utils.saveSetting("azure_ip_blocks", azureIPBlocks);
+                await db.saveSetting("azure_ip_blocks", azureIPBlocks);
             }
         }
 
         if (cloudflareIPBlocks.length > 0 && azureIPBlocks.length > 0) {
-            await utils.saveSetting("trusted_xff_ip_blocks", cloudflareIPBlocks.concat(azureIPBlocks));
+            await db.saveSetting("trusted_xff_ip_blocks", cloudflareIPBlocks.concat(azureIPBlocks));
         }
     }
 });

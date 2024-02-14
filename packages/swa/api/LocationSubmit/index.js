@@ -5,10 +5,12 @@ import * as utils from "@vvdotcr/common";
 const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
 
 export default async (context, req) => {
+  const db = new utils.Database;
+
   var response;
   const submissionId = req.query.submissionId;
   var submissionStatus;
-  var item = await utils.getSighting(submissionId);
+  var item = await db.getSighting(submissionId);
 
   const form = req.parseFormBody();
   const latitude = parseFloat(form.get('latitude').value.toString());
@@ -28,7 +30,7 @@ export default async (context, req) => {
   item.imageLocation = imageLocation;
   item.submissionStatus = submissionStatus;
 
-  await utils.saveSighting(item);
+  await db.saveSighting(item);
   response = utils.renderTemplate(
     'sighting_submit_status_recheck',
     {

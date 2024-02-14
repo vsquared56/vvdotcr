@@ -1,6 +1,8 @@
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const db = new utils.Database;
+
   var response;
  
   const edit = req.params.edit;
@@ -11,7 +13,7 @@ export default async (context, req) => {
   } else if (settingId === 'add') {
     response = utils.renderTemplate('settings_item_add', null, context);
   } else if (settingId) {
-    const settingValue = await utils.getSetting(settingId);
+    const settingValue = await db.getSetting(settingId);
     if (edit) {
       response = utils.renderTemplate(
         'settings_item_edit',
@@ -32,7 +34,7 @@ export default async (context, req) => {
       );
     }
   } else {
-    const allSettings = await utils.getAllSettings();
+    const allSettings = await db.getAllSettings();
     var settingsItems = "";
 
     for (const setting of allSettings) {

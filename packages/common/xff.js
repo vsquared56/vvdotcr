@@ -1,9 +1,11 @@
 import ipRangeCheck from "ip-range-check"
 
-import { getSetting } from "./db.js"
+import { Database } from "./db.js"
 
 export async function parseXff(xff) {
-    const trustedIpBlocks = await getSetting("trusted_xff_ip_blocks");
+    const db = new Database;
+
+    const trustedIpBlocks = await db.getSetting("trusted_xff_ip_blocks");
 
     const regex = /^(.*?(?:[^:]|::))(?:(:)([0-9]*))?$/;
     const xffArr = xff.replace(/\s/g, "").split(",")

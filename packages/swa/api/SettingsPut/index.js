@@ -8,7 +8,7 @@ export default async (context, req) => {
   const form = req.parseFormBody();
   const settingValue = JSON.parse(form.get('value').value.toString());
 
-  await utils.saveSetting(settingId, settingValue);
+  await db.saveSetting(settingId, settingValue);
 
   response = utils.renderTemplate(
     'settings_item',

@@ -1,15 +1,16 @@
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
-  const sightingId = req.params.sightingId;
-  var response;
+  const db = new utils.Database;
 
-  var sighting = await utils.getSighting(sightingId);
+  var response;
+  const sightingId = req.params.sightingId;
+  var sighting = await db.getSighting(sightingId);
 
   await utils.deleteSightingFile(`originals/${sighting.fileName}`, 'original');
   await utils.deleteSightingFile(`thumb/${sighting.id}.jpeg`, 'public');
   await utils.deleteSightingFile(`large/${sighting.id}.jpeg`, 'public');
-  await utils.deleteSightingRecord(sighting.id);
+  await db.deleteSighting(sighting.id);
   
   //Remove the modal and card for this sighting
   response = utils.renderTemplate(

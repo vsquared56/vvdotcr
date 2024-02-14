@@ -1,13 +1,15 @@
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const db = new utils.Database;
+
   var response = "";
 
   const edit = req.params.edit;
   const sightingId = req.params.sightingId;
 
   if (sightingId && edit === 'edit') {
-    const sighting = await utils.getSighting(sightingId);
+    const sighting = await db.getSighting(sightingId);
     response = utils.renderTemplate(
       'admin_sightings_item',
       {
@@ -18,7 +20,7 @@ export default async (context, req) => {
   } else {
 
     const page = req.query.page ? parseInt(req.query.page) : 0;
-    const sightings = await utils.getPaginatedSightings(2, true, page);
+    const sightings = await db.getPaginatedSightings(2, true, page);
 
     if (!sightings.items) {
       response = utils.renderTemplate(

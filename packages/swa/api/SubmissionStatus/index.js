@@ -1,10 +1,12 @@
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const db = new utils.Database;
+  
   var response;
   const submissionId = req.query.submissionId;
   const recheckCount = parseInt(req.query.recheckCount);
-  const item = await utils.getSighting(submissionId);
+  const item = await db.getSighting(submissionId);
   const submissionStatus = item.submissionStatus;
 
   if (recheckCount >= 8) {

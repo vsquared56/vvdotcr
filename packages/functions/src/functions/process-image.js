@@ -14,7 +14,9 @@ app.serviceBusQueue('process-image', {
     connection: 'SERVICE_BUS_CONNECTION_STRING',
     queueName: 'new-file-uploads',
     handler: async (message, context) => {
-        const item = await utils.getSighting(message);
+        const db = new utils.Database;
+
+        const item = await db.getSighting(message);
         const originalSighting = await utils.downloadOriginalSighting(item.fileName);
         
         // Get image data from the Azure Vision API
@@ -71,7 +73,7 @@ app.serviceBusQueue('process-image', {
         item.visionData = visionData;
         item.processingLatency = item.modifyDate - item.createDate;
 
-        await utils.saveSighting(item);
+        await db.saveSighting(item);
 
         if (submissionStatus === "pendingAutomaticApproval") {
             // Send a Service Bus Message

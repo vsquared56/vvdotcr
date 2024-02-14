@@ -1,6 +1,8 @@
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const db = new utils.Database;
+
   var response = "";
 
   const dateOptions = {
@@ -11,7 +13,7 @@ export default async (context, req) => {
 
   if (req.params.sightingId) {
     const sightingId = req.params.sightingId.toString();
-    const sighting = await utils.getSighting(sightingId);
+    const sighting = await db.getSighting(sightingId);
     response = utils.renderTemplate(
       'sightings_item',
       {
@@ -23,7 +25,7 @@ export default async (context, req) => {
     );
   } else {
     const page = req.query.page ? parseInt(req.query.page) : 0;
-    const sightings = await utils.getPaginatedSightings(5, false, page);
+    const sightings = await db.getPaginatedSightings(5, false, page);
     if (!sightings.items) {
       response = utils.renderTemplate(
         'sightings_no_more',

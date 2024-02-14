@@ -1,13 +1,15 @@
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const db = new utils.Database;
+
   const sightingId = req.params.sightingId;
   var response;
 
   const form = req.parseFormBody();
   const actionValue = form.get('action').value.toString();
 
-  var sighting = await utils.getSighting(sightingId);
+  var sighting = await db.getSighting(sightingId);
 
   if (actionValue === "publish") {
     sighting.submissionStatus = "adminPublished";
@@ -17,7 +19,7 @@ export default async (context, req) => {
     sighting.isPublished = false;
   }
 
-  await utils.saveSighting(sighting);
+  await db.saveSighting(sighting);
 
   //Update the modal for this sighting
   response = utils.renderTemplate(

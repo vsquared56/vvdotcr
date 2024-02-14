@@ -1,13 +1,15 @@
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const db = new utils.Database;
+
   var response = "";
 
   const edit = req.params.edit;
   const propertyName = req.params.propertyName;
   const sightingId = req.params.sightingId;
 
-  const sighting = await utils.getSighting(sightingId);
+  const sighting = await db.getSighting(sightingId);
 
   if (propertyName === 'edit') {
     var sightingProperties = "";
