@@ -23,6 +23,23 @@ export async function getSighting(id) {
     }
 }
 
+export async function deleteSightingRecord(id) {
+    const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
+    const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;
+    const COSMOS_DB_CONTAINER_NAME = "vvdotcr-sightings-dev";
+
+    const cosmosClient = new CosmosClient(COSMOS_DB_CONNECTION_STRING);
+    const { database } = await cosmosClient.databases.createIfNotExists({ id: COSMOS_DB_DATABASE_NAME });
+    const { container } = await database.containers.createIfNotExists({
+        id: COSMOS_DB_CONTAINER_NAME,
+        partitionKey: {
+            paths: "/id"
+        }
+    });
+
+    await container.item(id, id).delete();
+}
+
 export async function getPaginatedSightings(count, includeUnpublished, page) {
     const COSMOS_DB_CONNECTION_STRING = process.env.COSMOS_DB_CONNECTION_STRING;
     const COSMOS_DB_DATABASE_NAME = process.env.COSMOS_DB_DATABASE_NAME;

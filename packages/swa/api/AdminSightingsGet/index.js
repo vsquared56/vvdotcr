@@ -8,34 +8,10 @@ export default async (context, req) => {
 
   if (sightingId && edit === 'edit') {
     const sighting = await utils.getSighting(sightingId);
-    var sightingProperties = "";
-    for (const property in sighting) {
-      var propertyValue;
-
-      if (!property.match(/_.*/)) { //Ignore internal CosmosDB properties
-        if (property.match(/.*Date/) && sighting[property]) {
-          propertyValue = (new Date(sighting[property])).toLocaleString();
-        } else if (typeof sighting[property] === 'string' || sighting[property] instanceof String) {
-          propertyValue = sighting[property];
-        } else {
-          propertyValue = JSON.stringify(sighting[property]);
-        }
-        sightingProperties += utils.renderTemplate(
-          'admin_sightings_item_property',
-          {
-            propertyName: property,
-            propertyValue: propertyValue
-          },
-          context
-        );
-      }
-    }
     response = utils.renderTemplate(
       'admin_sightings_item',
       {
-        sighting: sighting,
-        sightingProperties: sightingProperties,
-        published: sighting.submissionStatus === "approved"
+        sighting: sighting
       },
       context
     );
@@ -59,9 +35,9 @@ export default async (context, req) => {
           {
             sighting: sighting,
             sightingDate: (new Date(sighting.createDate)).toLocaleString(),
-            published: sighting.submissionStatus === "approved",
             loadMore: (itemCount === sightings.items.length && sightings.continuationToken !== null),
-            nextPage: page + 1
+            nextPage: page + 1,
+            replace: false
           },
           context
         );

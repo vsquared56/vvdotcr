@@ -4,6 +4,35 @@ import {
     newPipeline
   } from "@azure/storage-blob";
 
+export async function deleteSightingFile(filePath, type) {
+    const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
+    const STORAGE_KEY = process.env.STORAGE_KEY;
+    var storageContainer;
+    if (type === "original") {
+        storageContainer = "vvdotcr-sightings-originals-dev";
+    } else if (type === "public") {
+        storageContainer = "vvdotcr-sightings-public-dev";
+    } else {
+        throw new Error("Unsupported sighting file type, must be one of 'original' or 'public'");
+    }
+
+    const storageUrl = `https://${STORAGE_ACCOUNT}.blob.core.windows.net`;
+
+    // Set auth credentials for upload
+    const sharedKeyCredential = new StorageSharedKeyCredential(STORAGE_ACCOUNT, STORAGE_KEY);
+    const pipeline = newPipeline(sharedKeyCredential);
+
+    const blobServiceClient = new BlobServiceClient(storageUrl, pipeline);
+    
+    try {
+        const containerClient = blobServiceClient.getContainerClient(storageContainer);
+        const deleteBlobClient = containerClient.getBlobClient(filePath);
+        const deleteBlobResponse = await deleteBlobClient.delete();
+    } catch {
+        throw new Error("Error deleting blob in Azure storage.");
+    }
+}
+
 export async function downloadOriginalSighting(filename) {
     const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
     const STORAGE_KEY = process.env.STORAGE_KEY;

@@ -1,0 +1,13 @@
+<tr hx-trigger='cancel' class='editing' hx-get="/api/panel/sightings/{{sightingId}}/properties/{{propertyName}}">
+  <td colspan=3 class="text-xs lg:text-sm">
+    <div>{{propertyName}}</div>
+    <textarea cols="50" rows="4" name='value'>{{{propertyValue}}}</textarea>
+    <button class="btn btn-sm btn-warning" hx-get="/api/panel/sightings/{{sightingId}}/properties/{{propertyName}}">
+      Cancel
+    </button>
+    <button class="btn btn-sm btn-success" hx-put="/api/panel/sightings/{{sightingId}}/properties/{{propertyName}}"
+      hx-include="closest tr">
+      Save
+    </button>
+  </td>
+</tr>
