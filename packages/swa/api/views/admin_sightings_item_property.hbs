@@ -1,6 +1,6 @@
 <tr>
-  <td class="sm:text-xs lg:text-sm">{{propertyName}}</td>
-  <td class="sm:text-xs lg:text-sm truncate">{{{propertyValue}}}</td>
+  <td class="text-xs lg:text-sm">{{propertyName}}</td>
+  <td class="text-xs lg:text-sm truncate">{{{propertyValue}}}</td>
   <td>
     <button class="btn btn-primary btn-sm" hx-get="/api/panel/sightings/{{sightingId}}/properties/{{propertyName}}/edit" hx-trigger="edit" onClick="htmx.trigger(this, 'edit')">
       Edit
