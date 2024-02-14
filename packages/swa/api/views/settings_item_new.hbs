@@ -1,7 +1,7 @@
 <tr hx-trigger='cancel' class='editing' hx-get="/api/settings">
-  <td class="text-xs lg:text-sm"><input name='name' value='setting_name'</td>
-  <td class="text-xs lg:text-sm"><input name='value' value='"Some JSON"'></td>
-  <td>
+  <td colspan=3 class="text-xs lg:text-sm">
+    <input name='name' value='setting_name' />
+    <textarea cols="50" rows="4" name='value'>"someJson"</textarea>
     <button class="btn btn-warning btn-sm" hx-get="/api/settings/add">
       Cancel
     </button>

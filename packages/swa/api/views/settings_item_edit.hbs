@@ -1,7 +1,8 @@
 <tr hx-trigger='cancel' class='editing' hx-get="/api/setting/?settingId={{settingId}}">
-  <td class="text-xs lg:text-sm">{{settingName}}</td>
-  <td class="text-xs lg:text-sm"><input name='value' value='{{{settingValue}}}'></td>
-  <td>
+  <td colspan=3 class="text-xs lg:text-sm">
+    <div>{{settingName}}</div>
+    <div class="separator"></div>
+    <textarea cols="50" rows="4" name="value">{{{settingValue}}}</textarea>
     <button class="btn btn-warning btn-sm" hx-get="/api/settings/{{settingName}}">
       Cancel
     </button>
