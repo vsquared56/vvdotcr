@@ -1,6 +1,6 @@
 <tr hx-trigger='cancel' class='editing' hx-get="/api/panel/sightings/{{sightingId}}/properties/{{propertyName}}">
-  <td>{{propertyName}}</td>
-  <td><input name='value' value='{{{propertyValue}}}'></td>
+  <td class="sm:text-xs lg:text-sm">{{propertyName}}</td>
+  <td class="sm:text-xs lg:text-sm"><input name='value' value='{{{propertyValue}}}'></td>
   <td>
     <button class="btn btn-sm btn-warning" hx-get="/api/panel/sightings/{{sightingId}}/properties/{{propertyName}}">
       Cancel
