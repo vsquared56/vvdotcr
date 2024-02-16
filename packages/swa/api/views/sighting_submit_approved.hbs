@@ -1,6 +1,6 @@
 <div class="modal-box" hx-target="this" hx-swap="outerHTML">
   <h3 class="font-bold text-lg">Congrats! Your sighting was accepted!</h3>
-  <p class="py-4">{{submissionId}}</p>
+  <p class="py-4">{{sightingId}}</p>
   <p class="py-4">Image details: {{imageData}}</p>
   <div class="modal-action">
     <button class="btn btn-primary" hx-get="/api/sightings/new?finished=true" hx-swap="outerHTML"

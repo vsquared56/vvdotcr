@@ -4,15 +4,15 @@ export default async (context, req) => {
   const db = new utils.Database;
   
   var response;
-  const submissionId = req.params.sightingId;
+  const sightingId = req.params.sightingId;
   const recheckCount = parseInt(req.query.recheckCount);
-  const item = await db.getSighting(submissionId);
+  const item = await db.getSighting(sightingId);
   const submissionStatus = item.submissionStatus;
 
   if (recheckCount >= 8) {
     response = utils.renderTemplate(
       'sighting_submit_status_timeout',
-      { submissionId: submissionId, submissionStatus: submissionStatus },
+      { sightingId: sightingId, submissionStatus: submissionStatus },
       context
     );
   } else if (submissionStatus === 'saved') {
@@ -20,7 +20,7 @@ export default async (context, req) => {
     response = utils.renderTemplate(
       'sighting_submit_status_recheck',
       {
-        submissionId: submissionId,
+        sightingId: sightingId,
         pendingResizing: true,
         pendingAutomaticApproval: false,
         recheckCount: (recheckCount + 1),
@@ -33,7 +33,7 @@ export default async (context, req) => {
     response = utils.renderTemplate(
       'sighting_submit_status_recheck',
       {
-        submissionId: submissionId,
+        sightingId: sightingId,
         pendingResizing: false,
         pendingAutomaticApproval: true,
         recheckCount: (recheckCount + 1),
@@ -50,7 +50,7 @@ export default async (context, req) => {
     const card = utils.renderTemplate(
       'sightings_card',
       {
-        sightingId: submissionId,
+        sightingId: sightingId,
         sightingImage: item.thumbnailImageUrl,
         sightingDate: new Date(item.createDate).toLocaleDateString('en-US', dateOptions),
         loadMore: false,
@@ -61,7 +61,7 @@ export default async (context, req) => {
     response = utils.renderTemplate(
       'sighting_submit_approved',
       {
-        submissionId: submissionId,
+        sightingId: sightingId,
         submissionStatus: submissionStatus,
         imageData: JSON.stringify(item),
         card: card
@@ -71,17 +71,17 @@ export default async (context, req) => {
   } else if (submissionStatus === 'needsManualApproval') {
     response = utils.renderTemplate(
       'sighting_submit_needs_manual_approval',
-      { submissionId: submissionId, submissionStatus: submissionStatus, imageData: JSON.stringify(item) },
+      { sightingId: sightingId, submissionStatus: submissionStatus, imageData: JSON.stringify(item) },
       context
     );
   } else if (submissionStatus === 'locationRequest') {
     response = utils.renderTemplate(
       'sighting_submit_location_request',
-      { submissionId: submissionId, submissionStatus: submissionStatus },
+      { sightingId: sightingId, submissionStatus: submissionStatus },
       context
     );
   } else {
-    throw new Error(`Submission ID ${submissionId} has an invalid status of ${submissionStatus}`);
+    throw new Error(`Submission ID ${sightingId} has an invalid status of ${submissionStatus}`);
   }
 
   context.res = {

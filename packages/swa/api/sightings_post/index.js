@@ -30,7 +30,7 @@ export default async (context, req) => {
   }
 
   const { fields, files } = await parseMultipartFormData.default(req);
-  const submissionId = crypto.randomUUID();
+  const sightingId = crypto.randomUUID();
   const contentType = files[0].mimeType;
   const originalFileName = files[0].filename;
   const originalFileExtension = path.extname(originalFileName).toLowerCase().replace(/^\./, '');
@@ -59,7 +59,7 @@ export default async (context, req) => {
   }
   else {
     const fileData = files[0].bufferFile;
-    const fileName = `${submissionId}.${originalFileExtension}`;
+    const fileName = `${sightingId}.${originalFileExtension}`;
 
     const fileMetadata = await sharp(fileData).metadata();
 
@@ -76,7 +76,7 @@ export default async (context, req) => {
       const createDate = Date.now();
       const submissionStatus = "saved";
       const item = {
-        id: submissionId,
+        id: sightingId,
         submissionStatus: submissionStatus,
         fileName: fileName,
         originalFileName: originalFileName,
@@ -109,14 +109,14 @@ export default async (context, req) => {
       const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
       const sbSender = sbClient.createSender('new-file-uploads');
       try {
-        await sbSender.sendMessages({ body: submissionId });
+        await sbSender.sendMessages({ body: sightingId });
       } finally {
         await sbClient.close();
       }
 
       response = utils.renderTemplate(
         'sighting_submit_submitted',
-        { submissionId: submissionId, submissionStatus: submissionStatus, recheckCount: 0, recheckInterval: 1 },
+        { sightingId: sightingId, submissionStatus: submissionStatus, recheckCount: 0, recheckInterval: 1 },
         context
       );
     }
