@@ -63,7 +63,7 @@ export class Database {
             throw new Error(`Error reading setting ${name} from CosmosDB`);
         }
         else {
-            return resource;
+            return resource.value;
         }
     }
 
@@ -71,7 +71,7 @@ export class Database {
         const querySpec = {
             query: "SELECT * FROM c"
         };
-        const { resources } = await settingsContainer.items.query(querySpec).fetchAll();
+        const { resources } = await this.settingsContainer.items.query(querySpec).fetchAll();
     
         return resources;
     }
