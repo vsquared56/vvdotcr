@@ -1,5 +1,5 @@
 <div class="modal-box"
-     hx-get="/api/submission-status?submissionId={{submissionId}}&recheckCount={{recheckCount}}"
+     hx-get="/api/sightings/{{submissionId}}/status?recheckCount={{recheckCount}}"
      hx-trigger="every {{recheckInterval}}s" hx-swap="outerHTML">
   <h3 class="font-bold text-lg">Processing! {{submissionId}}</h3>
   <span class="loading loading-spinner loading-lg"></span>
