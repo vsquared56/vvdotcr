@@ -8,9 +8,9 @@ export default async (context, req) => {
   const sightingId = req.params.sightingId;
   var sighting = await db.getSighting(sightingId);
 
-  await storage.deleteSightingFile('originals', sighting.fileName);
-  await storage.deleteSightingFile('thumb', `${sighting.id}.jpg`);
-  await storage.deleteSightingFile('large', `${sighting.id}.jpg`);
+  await storage.deleteSightingFile('original', sighting.originalFileName);
+  await storage.deleteSightingFile('thumb', sighting.thumbFileName);
+  await storage.deleteSightingFile('large', sighting.largeFileName);
   await db.deleteSighting(sighting.id);
   
   //Remove the modal and card for this sighting

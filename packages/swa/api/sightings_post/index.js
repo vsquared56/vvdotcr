@@ -32,8 +32,8 @@ export default async (context, req) => {
   const { fields, files } = await parseMultipartFormData.default(req);
   const sightingId = crypto.randomUUID();
   const contentType = files[0].mimeType;
-  const originalFileName = files[0].filename;
-  const originalFileExtension = path.extname(originalFileName).toLowerCase().replace(/^\./, '');
+  const sourceFileName = files[0].filename;
+  const originalFileExtension = path.extname(sourceFileName).toLowerCase().replace(/^\./, '');
   const originalFileSize = files[0].bufferFile.length;
 
   if (files.length != 1) {
@@ -59,7 +59,7 @@ export default async (context, req) => {
   }
   else {
     const fileData = files[0].bufferFile;
-    const fileName = `${sightingId}.${originalFileExtension}`;
+    const originalFileName = `${sightingId}.${originalFileExtension}`;
 
     const fileMetadata = await sharp(fileData).metadata();
 
@@ -70,7 +70,7 @@ export default async (context, req) => {
         context
       );
     } else {
-      const originalImageUrl = await storage.uploadSighting('originals', fileName, fileData);
+      const originalImageUrl = await storage.uploadSighting('original', originalFileName, fileData);
 
       // Set DB item
       const createDate = Date.now();
@@ -78,8 +78,7 @@ export default async (context, req) => {
       const item = {
         id: sightingId,
         submissionStatus: submissionStatus,
-        fileName: fileName,
-        originalFileName: originalFileName,
+        sourceFileName: sourceFileName,
         originalFileType: contentType,
         originalFileSize: originalFileSize,
         originalHeight: fileMetadata.height,
@@ -95,8 +94,11 @@ export default async (context, req) => {
         publishedBy: null,
         automaticApprovalDenied: null,
         isPublished: false,
+        originalFileName: originalFileName,
         originalImageUrl: originalImageUrl,
-        thumbnailImageUrl: null,
+        thumbFileName: null,
+        thumbImageUrl: null,
+        largeFileName: null,
         largeImageUrl: null,
         imageLocation: null,
         visionData: null

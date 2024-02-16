@@ -8,15 +8,15 @@ export class Storage {
     constructor() {
         const storageKey = process.env.STORAGE_KEY;
         const storageAccount = process.env.STORAGE_ACCOUNT
-        const storageUrl = `https://${storageAccount}.blob.core.windows.net`;
+        this.storageUrl = `https://${storageAccount}.blob.core.windows.net`;
 
         // Set auth credentials for upload
         const sharedKeyCredential = new StorageSharedKeyCredential(storageAccount, storageKey);
         const pipeline = newPipeline(sharedKeyCredential);
 
-        const blobServiceClient = new BlobServiceClient(storageUrl, pipeline);
+        const blobServiceClient = new BlobServiceClient(this.storageUrl, pipeline);
         try {
-            this.privateContainerClient = blobServiceClient.getContainerClient("vvdotcr-sightings-originals-dev");
+            this.privateContainerClient = blobServiceClient.getContainerClient("vvdotcr-sightings-private-dev");
             this.publicContainerClient = blobServiceClient.getContainerClient("vvdotcr-sightings-public-dev");
         } catch {
             throw new Error("Error getting container clients for Azure storage.");
@@ -24,7 +24,7 @@ export class Storage {
     }
 
     getContainer(type) {
-        if (type === "originals") {
+        if (type === "original") {
             return this.privateContainerClient
         } else {
             return this.publicContainerClient
@@ -32,7 +32,7 @@ export class Storage {
     }
 
     getPath(type, filename) {
-        if (type.match(/^(originals|thumb|large)$/)) {
+        if (type.match(/^(original|thumb|large)$/)) {
             return `${type}/${filename}`;
         }
     }

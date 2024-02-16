@@ -40,7 +40,7 @@ export default async (context, req) => {
           'sightings_card',
           {
             sightingId: sighting.id,
-            sightingImage: sighting.thumbnailImageUrl,
+            sightingImage: sighting.thumbImageUrl,
             sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions),
             loadMore: (itemCount === sightings.items.length && sightings.continuationToken !== null),
             nextPage: page + 1
