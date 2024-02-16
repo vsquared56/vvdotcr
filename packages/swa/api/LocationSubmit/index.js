@@ -8,9 +8,9 @@ export default async (context, req) => {
   const db = new utils.Database;
 
   var response;
-  const submissionId = req.query.submissionId;
+  const sightingId = req.params.sightingId;
   var submissionStatus;
-  var item = await db.getSighting(submissionId);
+  var item = await db.getSighting(sightingId);
 
   const form = req.parseFormBody();
   const latitude = parseFloat(form.get('latitude').value.toString());
@@ -34,7 +34,7 @@ export default async (context, req) => {
   response = utils.renderTemplate(
     'sighting_submit_status_recheck',
     {
-      submissionId: submissionId,
+      sightingId: sightingId,
       pendingResizing: false,
       pendingAutomaticApproval: true,
       recheckCount: 0,

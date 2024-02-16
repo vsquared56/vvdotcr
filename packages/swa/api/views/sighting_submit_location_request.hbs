@@ -40,12 +40,12 @@
       <input id='longitude' name='longitude' type='hidden'>
       <input id='accuracy' name='accuracy' type='hidden'>
       <input id='timestamp' name='timestamp' type='hidden'>
-      <button id='submitLocation' class='btn btn-primary' hx-post='/api/location-submit?submissionId={{submissionId}}'
+      <button id='submitLocation' class='btn btn-primary' hx-post='/api/sightings/{{submissionId}}/location'
         hx-on:htmx:confirm='confirmLocation(event);' hx-target='#modal-dialog'>
         Submit my location
       </button>
       <button id='submitWithoutLocation' class='btn btn-neutral'
-        hx-post='/api/location-submit?submissionId={{submissionId}}' hx-target='#modal-dialog'>
+        hx-post='/api/sightings/{{submissionId}}/location' hx-target='#modal-dialog'>
         Submit without a location.
       </button>
     </form>

@@ -8,7 +8,7 @@
       "methods": [
         "post"
       ],
-      "route": "location-submit"
+      "route": "sightings/{sightingId:guid}/location"
     },
     {
       "type": "http",
