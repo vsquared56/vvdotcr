@@ -101,7 +101,8 @@ export default async (context, req) => {
         largeFileName: null,
         largeImageUrl: null,
         imageLocation: null,
-        visionData: null
+        visionData: null,
+        viewCount: 0
       }
 
       // Save image data to CosmosDB
