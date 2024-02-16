@@ -4,83 +4,65 @@ import {
     newPipeline
   } from "@azure/storage-blob";
 
-export async function deleteSightingFile(filePath, type) {
-    const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
-    const STORAGE_KEY = process.env.STORAGE_KEY;
-    var storageContainer;
-    if (type === "original") {
-        storageContainer = "vvdotcr-sightings-originals-dev";
-    } else if (type === "public") {
-        storageContainer = "vvdotcr-sightings-public-dev";
-    } else {
-        throw new Error("Unsupported sighting file type, must be one of 'original' or 'public'");
+export class Storage {
+    constructor() {
+        const storageKey = process.env.STORAGE_KEY;
+        const storageAccount = process.env.STORAGE_ACCOUNT
+        const storageUrl = `https://${storageAccount}.blob.core.windows.net`;
+
+        // Set auth credentials for upload
+        const sharedKeyCredential = new StorageSharedKeyCredential(storageAccount, storageKey);
+        const pipeline = newPipeline(sharedKeyCredential);
+
+        const blobServiceClient = new BlobServiceClient(storageUrl, pipeline);
+        try {
+            this.privateContainerClient = blobServiceClient.getContainerClient("vvdotcr-sightings-originals-dev");
+            this.publicContainerClient = blobServiceClient.getContainerClient("vvdotcr-sightings-public-dev");
+        } catch {
+            throw new Error("Error getting container clients for Azure storage.");
+        }
     }
 
-    const storageUrl = `https://${STORAGE_ACCOUNT}.blob.core.windows.net`;
+    getContainer(type) {
+        if (type === "originals") {
+            return this.privateContainerClient
+        } else {
+            return this.publicContainerClient
+        }
+    }
 
-    // Set auth credentials for upload
-    const sharedKeyCredential = new StorageSharedKeyCredential(STORAGE_ACCOUNT, STORAGE_KEY);
-    const pipeline = newPipeline(sharedKeyCredential);
+    getPath(type, filename) {
+        if (type.match(/^(originals|thumb|large)$/)) {
+            return `${type}/${filename}`;
+        }
+    }
 
-    const blobServiceClient = new BlobServiceClient(storageUrl, pipeline);
-    
-    try {
-        const containerClient = blobServiceClient.getContainerClient(storageContainer);
-        const deleteBlobClient = containerClient.getBlobClient(filePath);
+    async deleteSightingFile(type, filename) {
+        const container = this.getContainer(type);
+        const path = this.getPath(type, filename);
+
+        const deleteBlobClient = container.getBlobClient(path);
         const deleteBlobResponse = await deleteBlobClient.delete();
-    } catch {
-        throw new Error("Error deleting blob in Azure storage.");
-    }
-}
-
-export async function downloadOriginalSighting(filename) {
-    const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
-    const STORAGE_KEY = process.env.STORAGE_KEY;
-    const storageContainer = "vvdotcr-sightings-originals-dev";
-    const storageUrl = `https://${STORAGE_ACCOUNT}.blob.core.windows.net`;
-
-    // Set auth credentials for download
-    const sharedKeyCredential = new StorageSharedKeyCredential(STORAGE_ACCOUNT, STORAGE_KEY);
-    const pipeline = newPipeline(sharedKeyCredential);
-
-    // Download the files
-    const blobServiceClient = new BlobServiceClient(storageUrl, pipeline);
-    const containerClient = blobServiceClient.getContainerClient(storageContainer);
-    const downloadBlobClient = containerClient.getBlobClient(`originals/${filename}`);
-    const downloadBlobResponse = await downloadBlobClient.downloadToBuffer();
-
-    return downloadBlobResponse;
-}
-
-export async function uploadSighting(filePath, type, buffer) {
-    const STORAGE_ACCOUNT = process.env.STORAGE_ACCOUNT;
-    const STORAGE_KEY = process.env.STORAGE_KEY;
-    var storageContainer;
-    if (type === "original") {
-        storageContainer = "vvdotcr-sightings-originals-dev";
-    } else if (type === "public") {
-        storageContainer = "vvdotcr-sightings-public-dev";
-    } else {
-        throw new Error("Unsupported sighting file type, must be one of 'original' or 'public'");
     }
 
-    const storageUrl = `https://${STORAGE_ACCOUNT}.blob.core.windows.net`;
+    async downloadSighting(type, filename) {
+        const container = this.getContainer(type);
+        const path = this.getPath(type, filename);
 
-    // Set auth credentials for upload
-    const sharedKeyCredential = new StorageSharedKeyCredential(STORAGE_ACCOUNT, STORAGE_KEY);
-    const pipeline = newPipeline(sharedKeyCredential);
+        const downloadBlobClient = container.getBlobClient(path);
+        const downloadBlobResponse = await downloadBlobClient.downloadToBuffer();
 
-    // Upload the files
-    const blobServiceClient = new BlobServiceClient(storageUrl, pipeline);
-    
-    try {
-        const containerClient = blobServiceClient.getContainerClient(storageContainer);
-        const uploadBlobClient = containerClient.getBlockBlobClient(filePath);
+        return downloadBlobResponse;
+    }
+
+    async uploadSighting(type, filename, buffer) {
+        const container = this.getContainer(type);
+        const path = this.getPath(type, filename);
+
+        const uploadBlobClient = container.getBlockBlobClient(path);
         const uploadBlobResponse = await uploadBlobClient.uploadData(buffer);
-    } catch {
-        throw new Error("Error uploading file to Azure storage.");
+        const sightingUrl = `${this.storageUrl}/${container.containerName}/${path}`;
+    
+        return sightingUrl;
     }
-    const sightingUrl = `${storageUrl}/${storageContainer}/${filePath}`;
-
-    return sightingUrl;
 }

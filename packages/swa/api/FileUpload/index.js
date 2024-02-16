@@ -17,8 +17,6 @@ const ALLOWED_IMAGE_TYPES = {
 const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
 
 export default async (context, req) => {
-  const db = new utils.Database;
-
   var response;
   var clientIp = null;
   if (req.headers.hasOwnProperty("x-forwarded-for")) {
@@ -44,6 +42,9 @@ export default async (context, req) => {
     }
   }
   else if (req.method === "POST") {
+    const db = new utils.Database;
+    const storage = new utils.Storage;
+
     const { fields, files } = await parseMultipartFormData.default(req);
     const submissionId = crypto.randomUUID();
     const contentType = files[0].mimeType;
@@ -85,7 +86,7 @@ export default async (context, req) => {
           context
         );
       } else {
-        const originalImageUrl = await utils.uploadSighting(`originals/${fileName}`, 'original', fileData);
+        const originalImageUrl = await storage.uploadSighting('originals', fileName, fileData);
 
         // Set DB item
         const createDate = Date.now();

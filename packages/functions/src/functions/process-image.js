@@ -15,9 +15,10 @@ app.serviceBusQueue('process-image', {
     queueName: 'new-file-uploads',
     handler: async (message, context) => {
         const db = new utils.Database;
+        const storage = new utils.Storage;
 
         const item = await db.getSighting(message);
-        const originalSighting = await utils.downloadOriginalSighting(item.fileName);
+        const originalSighting = await storage.downloadSighting('originals', item.fileName);
         
         // Get image data from the Azure Vision API
         const visionResponse = await fetch(`${VISION_API_ENDPOINT}/computervision/imageanalysis:analyze?api-version=2023-10-01&features=smartCrops,objects,tags&smartcrops-aspect-ratios=1.0`, {
@@ -39,7 +40,7 @@ app.serviceBusQueue('process-image', {
             .jpeg()
             .toBuffer();
 
-        const thumbnailImageUrl = await utils.uploadSighting(`thumb/${item.id}.jpeg`, 'public', croppedBuffer);
+        const thumbnailImageUrl = await storage.uploadSighting('thumb', `${item.id}.jpeg`, croppedBuffer);
 
         // Resize the image to a reasonable size
         const largeBuffer = await sharp(originalSighting)
@@ -47,7 +48,7 @@ app.serviceBusQueue('process-image', {
             .jpeg()
             .toBuffer();
 
-        const largeImageUrl = await utils.uploadSighting(`large/${item.id}.jpeg`, 'public', largeBuffer);
+        const largeImageUrl = await storage.uploadSighting('large', `${item.id}.jpeg`, largeBuffer);
 
         // Parse location from EXIF data
         var submissionStatus;
