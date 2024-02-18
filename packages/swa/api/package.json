@@ -11,6 +11,7 @@
     "@anzp/azure-function-multipart": "^3.1.0",
     "@azure/service-bus": "^7.9.3",
     "@vvdotcr/common": "^1.0.0",
+    "handlebars": "^4.7.8",
     "sharp": "^0.33.1",
     "streamifier": "^0.1.1"
   }
