@@ -4,9 +4,9 @@
   <h3 class="font-bold text-lg">Processing! <%= it.sighting.id %></h3>
   <span class="loading loading-spinner loading-lg"></span>
   <p class="py-4">Image saved... rechecking status every <%= it.recheckInterval %> seconds...</p>
-  <% if (it.pendingResizing) { %>
+  <% if (it.sighting.submissionStatus === 'saved') { %>
   <p class="py-4">Current status: pending resizing.</p>
-  <% } else if (it.pendingAutomaticApproval) { %>
+  <% } else if (it.sighting.submissionStatus === 'pendingAutomaticApproval') { %>
   <p class="py-4">Current status: pending automatic approval.</p>
   <% } %>
 </div>

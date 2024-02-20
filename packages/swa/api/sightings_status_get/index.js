@@ -23,7 +23,7 @@ export default async (context, req) => {
         sighting: sighting
       }
     );
-  } else if (submissionStatus === 'saved') {
+  } else if (submissionStatus === 'saved' || submissionStatus === 'pendingAutomaticApproval') {
     //Exponential backoff for retry requests
     response = eta.render(
       "./sighting_submit_status_recheck",
@@ -35,39 +35,18 @@ export default async (context, req) => {
         recheckInterval: Math.pow(1.5, recheckCount)
       }
     );
-  } else if (submissionStatus === 'pendingAutomaticApproval') {
-    //Exponential backoff for retry requests
-    response = eta.render(
-      "./sighting_submit_status_recheck",
-      {
-        sighting: sighting,
-        pendingResizing: false,
-        pendingAutomaticApproval: true,
-        recheckCount: (recheckCount + 1),
-        recheckInterval: Math.pow(1.5, recheckCount)
-      }
-    );
   } else if (submissionStatus === 'approved') {
     const dateOptions = {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     };
-    const card = eta.render(
-      "./sightings_card",
-      {
-        sighting: sighting,
-        sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions),
-        loadMore: false,
-        nextPage: null
-      }
-    );
     response = eta.render(
       "./sighting_submit_approved",
       {
         sighting: sighting,
-        imageData: JSON.stringify(sighting),
-        card: card
+        sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions),
+        imageData: JSON.stringify(sighting)
       }
     );
   } else if (submissionStatus === 'needsManualApproval') {
