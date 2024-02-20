@@ -1,6 +1,13 @@
+import { Eta } from "eta";
+import * as path from "path";
+
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const eta = new Eta(
+    {
+      views: path.join(context.executionContext.functionDirectory, '..', 'views')
+    });
   const settingId = req.params.settingId;
 
   var response;
@@ -10,13 +17,12 @@ export default async (context, req) => {
 
   await db.saveSetting(settingId, settingValue);
 
-  response = utils.renderTemplate(
-    'settings_item',
+  response = eta.render(
+    "./settings_item",
     {
       settingName: settingId,
       settingValue: JSON.stringify(settingValue)
-    },
-    context
+    }
   );
 
   context.res = {

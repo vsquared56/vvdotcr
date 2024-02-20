@@ -1,6 +1,13 @@
+import { Eta } from "eta";
+import * as path from "path";
+
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const eta = new Eta(
+    {
+      views: path.join(context.executionContext.functionDirectory, '..', 'views')
+    });
   var response;
   var clientIp = null;
   if (req.headers.hasOwnProperty("x-forwarded-for")) {
@@ -11,16 +18,13 @@ export default async (context, req) => {
   }
 
   if (req.query.finished) {
-    response = utils.renderTemplate(
-      'sighting_submit_finished',
-      null,
-      context
+    response = eta.render(
+      "./sighting_submit_finished"
     );
   } else {
-    response = utils.renderTemplate(
-      'sighting_submit',
-      { retrySubmission: (req.query.retry === "true") },
-      context
+    response = eta.render(
+      "./sighting_submit",
+      { retrySubmission: (req.query.retry === "true") }
     );
   }
 

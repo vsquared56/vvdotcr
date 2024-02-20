@@ -1,6 +1,13 @@
+import { Eta } from "eta";
+import * as path from "path";
+
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const eta = new Eta(
+    {
+      views: path.join(context.executionContext.functionDirectory, '..', 'views')
+    });
   const db = new utils.Database;
 
   var response;
@@ -9,28 +16,30 @@ export default async (context, req) => {
   const settingId = req.params.settingId;
 
   if (settingId === 'new') {
-    response = utils.renderTemplate('settings_item_new', null, context);
+    response = eta.render(
+      "./settings_item_new"
+    );
   } else if (settingId === 'add') {
-    response = utils.renderTemplate('settings_item_add', null, context);
+    response = eta.render(
+      "./settings_item_add"
+    );
   } else if (settingId) {
     const settingValue = await db.getSetting(settingId);
     if (edit) {
-      response = utils.renderTemplate(
-        'settings_item_edit',
+      response = eta.render(
+        "./settings_item_edit",
         {
           settingName: settingId,
           settingValue: JSON.stringify(settingValue)
-        },
-        context
+        }
       );
     } else {
-      response = utils.renderTemplate(
-        'settings_item',
+      response = eta.render(
+        "./settings_item",
         {
           settingName: settingId,
           settingValue: JSON.stringify(settingValue)
-        },
-        context
+        }
       );
     }
   } else {
@@ -38,20 +47,20 @@ export default async (context, req) => {
     var settingsItems = "";
 
     for (const setting of allSettings) {
-      settingsItems += utils.renderTemplate(
-        'settings_item',
+      settingsItems += eta.render(
+        "./settings_item",
         {
-          settingName: setting.id,
-          settingValue: JSON.stringify(setting.value)
-        },
-        context
+          settingName: settingId,
+          settingValue: JSON.stringify(settingValue)
+        }
       );
     }
 
-    response = utils.renderTemplate(
-      'settings_table',
-      { settingsItems: settingsItems },
-      context
+    response = eta.render(
+      "./settings_table",
+      {
+        settingsItems: settingsItems
+      }
     );
   }
 

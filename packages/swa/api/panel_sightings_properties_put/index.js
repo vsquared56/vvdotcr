@@ -1,6 +1,13 @@
+import { Eta } from "eta";
+import * as path from "path";
+
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const eta = new Eta(
+    {
+      views: path.join(context.executionContext.functionDirectory, '..', 'views')
+    });
   const db = new utils.Database;
 
   var response;
@@ -14,14 +21,13 @@ export default async (context, req) => {
   sighting[propertyName] = propertyValue;
   await db.saveSighting(sighting);
 
-  response = utils.renderTemplate(
-    'admin_sightings_item_property',
+  response = eta.render(
+    "./admin_sightings_item_property",
     {
       sightingId: sighting.id,
       propertyName: propertyName,
       propertyValue: utils.renderSightingProperty(propertyName, sighting[propertyName])
-    },
-    context
+    }
   );
 
   context.res = {

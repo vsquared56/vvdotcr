@@ -1,3 +1,4 @@
+import { Eta } from "eta";
 import * as crypto from "crypto";
 import * as path from "path";
 import { ServiceBusClient } from "@azure/service-bus";
@@ -17,6 +18,10 @@ const ALLOWED_IMAGE_TYPES = {
 const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
 
 export default async (context, req) => {
+  const eta = new Eta(
+    {
+      views: path.join(context.executionContext.functionDirectory, '..', 'views')
+    });
   const db = new utils.Database;
   const storage = new utils.Storage;
   var response;
@@ -37,24 +42,21 @@ export default async (context, req) => {
   const originalFileSize = files[0].bufferFile.length;
 
   if (files.length != 1) {
-    response = utils.renderTemplate(
-      'sighting_submit_error',
-      { error: "Only one file upload is allowed at a time." },
-      context
+    response = eta.render(
+      "./sighting_submit_error",
+      { error: "Only one file upload is allowed at a time." }
     );
   }
   else if (originalFileSize >= 20 * 1024 * 1024) {
-    response = utils.renderTemplate(
-      'sighting_submit_error',
-      { error: "Images must be below 20 MB." },
-      context
+    response = eta.render(
+      "./sighting_submit_error",
+      { error: "Images must be below 20 MB." }
     );
   }
   else if (!(originalFileExtension in ALLOWED_IMAGE_TYPES) || (ALLOWED_IMAGE_TYPES[originalFileExtension] != contentType)) {
-    response = utils.renderTemplate(
-      'sighting_submit_error',
-      { error: "Image is not an allowed type." },
-      context
+    response = eta.render(
+      "./sighting_submit_error",
+      { error: "Image is not an allowed type." }
     );
   }
   else {
@@ -64,10 +66,9 @@ export default async (context, req) => {
     const fileMetadata = await sharp(fileData).metadata();
 
     if (fileMetadata.width < 600 || fileMetadata.height < 600) {
-      response = utils.renderTemplate(
-        'sighting_submit_error',
-        { error: "Images must be at least 600x600." },
-        context
+      response = eta.render(
+        "./sighting_submit_error",
+        { error: "Images must be at least 600x600." }
       );
     } else {
       const originalImageUrl = await storage.uploadSighting('original', originalFileName, fileData);
@@ -117,10 +118,14 @@ export default async (context, req) => {
         await sbClient.close();
       }
 
-      response = utils.renderTemplate(
-        'sighting_submit_submitted',
-        { sightingId: sightingId, submissionStatus: submissionStatus, recheckCount: 0, recheckInterval: 1 },
-        context
+      response = eta.render(
+        "./sighting_submit_submitted",
+        {
+          sightingId: sightingId,
+          submissionStatus: submissionStatus,
+          recheckCount: 0,
+          recheckInterval: 1
+        }
       );
     }
   }

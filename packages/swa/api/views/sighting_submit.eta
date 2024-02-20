@@ -1,7 +1,7 @@
 <div id="sighting-submit"
-     {{#if retrySubmission}}
+     <% if (it.retrySubmission) { %>
      hx-swap-oob="true"
-     {{/if}}
+     <% } %>
      class="collapse collapse-arrow bg-primary">
   <input type="checkbox" checked="true"/>
   <div class="collapse-title text-xl text-primary-content font-medium">

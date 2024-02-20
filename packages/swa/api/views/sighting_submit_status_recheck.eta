@@ -1,12 +1,12 @@
 <div class="modal-box"
-     hx-get="/api/sightings/{{sightingId}}/status?recheckCount={{recheckCount}}"
-     hx-trigger="every {{recheckInterval}}s" hx-swap="outerHTML">
-  <h3 class="font-bold text-lg">Processing! {{sightingId}}</h3>
+     hx-get="/api/sightings/<%= it.sightingId %>/status?recheckCount=<%= it.recheckCount %>"
+     hx-trigger="every <%= it.recheckInterval %>s" hx-swap="outerHTML">
+  <h3 class="font-bold text-lg">Processing! <%= it.sightingId %></h3>
   <span class="loading loading-spinner loading-lg"></span>
-  <p class="py-4">Image saved... rechecking status every {{recheckInterval}} seconds...</p>
-  {{#if pendingResizing}}
+  <p class="py-4">Image saved... rechecking status every <%= it.recheckInterval %> seconds...</p>
+  <% if (it.pendingResizing) { %>
   <p class="py-4">Current status: pending resizing.</p>
-  {{else if pendingAutomaticApproval}}
+  <% } else if (it.pendingAutomaticApproval) { %>
   <p class="py-4">Current status: pending automatic approval.</p>
-  {{/if}}
+  <% } %>
 </div>

@@ -19,8 +19,8 @@
     <div class="flex-1"></div>
     <div class="flex flex-col overflow-y-auto">
       <div class="flex-none text-center">Header</div>
-      <img class="max-w-screen h-auto rounded-md object-scale-down drop-shadow-md" src="{{sightingImage}}" alt="" />
-      <div class="flex-none text-center">{{sightingDate}}</div>
+      <img class="max-w-screen h-auto rounded-md object-scale-down drop-shadow-md" src="<%= it.sightingImage %>" alt="" />
+      <div class="flex-none text-center"><%= it.sightingDate %></div>
     </div>
     <div class="flex-1"></div>
     <div class="navbar bg-base-100 min-h-8">
@@ -38,7 +38,7 @@
             </svg>
           </summary>
           <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
-            <li><a href="{{sighting.largeImageUrl}}" target="_blank">View full image</a></li>
+            <li><a href="<%= it.sighting.largeImageUrl %>" target="_blank">View full image</a></li>
           </ul>
         </details>
       </div>

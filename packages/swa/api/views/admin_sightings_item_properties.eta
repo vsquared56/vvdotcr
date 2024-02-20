@@ -7,6 +7,6 @@
     </tr>
   </thead>
   <tbody hx-target="closest tr" hx-swap="outerHTML">
-    {{{sightingProperties}}}
+    <%~ it.sightingProperties %>
   </tbody>
 </table>

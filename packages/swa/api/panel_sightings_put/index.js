@@ -1,6 +1,13 @@
+import { Eta } from "eta";
+import * as path from "path";
+
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const eta = new Eta(
+    {
+      views: path.join(context.executionContext.functionDirectory, '..', 'views')
+    });
   const db = new utils.Database;
 
   const sightingId = req.params.sightingId;
@@ -22,25 +29,23 @@ export default async (context, req) => {
   await db.saveSighting(sighting);
 
   //Update the modal for this sighting
-  response = utils.renderTemplate(
-    'admin_sightings_item',
+  response = eta.render(
+    "./admin_sightings_item",
     {
       sighting: sighting
-    },
-    context
+    }
   );
 
   //Also replace the card behind the modal with the latest data
-  response += utils.renderTemplate(
-    'admin_sightings_card',
+  response += eta.render(
+    "./admin_sightings_card",
     {
       sighting: sighting,
       sightingDate: (new Date(sighting.createDate)).toLocaleString(),
       loadMore: false,
       nextPage: null,
       replace: true
-    },
-    context
+    }
   );
 
   context.res = {

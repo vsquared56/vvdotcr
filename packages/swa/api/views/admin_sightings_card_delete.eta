@@ -1,2 +1,2 @@
-<div id="sighting-card-{{sighting.id}}" hx-swap-oob="true" hx-on::load="htmx.find('#sighting-card-{{sighting.id}}').outerHTML='';">
+<div id="sighting-card-<%= it.sighting.id %>" hx-swap-oob="true" hx-on::load="htmx.find('#sighting-card-<%= it.sighting.id %>').outerHTML='';">
 </div>

@@ -1,6 +1,13 @@
+import { Eta } from "eta";
+import * as path from "path";
+
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const eta = new Eta(
+    {
+      views: path.join(context.executionContext.functionDirectory, '..', 'views')
+    });
   const db = new utils.Database;
 
   var response = "";
@@ -10,12 +17,11 @@ export default async (context, req) => {
 
   if (sightingId && edit === 'edit') {
     const sighting = await db.getSighting(sightingId);
-    response = utils.renderTemplate(
-      'admin_sightings_item',
+    response = eta.render(
+      "./admin_sightings_item",
       {
         sighting: sighting
-      },
-      context
+      }
     );
   } else {
 
@@ -23,25 +29,25 @@ export default async (context, req) => {
     const sightings = await db.getPaginatedSightings(2, true, page);
 
     if (!sightings.items) {
-      response = utils.renderTemplate(
-        'sightings_no_more',
-        null,
-        context
+      response = eta.render(
+        "./sightings_no_more",
+        {
+          sighting: sighting
+        }
       );
     }
     else {
       var itemCount = 1;
       for (const sighting of sightings.items) {
-        response += utils.renderTemplate(
-          'admin_sightings_card',
+        response += eta.render(
+          "./admin_sightings_card",
           {
             sighting: sighting,
             sightingDate: (new Date(sighting.createDate)).toLocaleString(),
             loadMore: (itemCount === sightings.items.length && sightings.continuationToken !== null),
             nextPage: page + 1,
             replace: false
-          },
-          context
+          }
         );
         itemCount++;
       }

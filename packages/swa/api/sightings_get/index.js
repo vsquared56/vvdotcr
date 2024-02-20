@@ -1,6 +1,13 @@
+import { Eta } from "eta";
+import * as path from "path";
+
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const eta = new Eta(
+    {
+      views: path.join(context.executionContext.functionDirectory, '..', 'views')
+    });
   const db = new utils.Database;
 
   var response = "";
@@ -14,38 +21,34 @@ export default async (context, req) => {
   if (req.params.sightingId) {
     const sightingId = req.params.sightingId.toString();
     const sighting = await db.getSighting(sightingId);
-    response = utils.renderTemplate(
-      'sightings_item',
+    response = eta.render(
+      "./sightings_item",
       {
         sightingId: sighting.id,
         sightingImage: sighting.largeImageUrl,
         sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions)
-      },
-      context
+      }
     );
   } else {
     const page = req.query.page ? parseInt(req.query.page) : 0;
     const sightings = await db.getPaginatedSightings(5, false, page);
     if (!sightings.items) {
-      response = utils.renderTemplate(
-        'sightings_no_more',
-        null,
-        context
+      response = eta.render(
+        "./sightings_no_more"
       );
     }
     else {
       var itemCount = 1;
       for (const sighting of sightings.items) {
-        response += utils.renderTemplate(
-          'sightings_card',
+        response += eta.render(
+          "./sightings_card",
           {
             sightingId: sighting.id,
             sightingImage: sighting.thumbImageUrl,
             sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions),
             loadMore: (itemCount === sightings.items.length && sightings.continuationToken !== null),
             nextPage: page + 1
-          },
-          context
+          }
         );
         itemCount++;
       }

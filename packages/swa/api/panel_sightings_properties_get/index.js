@@ -1,6 +1,13 @@
+import { Eta } from "eta";
+import * as path from "path";
+
 import * as utils from "@vvdotcr/common";
 
 export default async (context, req) => {
+  const eta = new Eta(
+    {
+      views: path.join(context.executionContext.functionDirectory, '..', 'views')
+    });
   const db = new utils.Database;
 
   var response = "";
@@ -17,44 +24,40 @@ export default async (context, req) => {
       
       if (!property.match(/_.*/)) { //Ignore internal CosmosDB properties
         const propertyValue = utils.renderSightingProperty(property, sighting[property]);
-        sightingProperties += utils.renderTemplate(
-          'admin_sightings_item_property',
+        sightingProperties += eta.render(
+          "./admin_sightings_item_property",
           {
             sightingId: sighting.id,
             propertyName: property,
             propertyValue: propertyValue
-          },
-          context
+          }
         );
       }
     }
-    response = utils.renderTemplate(
-      'admin_sightings_item_properties',
+    response = eta.render(
+      "./admin_sightings_item_properties",
       {
         sighting: sighting,
         sightingProperties: sightingProperties
-      },
-      context
+      }
     );
   } else if (edit === "edit") {
-    response = utils.renderTemplate(
-      'admin_sightings_item_property_edit',
+    response = eta.render(
+      "./admin_sightings_item_property_edit",
       {
         sightingId: sighting.id,
         propertyName: propertyName,
         propertyValue: JSON.stringify(sighting[propertyName])
-      },
-      context
+      }
     );
   } else {
-    response = utils.renderTemplate(
-      'admin_sightings_item_property',
+    response = eta.render(
+      "./admin_sightings_item_property",
       {
         sightingId: sighting.id,
         propertyName: propertyName,
         propertyValue: utils.renderSightingProperty(propertyName, sighting[propertyName])
-      },
-      context
+      }
     );
   }
 

@@ -1,3 +1,6 @@
+import { Eta } from "eta";
+import * as path from "path";
+
 import { ServiceBusClient } from "@azure/service-bus";
 
 import * as utils from "@vvdotcr/common";
@@ -5,6 +8,10 @@ import * as utils from "@vvdotcr/common";
 const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
 
 export default async (context, req) => {
+  const eta = new Eta(
+    {
+      views: path.join(context.executionContext.functionDirectory, '..', 'views')
+    });
   const db = new utils.Database;
 
   var response;
@@ -31,16 +38,15 @@ export default async (context, req) => {
   item.submissionStatus = submissionStatus;
 
   await db.saveSighting(item);
-  response = utils.renderTemplate(
-    'sighting_submit_status_recheck',
+  response = eta.render(
+    "./sighting_submit_status_recheck",
     {
       sightingId: sightingId,
       pendingResizing: false,
       pendingAutomaticApproval: true,
       recheckCount: 0,
       recheckInterval: 1
-    },
-    context
+    }
   );
 
   // Send a Service Bus Message
