@@ -13,14 +13,10 @@
                 </tr>
             </thead>
             <tbody hx-target="closest tr" hx-swap="outerHTML">
-                <%~ it.settingsItems %>
-                <tr>
-                    <td colspan=3>
-                        <button class="btn btn-primary" hx-get="/api/settings/new">
-                            Add Setting
-                        </button>
-                    </td>
-                </tr>
+                <% it.settings.forEach(function(setting){ %>
+                <%~ include("./settings_item", { setting: setting }) %>
+                <% }) %>
+                <%~ include("./settings_item_add") %>
             </tbody>
         </table>
     </div>

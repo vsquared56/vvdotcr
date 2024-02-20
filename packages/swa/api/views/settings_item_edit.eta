@@ -1,15 +1,15 @@
-<tr hx-trigger='cancel' class='editing' hx-get="/api/setting/?settingId=<%= it.settingId %>">
+<tr hx-trigger='cancel' class='editing' hx-get="/api/setting/?settingId=<%= it.setting.id %>">
   <td colspan=3 class="text-xs lg:text-sm">
-    <div><%= it.settingName %></div>
+    <div><%= it.setting.id %></div>
     <div class="separator"></div>
-    <textarea cols="50" rows="4" name="value"><%~ it.settingValue %></textarea>
-    <button class="btn btn-warning btn-sm" hx-get="/api/settings/<%= it.settingName %>">
+    <textarea cols="50" rows="4" name="value"><%~ it.setting.value %></textarea>
+    <button class="btn btn-warning btn-sm" hx-get="/api/settings/<%= it.setting.id %>">
       Cancel
     </button>
-    <button class="btn btn-error btn-sm" hx-delete="/api/settings/<%= it.settingName %>">
+    <button class="btn btn-error btn-sm" hx-delete="/api/settings/<%= it.setting.id %>">
       Delete
     </button>
-    <button class="btn btn-success btn-sm" hx-put="/api/settings/<%= it.settingName %>" hx-include="closest tr">
+    <button class="btn btn-success btn-sm" hx-put="/api/settings/<%= it.setting.id %>" hx-include="closest tr">
       Save
     </button>
   </td>

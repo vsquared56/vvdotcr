@@ -29,37 +29,28 @@ export default async (context, req) => {
       response = eta.render(
         "./settings_item_edit",
         {
-          settingName: settingId,
-          settingValue: JSON.stringify(settingValue)
+          setting: { id: settingId, value: JSON.stringify(settingValue) }
         }
       );
     } else {
       response = eta.render(
         "./settings_item",
         {
-          settingName: settingId,
-          settingValue: JSON.stringify(settingValue)
+          setting: { id: settingId, value: JSON.stringify(settingValue) }
         }
       );
     }
   } else {
     const allSettings = await db.getAllSettings();
-    var settingsItems = "";
+    //Format setting values as JSON for display
+    const formattedSettings = allSettings.map(({ id, value }) => ({ id: id, value: JSON.stringify(value) }));
 
-    for (const setting of allSettings) {
-      settingsItems += eta.render(
-        "./settings_item",
-        {
-          settingName: setting.id,
-          settingValue: JSON.stringify(setting.value)
-        }
-      );
-    }
+    var settingsItems = "";
 
     response = eta.render(
       "./settings_table",
       {
-        settingsItems: settingsItems
+        settings: formattedSettings
       }
     );
   }

@@ -21,8 +21,7 @@ export default async (context, req) => {
   response = eta.render(
     "./settings_item",
     {
-      settingName: settingId,
-      settingValue: JSON.stringify(settingValue)
+      setting: {id: settingId, value: JSON.stringify(settingValue) }
     }
   );
 

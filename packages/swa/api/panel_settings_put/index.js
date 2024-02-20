@@ -11,7 +11,7 @@ export default async (context, req) => {
   const db = new utils.Database;
 
   var response;
-  
+
   const settingId = req.params.settingId;
 
   const form = req.parseFormBody();
@@ -22,8 +22,7 @@ export default async (context, req) => {
   response = eta.render(
     "./settings_item",
     {
-      settingName: settingId,
-      settingValue: JSON.stringify(settingValue)
+      setting: {id: settingId, value: JSON.stringify(settingValue)}
     }
   );
 
