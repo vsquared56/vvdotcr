@@ -24,8 +24,7 @@ export default async (context, req) => {
     response = eta.render(
       "./sightings_item",
       {
-        sightingId: sighting.id,
-        sightingImage: sighting.largeImageUrl,
+        sighting: sighting,
         sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions)
       }
     );
@@ -43,8 +42,7 @@ export default async (context, req) => {
         response += eta.render(
           "./sightings_card",
           {
-            sightingId: sighting.id,
-            sightingImage: sighting.thumbImageUrl,
+            sighting: sighting,
             sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions),
             loadMore: (itemCount === sightings.items.length && sightings.continuationToken !== null),
             nextPage: page + 1

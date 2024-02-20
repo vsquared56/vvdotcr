@@ -6,14 +6,14 @@
 <% } else { %>
 <div class="card card-compact w-full min-w-60 max-w-80 bg-base-300 shadow-xl">
 <% } %>
-  <figure hx-get="/api/sightings/<%= it.sightingId %>"
+  <figure hx-get="/api/sightings/<%= it.sighting.id %>"
           hx-trigger="click" 
           hx-target="body"
           hx-swap="beforeend">
-    <img class="sighting-img" src="<%= it.sightingImage %>" />
+    <img class="sighting-img" src="<%= it.sighting.thumbImageUrl %>" />
   </figure>
   <div class="card-body items-center text-center"
-       hx-get="/api/sightings/<%= it.sightingId %>"
+       hx-get="/api/sightings/<%= it.sighting.id %>"
        hx-trigger="click" 
        hx-target="body"
        hx-swap="beforeend">
