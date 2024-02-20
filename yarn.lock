@@ -1110,6 +1110,7 @@ __metadata:
     "@anzp/azure-function-multipart": "npm:^3.1.0"
     "@azure/service-bus": "npm:^7.9.3"
     "@vvdotcr/common": "npm:^1.0.0"
+    eta: "npm:^3.2.0"
     sharp: "npm:^0.33.1"
     streamifier: "npm:^0.1.1"
   languageName: unknown
@@ -2191,6 +2192,13 @@ __metadata:
   version: 1.0.3
   resolution: "escape-html@npm:1.0.3"
   checksum: 524c739d776b36c3d29fa08a22e03e8824e3b2fd57500e5e44ecf3cc4707c34c60f9ca0781c0e33d191f2991161504c295e98f68c78fe7baa6e57081ec6ac0a3
+  languageName: node
+  linkType: hard
+
+"eta@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "eta@npm:3.2.0"
+  checksum: d9763f8af5c9904cd2fef25d38bfd3a05c616beffeacbceb34cd00fdcd49f02d3790e81fa56275cbe9e44cc4db2abc89b52beaf1fd615e891bfd5a3aaefbd644
   languageName: node
   linkType: hard
 
