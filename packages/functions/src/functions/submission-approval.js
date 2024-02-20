@@ -14,8 +14,10 @@ app.serviceBusQueue('submission-approval', {
     connection: 'SERVICE_BUS_CONNECTION_STRING',
     queueName: 'new-sightings-to-validate',
     handler: async (message, context) => {
-        const item = await utils.getSighting(message);
-        const minLocationAccuracy = await utils.getSetting("min_location_accuracy_meters");
+        const db = new utils.Database;
+
+        const item = await db.getSighting(message);
+        const minLocationAccuracy = await db.getSetting("min_location_accuracy_meters");
 
         if (item.imageLocation === null || item.imageLocation.latitude === null || item.imageLocation.longitude === null) {
             item.submissionStatus = 'needsManualApproval';
@@ -25,7 +27,7 @@ app.serviceBusQueue('submission-approval', {
             item.automaticApprovalDenied = 'inaccurateBrowserLocation';
         }
         else {
-            const geolockedLocations = await utils.getSetting("geolocked_locations");
+            const geolockedLocations = await db.getSetting("geolocked_locations");
             const center = [item.imageLocation.longitude, item.imageLocation.latitude];
             const radius = item.imageLocation.accuracy;
             const options = { steps: 20, units: 'meters' };
@@ -49,6 +51,6 @@ app.serviceBusQueue('submission-approval', {
             }
         }
 
-        await utils.saveSighting(item);
+        await db.saveSighting(item);
     },
 });

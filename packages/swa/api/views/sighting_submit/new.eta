@@ -1,0 +1,38 @@
+<div id="sighting-submit"
+     <% if (it.retrySubmission) { %>
+     hx-swap-oob="true"
+     <% } %>
+     class="collapse collapse-arrow bg-primary">
+  <input type="checkbox" checked="true"/>
+  <div class="collapse-title text-xl text-primary-content font-medium">
+    Submit a new sighting!
+  </div>
+  <div class="collapse-content bg-base-200 p-4">
+    <form id="form"
+          hx-encoding="multipart/form-data"
+          hx-post="/api/sightings"
+          hx-target="body"
+          hx-swap="beforeend">
+      <div class="flex flex-wrap gap-4 max-w-full">
+        <input name="file"
+               type="file"
+               accept="image/jpeg,image/png"
+               class="file-input file-input-primary file-input-xs w-56 md:file-input-sm md:w-80 lg:file-input-md">
+        <div>
+          <button class="btn btn-primary btn-xs md:btn-sm lg:btn-md">
+            Upload
+          </button>
+          <progress id="progress" class="progress w-40 md:w-56" value="0" max="100"></progress>
+        </div>
+      </div>
+    </form>
+    <script>
+      htmx.on('#form', 'htmx:xhr:progress', function (evt) {
+        htmx.find('#progress').setAttribute('value', evt.detail.loaded / evt.detail.total * 100);
+        if (evt.detail.loaded == evt.detail.total) {
+          htmx.off('#form', 'htmx:xhr:progress', this);
+        }
+      });
+    </script>
+  </div>
+</div>
