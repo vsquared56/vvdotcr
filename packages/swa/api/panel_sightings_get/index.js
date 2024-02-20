@@ -20,7 +20,8 @@ export default async (context, req) => {
     response = eta.render(
       "./admin_sightings_item",
       {
-        sighting: sighting
+        sighting: sighting,
+        sightingDate: (new Date(sighting.createDate)).toLocaleString()
       }
     );
   } else {
