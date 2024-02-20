@@ -50,8 +50,8 @@ export default async (context, req) => {
       settingsItems += eta.render(
         "./settings_item",
         {
-          settingName: settingId,
-          settingValue: JSON.stringify(settingValue)
+          settingName: setting.id,
+          settingValue: JSON.stringify(setting.value)
         }
       );
     }

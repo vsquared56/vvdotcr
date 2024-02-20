@@ -30,10 +30,7 @@ export default async (context, req) => {
 
     if (!sightings.items) {
       response = eta.render(
-        "./sightings_no_more",
-        {
-          sighting: sighting
-        }
+        "./sightings_no_more"
       );
     }
     else {
