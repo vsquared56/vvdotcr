@@ -18,7 +18,7 @@ export default async (context, req) => {
 
   if (recheckCount >= 8) {
     response = eta.render(
-      "./sighting_submit_status_timeout",
+      "./sighting_submit/status_timeout",
       {
         sighting: sighting
       }
@@ -26,7 +26,7 @@ export default async (context, req) => {
   } else if (submissionStatus === 'saved' || submissionStatus === 'pendingAutomaticApproval') {
     //Exponential backoff for retry requests
     response = eta.render(
-      "./sighting_submit_status_recheck",
+      "./sighting_submit/status_recheck",
       {
         sighting: sighting,
         pendingResizing: true,
@@ -42,7 +42,7 @@ export default async (context, req) => {
       day: 'numeric',
     };
     response = eta.render(
-      "./sighting_submit_approved",
+      "./sighting_submit/approved",
       {
         sighting: sighting,
         sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions),
@@ -51,7 +51,7 @@ export default async (context, req) => {
     );
   } else if (submissionStatus === 'needsManualApproval') {
     response = eta.render(
-      "./sighting_submit_needs_manual_approval",
+      "./sighting_submit/needs_manual_approval",
       {
         sighting: sighting,
         imageData: JSON.stringify(sighting)
@@ -59,7 +59,7 @@ export default async (context, req) => {
     );
   } else if (submissionStatus === 'locationRequest') {
     response = eta.render(
-      "./sighting_submit_location_request",
+      "./sighting_submit/location_request",
       {
         sighting: sighting
       }

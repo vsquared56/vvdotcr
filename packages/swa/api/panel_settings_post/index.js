@@ -19,14 +19,14 @@ export default async (context, req) => {
   await db.saveSetting(settingId, settingValue);
 
   response = eta.render(
-    "./settings_item",
+    "./panel/settings_item",
     {
       setting: {id: settingId, value: JSON.stringify(settingValue) }
     }
   );
 
   response += eta.render(
-    "./settings_item_add"
+    "./panel/settings_item_add"
   );
 
   context.res = {

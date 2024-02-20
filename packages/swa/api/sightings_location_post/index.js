@@ -40,7 +40,7 @@ export default async (context, req) => {
 
   await db.saveSighting(sighting);
   response = eta.render(
-    "./sighting_submit_status_recheck",
+    "./sighting_submit/status_recheck",
     {
       sighting: sighting,
       pendingResizing: false,

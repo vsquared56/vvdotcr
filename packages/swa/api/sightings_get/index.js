@@ -22,7 +22,7 @@ export default async (context, req) => {
     const sightingId = req.params.sightingId.toString();
     const sighting = await db.getSighting(sightingId);
     response = eta.render(
-      "./sightings_item",
+      "./sightings/item",
       {
         sighting: sighting,
         sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions)
@@ -33,14 +33,14 @@ export default async (context, req) => {
     const sightings = await db.getPaginatedSightings(5, false, page);
     if (!sightings.items) {
       response = eta.render(
-        "./sightings_no_more"
+        "./sightings/no_more"
       );
     }
     else {
       var itemCount = 1;
       for (const sighting of sightings.items) {
         response += eta.render(
-          "./sightings_card",
+          "./sightings/card",
           {
             sighting: sighting,
             sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions),

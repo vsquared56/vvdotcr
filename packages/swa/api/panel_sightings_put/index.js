@@ -31,7 +31,7 @@ export default async (context, req) => {
 
   //Update the modal for this sighting
   response = eta.render(
-    "./admin_sightings_item",
+    "./panel/sightings_item",
     {
       sighting: sighting
     }
@@ -39,7 +39,7 @@ export default async (context, req) => {
 
   //Also replace the card behind the modal with the latest data
   response += eta.render(
-    "./admin_sightings_card",
+    "./panel/sightings_card",
     {
       sighting: sighting,
       sightingDate: (new Date(sighting.createDate)).toLocaleString(),

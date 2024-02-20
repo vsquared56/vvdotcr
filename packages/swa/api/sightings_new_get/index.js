@@ -8,7 +8,7 @@ export default async (context, req) => {
     {
       views: path.join(context.executionContext.functionDirectory, '..', 'views')
     });
-    
+
   var response;
 
   var clientIp = null;
@@ -21,11 +21,11 @@ export default async (context, req) => {
 
   if (req.query.finished) {
     response = eta.render(
-      "./sighting_submit_finished"
+      "./sighting_submit/finished"
     );
   } else {
     response = eta.render(
-      "./sighting_submit",
+      "./sighting_submit/new",
       { retrySubmission: (req.query.retry === "true") }
     );
   }

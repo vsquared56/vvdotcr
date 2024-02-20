@@ -22,7 +22,7 @@ export default async (context, req) => {
   
   //Remove the modal and card for this sighting
   response = eta.render(
-    "./admin_sightings_card_delete",
+    "./panel/sightings_card_delete",
     {
       sighting: sighting
     }

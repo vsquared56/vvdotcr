@@ -44,19 +44,19 @@ export default async (context, req) => {
 
   if (files.length != 1) {
     response = eta.render(
-      "./sighting_submit_error",
+      "./sighting_submit/error",
       { error: "Only one file upload is allowed at a time." }
     );
   }
   else if (originalFileSize >= 20 * 1024 * 1024) {
     response = eta.render(
-      "./sighting_submit_error",
+      "./sighting_submit/error",
       { error: "Images must be below 20 MB." }
     );
   }
   else if (!(originalFileExtension in ALLOWED_IMAGE_TYPES) || (ALLOWED_IMAGE_TYPES[originalFileExtension] != contentType)) {
     response = eta.render(
-      "./sighting_submit_error",
+      "./sighting_submit/error",
       { error: "Image is not an allowed type." }
     );
   }
@@ -68,7 +68,7 @@ export default async (context, req) => {
 
     if (fileMetadata.width < 600 || fileMetadata.height < 600) {
       response = eta.render(
-        "./sighting_submit_error",
+        "./sighting_submit/error",
         { error: "Images must be at least 600x600." }
       );
     } else {
@@ -120,7 +120,7 @@ export default async (context, req) => {
       }
 
       response = eta.render(
-        "./sighting_submit_submitted",
+        "./sighting_submit/submitted",
         {
           sighting: item,
           submissionStatus: submissionStatus,

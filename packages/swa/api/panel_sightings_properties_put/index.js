@@ -23,7 +23,7 @@ export default async (context, req) => {
   await db.saveSighting(sighting);
 
   response = eta.render(
-    "./admin_sightings_item_property",
+    "./panel/sightings_item_property",
     {
       sighting: sighting,
       propertyName: propertyName,

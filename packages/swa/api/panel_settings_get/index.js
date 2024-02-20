@@ -17,24 +17,24 @@ export default async (context, req) => {
 
   if (settingId === 'new') {
     response = eta.render(
-      "./settings_item_new"
+      "./panel/settings_item_new"
     );
   } else if (settingId === 'add') {
     response = eta.render(
-      "./settings_item_add"
+      "./panel/settings_item_add"
     );
   } else if (settingId) {
     const settingValue = await db.getSetting(settingId);
     if (edit) {
       response = eta.render(
-        "./settings_item_edit",
+        "./panel/settings_item_edit",
         {
           setting: { id: settingId, value: JSON.stringify(settingValue) }
         }
       );
     } else {
       response = eta.render(
-        "./settings_item",
+        "./panel/settings_item",
         {
           setting: { id: settingId, value: JSON.stringify(settingValue) }
         }
@@ -48,7 +48,7 @@ export default async (context, req) => {
     var settingsItems = "";
 
     response = eta.render(
-      "./settings_table",
+      "./panel/settings_table",
       {
         settings: formattedSettings
       }

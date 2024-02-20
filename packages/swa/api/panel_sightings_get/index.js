@@ -18,7 +18,7 @@ export default async (context, req) => {
   if (sightingId && edit === 'edit') {
     const sighting = await db.getSighting(sightingId);
     response = eta.render(
-      "./admin_sightings_item",
+      "./panel/sightings_item",
       {
         sighting: sighting,
         sightingDate: (new Date(sighting.createDate)).toLocaleString()
@@ -31,14 +31,14 @@ export default async (context, req) => {
 
     if (!sightings.items) {
       response = eta.render(
-        "./sightings_no_more"
+        "./sightings/no_more"
       );
     }
     else {
       var itemCount = 1;
       for (const sighting of sightings.items) {
         response += eta.render(
-          "./admin_sightings_card",
+          "./panel/sightings_card",
           {
             sighting: sighting,
             sightingDate: (new Date(sighting.createDate)).toLocaleString(),

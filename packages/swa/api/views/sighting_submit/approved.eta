@@ -8,5 +8,5 @@
   </div>
 </div>
 <div id='sightings-grid' hx-swap-oob="afterbegin">
-  <%~ include("./sightings_card", { sighting: it.sighting, sightingDate: it.sightingDate, loadMore: false }) %>
+  <%~ include("../sightings/card", { sighting: it.sighting, sightingDate: it.sightingDate, loadMore: false }) %>
 </div>

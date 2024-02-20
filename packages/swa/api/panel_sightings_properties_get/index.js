@@ -25,7 +25,7 @@ export default async (context, req) => {
       if (!property.match(/_.*/)) { //Ignore internal CosmosDB properties
         const propertyValue = utils.renderSightingProperty(property, sighting[property]);
         sightingProperties += eta.render(
-          "./admin_sightings_item_property",
+          "./panel/sightings_item_property",
           {
             sighting: sighting,
             propertyName: property,
@@ -35,7 +35,7 @@ export default async (context, req) => {
       }
     }
     response = eta.render(
-      "./admin_sightings_item_properties",
+      "./panel/sightings_item_properties",
       {
         sighting: sighting,
         sightingProperties: sightingProperties
@@ -43,7 +43,7 @@ export default async (context, req) => {
     );
   } else if (edit === "edit") {
     response = eta.render(
-      "./admin_sightings_item_property_edit",
+      "./panel/sightings_item_property_edit",
       {
         sighting: sighting,
         propertyName: propertyName,
@@ -52,7 +52,7 @@ export default async (context, req) => {
     );
   } else {
     response = eta.render(
-      "./admin_sightings_item_property",
+      "./panel/sightings_item_property",
       {
         sighting: sighting,
         propertyName: propertyName,
