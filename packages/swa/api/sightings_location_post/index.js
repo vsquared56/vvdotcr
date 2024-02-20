@@ -15,6 +15,7 @@ export default async (context, req) => {
   const db = new utils.Database;
 
   var response;
+  
   const sightingId = req.params.sightingId;
   var submissionStatus;
   var item = await db.getSighting(sightingId);

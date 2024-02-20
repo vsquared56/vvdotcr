@@ -8,9 +8,11 @@ export default async (context, req) => {
     {
       views: path.join(context.executionContext.functionDirectory, '..', 'views')
     });
-  const settingId = req.params.settingId;
+  const db = new utils.Database;
 
   var response;
+  
+  const settingId = req.params.settingId;
 
   const form = req.parseFormBody();
   const settingValue = JSON.parse(form.get('value').value.toString());

@@ -10,9 +10,10 @@ export default async (context, req) => {
     });
   const db = new utils.Database;
 
-  const sightingId = req.params.sightingId;
   var response;
 
+  const sightingId = req.params.sightingId;
+  
   const form = req.parseFormBody();
   const actionValue = form.get('action').value.toString();
 

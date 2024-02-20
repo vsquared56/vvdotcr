@@ -8,6 +8,8 @@ export default async (context, req) => {
     {
       views: path.join(context.executionContext.functionDirectory, '..', 'views')
     });
+  const db = new utils.Database;
+
   var response;
 
   const form = req.parseFormBody();

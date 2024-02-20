@@ -10,7 +10,7 @@ export default async (context, req) => {
     });
   const db = new utils.Database;
 
-  var response = "";
+  var response;
 
   const edit = req.params.edit;
   const propertyName = req.params.propertyName;

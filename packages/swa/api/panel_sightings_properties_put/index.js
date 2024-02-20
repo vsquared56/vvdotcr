@@ -11,6 +11,7 @@ export default async (context, req) => {
   const db = new utils.Database;
 
   var response;
+  
   const propertyName = req.params.propertyName;
   const sightingId = req.params.sightingId;
   const form = req.parseFormBody();

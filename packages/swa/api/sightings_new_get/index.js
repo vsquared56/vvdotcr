@@ -8,7 +8,9 @@ export default async (context, req) => {
     {
       views: path.join(context.executionContext.functionDirectory, '..', 'views')
     });
+    
   var response;
+
   var clientIp = null;
   if (req.headers.hasOwnProperty("x-forwarded-for")) {
     clientIp = await utils.parseXff(req.headers["x-forwarded-for"]);

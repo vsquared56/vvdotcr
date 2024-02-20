@@ -24,6 +24,7 @@ export default async (context, req) => {
     });
   const db = new utils.Database;
   const storage = new utils.Storage;
+  
   var response;
 
   var clientIp = null;
