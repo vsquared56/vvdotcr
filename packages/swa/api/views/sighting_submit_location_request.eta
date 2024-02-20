@@ -33,19 +33,18 @@
 
   </script>
   <h3 class="font-bold text-lg">Can we get your location?</h3>
-  <p class="py-4"><%= it.error %></p>
   <div class="modal-action">
     <form id='location'>
       <input id='latitude' name='latitude' type='hidden'>
       <input id='longitude' name='longitude' type='hidden'>
       <input id='accuracy' name='accuracy' type='hidden'>
       <input id='timestamp' name='timestamp' type='hidden'>
-      <button id='submitLocation' class='btn btn-primary' hx-post='/api/sightings/<%= it.sightingId %>/location'
+      <button id='submitLocation' class='btn btn-primary' hx-post='/api/sightings/<%= it.sighting.id %>/location'
         hx-on:htmx:confirm='confirmLocation(event);' hx-target='#modal-dialog'>
         Submit my location
       </button>
       <button id='submitWithoutLocation' class='btn btn-neutral'
-        hx-post='/api/sightings/<%= it.sightingId %>/location' hx-target='#modal-dialog'>
+        hx-post='/api/sightings/<%= it.sighting.id %>/location' hx-target='#modal-dialog'>
         Submit without a location.
       </button>
     </form>

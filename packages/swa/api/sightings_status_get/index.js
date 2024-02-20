@@ -13,15 +13,14 @@ export default async (context, req) => {
   var response;
   const sightingId = req.params.sightingId;
   const recheckCount = parseInt(req.query.recheckCount);
-  const item = await db.getSighting(sightingId);
-  const submissionStatus = item.submissionStatus;
+  const sighting = await db.getSighting(sightingId);
+  const submissionStatus = sighting.submissionStatus;
 
   if (recheckCount >= 8) {
     response = eta.render(
       "./sighting_submit_status_timeout",
       {
-        sightingId: sightingId,
-        submissionStatus: submissionStatus
+        sighting: sighting
       }
     );
   } else if (submissionStatus === 'saved') {
@@ -29,7 +28,7 @@ export default async (context, req) => {
     response = eta.render(
       "./sighting_submit_status_recheck",
       {
-        sightingId: sightingId,
+        sighting: sighting,
         pendingResizing: true,
         pendingAutomaticApproval: false,
         recheckCount: (recheckCount + 1),
@@ -41,7 +40,7 @@ export default async (context, req) => {
     response = eta.render(
       "./sighting_submit_status_recheck",
       {
-        sightingId: sightingId,
+        sighting: sighting,
         pendingResizing: false,
         pendingAutomaticApproval: true,
         recheckCount: (recheckCount + 1),
@@ -57,9 +56,8 @@ export default async (context, req) => {
     const card = eta.render(
       "./sightings_card",
       {
-        sightingId: sightingId,
-        sightingImage: item.thumbImageUrl,
-        sightingDate: new Date(item.createDate).toLocaleDateString('en-US', dateOptions),
+        sighting: sighting,
+        sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions),
         loadMore: false,
         nextPage: null
       }
@@ -67,9 +65,8 @@ export default async (context, req) => {
     response = eta.render(
       "./sighting_submit_approved",
       {
-        sightingId: sightingId,
-        submissionStatus: submissionStatus,
-        imageData: JSON.stringify(item),
+        sighting: sighting,
+        imageData: JSON.stringify(sighting),
         card: card
       }
     );
@@ -77,17 +74,15 @@ export default async (context, req) => {
     response = eta.render(
       "./sighting_submit_needs_manual_approval",
       {
-        sightingId: sightingId,
-        submissionStatus: submissionStatus,
-        imageData: JSON.stringify(item)
+        sighting: sighting,
+        imageData: JSON.stringify(sighting)
       }
     );
   } else if (submissionStatus === 'locationRequest') {
     response = eta.render(
       "./sighting_submit_location_request",
       {
-        sightingId: sightingId,
-        submissionStatus: submissionStatus
+        sighting: sighting
       }
     );
   } else {

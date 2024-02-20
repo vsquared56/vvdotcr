@@ -27,7 +27,7 @@ export default async (context, req) => {
         sightingProperties += eta.render(
           "./admin_sightings_item_property",
           {
-            sightingId: sighting.id,
+            sighting: sighting,
             propertyName: property,
             propertyValue: propertyValue
           }
@@ -45,7 +45,7 @@ export default async (context, req) => {
     response = eta.render(
       "./admin_sightings_item_property_edit",
       {
-        sightingId: sighting.id,
+        sighting: sighting,
         propertyName: propertyName,
         propertyValue: JSON.stringify(sighting[propertyName])
       }
@@ -54,7 +54,7 @@ export default async (context, req) => {
     response = eta.render(
       "./admin_sightings_item_property",
       {
-        sightingId: sighting.id,
+        sighting: sighting,
         propertyName: propertyName,
         propertyValue: utils.renderSightingProperty(propertyName, sighting[propertyName])
       }

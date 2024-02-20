@@ -24,7 +24,7 @@ export default async (context, req) => {
     });
   const db = new utils.Database;
   const storage = new utils.Storage;
-  
+
   var response;
 
   var clientIp = null;
@@ -122,7 +122,7 @@ export default async (context, req) => {
       response = eta.render(
         "./sighting_submit_submitted",
         {
-          sightingId: sightingId,
+          sighting: item,
           submissionStatus: submissionStatus,
           recheckCount: 0,
           recheckInterval: 1

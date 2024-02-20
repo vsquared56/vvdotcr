@@ -15,10 +15,10 @@ export default async (context, req) => {
   const db = new utils.Database;
 
   var response;
-  
+
   const sightingId = req.params.sightingId;
   var submissionStatus;
-  var item = await db.getSighting(sightingId);
+  var sighting = await db.getSighting(sightingId);
 
   const form = req.parseFormBody();
   const latitude = parseFloat(form.get('latitude').value.toString());
@@ -35,14 +35,14 @@ export default async (context, req) => {
   };
   submissionStatus = 'pendingAutomaticApproval';
 
-  item.imageLocation = imageLocation;
-  item.submissionStatus = submissionStatus;
+  sighting.imageLocation = imageLocation;
+  sighting.submissionStatus = submissionStatus;
 
-  await db.saveSighting(item);
+  await db.saveSighting(sighting);
   response = eta.render(
     "./sighting_submit_status_recheck",
     {
-      sightingId: sightingId,
+      sighting: sighting,
       pendingResizing: false,
       pendingAutomaticApproval: true,
       recheckCount: 0,
@@ -54,7 +54,7 @@ export default async (context, req) => {
   const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
   const sbSender = sbClient.createSender('new-sightings-to-validate');
   try {
-    await sbSender.sendMessages({ body: item.id });
+    await sbSender.sendMessages({ body: sighting.id });
   } finally {
     await sbClient.close();
   }

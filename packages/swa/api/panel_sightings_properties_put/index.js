@@ -11,7 +11,7 @@ export default async (context, req) => {
   const db = new utils.Database;
 
   var response;
-  
+
   const propertyName = req.params.propertyName;
   const sightingId = req.params.sightingId;
   const form = req.parseFormBody();
@@ -25,7 +25,7 @@ export default async (context, req) => {
   response = eta.render(
     "./admin_sightings_item_property",
     {
-      sightingId: sighting.id,
+      sighting: sighting,
       propertyName: propertyName,
       propertyValue: utils.renderSightingProperty(propertyName, sighting[propertyName])
     }

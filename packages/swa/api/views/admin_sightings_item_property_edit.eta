@@ -1,11 +1,11 @@
-<tr hx-trigger='cancel' class='editing' hx-get="/api/panel/sightings/<%= it.sightingId %>/properties/<%= it.propertyName %>">
+<tr hx-trigger='cancel' class='editing' hx-get="/api/panel/sightings/<%= it.sighting.id %>/properties/<%= it.propertyName %>">
   <td colspan=3 class="text-xs lg:text-sm">
     <div><%= it.propertyName %></div>
     <textarea cols="50" rows="4" name='value'><%~ it.propertyValue %></textarea>
-    <button class="btn btn-sm btn-warning" hx-get="/api/panel/sightings/<%= it.sightingId %>/properties/<%= it.propertyName %>">
+    <button class="btn btn-sm btn-warning" hx-get="/api/panel/sightings/<%= it.sighting.id %>/properties/<%= it.propertyName %>">
       Cancel
     </button>
-    <button class="btn btn-sm btn-success" hx-put="/api/panel/sightings/<%= it.sightingId %>/properties/<%= it.propertyName %>"
+    <button class="btn btn-sm btn-success" hx-put="/api/panel/sightings/<%= it.sighting.id %>/properties/<%= it.propertyName %>"
       hx-include="closest tr">
       Save
     </button>
