@@ -7,6 +7,8 @@
   <link rel="stylesheet" href="styles.css" />
   <title>vv.cr</title>
   <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+  <script>htmx.logAll();</script>
+
 </head>
 
 <body>
@@ -23,6 +25,19 @@
     <div class="divider"></div>
 
     <div class="px-4 md:px-8 lg:px-12">
+      <div id="message-submit" class="collapse bg-primary" hx-get="/api/messages/new" hx-trigger="click"
+      hx-swap="outerHTML">
+        <input type="checkbox" />
+        <div class="collapse-title text-xl text-primary-content font-medium">
+        Send a message!
+        </div>
+        <div class="collapse-content">
+          <p>Loading...</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
       <div id="sighting-submit" class="collapse bg-primary" hx-get="/api/sightings/new" hx-trigger="click"
         hx-swap="outerHTML">
         <input type="checkbox" />

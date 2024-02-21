@@ -1,0 +1,50 @@
+<div id="message-submit"
+     class="collapse collapse-arrow bg-primary">
+  <input type="checkbox" checked="true"/>
+  <div class="collapse-title text-xl text-primary-content font-medium">
+    Send a message!
+  </div>
+  <div class="collapse-content bg-base-200 p-4">
+    <form id="form"
+          hx-post="/api/messages"
+          hx-target="body"
+          hx-swap="beforeend">
+      <div class="flex flex-wrap gap-4 max-w-full">
+        <div id="message-driving-form" class="collapse bg-secondary">
+        <input type="checkbox" name="driving"/>
+          <div class="collapse-title text-xl text-secondary-content font-medium">
+            How am I driving?
+          </div>
+          <div class="collapse-content bg-base-300">
+            <div class="p-4">
+              <input type="radio" name="speed" value="faster" class="radio" /> Speed it up!
+              <input type="radio" name="speed" value="slower" class="radio" /> Slow down!
+              <input type="radio" name="speed" value="ok" class="radio" checked /> Just right
+            </div>
+          </div>
+        </div>
+        <div id="message-rating-form" class="collapse bg-secondary">
+          <input type="checkbox" name="rating"/>
+          <div class="collapse-title text-xl text-secondary-content font-medium">
+            Leave a rating!
+          </div>
+          <div class="collapse-content bg-base-300">
+            <div class="p-4">
+              <div class="rating">
+                <input type="radio" name="rating" value=1 class="mask mask-star" />
+                <input type="radio" name="rating" value=2 class="mask mask-star" />
+                <input type="radio" name="rating" value=3 class="mask mask-star" />
+                <input type="radio" name="rating" value=4 class="mask mask-star" />
+                <input type="radio" name="rating" value=5 class="mask mask-star" checked/>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <button class="btn btn-primary">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
