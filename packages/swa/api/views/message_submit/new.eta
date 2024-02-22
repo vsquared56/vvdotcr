@@ -9,9 +9,28 @@
           hx-post="/api/messages"
           hx-target="body"
           hx-swap="beforeend">
+      <script>
+        function updateSubmit() {
+          const messageCategoryElements = ["message-driving-form-checkbox", "message-rating-form-checkbox"];
+          var enabledCategories = 0;
+          for (element of messageCategoryElements) {
+            if (document.getElementById(element).checked) {
+              enabledCategories++;
+            }
+          }
+          var submitButton = document.getElementById("message-submit-button");
+          if (enabledCategories > 0) {
+            submitButton.removeAttribute("disabled");
+            submitButton.innerHTML = `Submit ${enabledCategories} message${enabledCategories > 1 ? 's' : ''}`
+          } else {
+            submitButton.setAttribute("disabled", "disabled");
+            submitButton.innerHTML = "Pick something to send above!"
+          }
+        }
+      </script>
       <div class="flex flex-wrap gap-4 max-w-full">
         <div id="message-driving-form" class="collapse collapse-plus bg-secondary">
-        <input type="checkbox" name="driving"/>
+        <input id="message-driving-form-checkbox" type="checkbox" name="driving" hx-on:click='updateSubmit();'/>
           <div class="collapse-title text-xl text-secondary-content font-medium">
             How am I driving?
           </div>
@@ -24,7 +43,7 @@
           </div>
         </div>
         <div id="message-rating-form" class="collapse collapse-plus bg-secondary">
-          <input type="checkbox" name="rating"/>
+          <input id="message-rating-form-checkbox" type="checkbox" name="rating" hx-on:click='updateSubmit();'/>
           <div class="collapse-title text-xl text-secondary-content font-medium">
             Leave a rating!
           </div>
@@ -41,8 +60,8 @@
           </div>
         </div>
         
-        <button class="btn btn-primary">
-          Submit
+        <button id="message-submit-button" class="btn btn-primary" disabled="disabled">
+          Pick something to send above!
         </button>
       </div>
     </form>
