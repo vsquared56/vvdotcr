@@ -7,62 +7,11 @@
   <div class="collapse-content bg-base-200">
     <form id="form"
           hx-post="/api/messages"
-          hx-target="body"
           hx-swap="beforeend">
-      <script>
-        function updateSubmit() {
-          const messageCategoryElements = ["message-driving-form-checkbox", "message-rating-form-checkbox"];
-          var enabledCategories = 0;
-          for (element of messageCategoryElements) {
-            if (document.getElementById(element).checked) {
-              enabledCategories++;
-            }
-          }
-          var submitButton = document.getElementById("message-submit-button");
-          if (enabledCategories > 0) {
-            submitButton.removeAttribute("disabled");
-            submitButton.innerHTML = `Submit ${enabledCategories} message${enabledCategories > 1 ? 's' : ''}`
-          } else {
-            submitButton.setAttribute("disabled", "disabled");
-            submitButton.innerHTML = "Pick something to send above!"
-          }
-        }
-      </script>
       <div class="flex flex-wrap gap-4 max-w-full p-4">
-        <div id="message-driving-form" class="collapse collapse-plus bg-secondary">
-        <input id="message-driving-form-checkbox" type="checkbox" name="driving" hx-on:click='updateSubmit();'/>
-          <div class="collapse-title text-xl text-secondary-content font-medium">
-            How am I driving?
-          </div>
-          <div class="collapse-content bg-base-300">
-            <div class="flex flex-col p-4">
-              <div><input type="radio" name="speed" value="faster" class="radio" /> Speed it up!</div>
-              <div><input type="radio" name="speed" value="slower" class="radio" /> Slow down!</div>
-              <div><input type="radio" name="speed" value="ok" class="radio" checked /> Just right</div>
-            </div>
-          </div>
-        </div>
-        <div id="message-rating-form" class="collapse collapse-plus bg-secondary">
-          <input id="message-rating-form-checkbox" type="checkbox" name="rating" hx-on:click='updateSubmit();'/>
-          <div class="collapse-title text-xl text-secondary-content font-medium">
-            Leave a rating!
-          </div>
-          <div class="collapse-content bg-base-300">
-            <div class="flex p-4">
-              <div class="rating">
-                <input type="radio" name="rating" value=1 class="mask mask-star" />
-                <input type="radio" name="rating" value=2 class="mask mask-star" />
-                <input type="radio" name="rating" value=3 class="mask mask-star" />
-                <input type="radio" name="rating" value=4 class="mask mask-star" />
-                <input type="radio" name="rating" value=5 class="mask mask-star" checked/>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <button id="message-submit-button" class="btn btn-primary" disabled="disabled">
-          Pick something to send above!
-        </button>
+        <%~ include("./driving_form", { formEnabled: false, updateSubmit: false }) %>
+        <%~ include("./rating_form", { formEnabled: false, updateSubmit: false }) %>
+        <%~ include("./message_submit_button", { submitEnabled: false, replace: false }) %>
       </div>
     </form>
   </div>

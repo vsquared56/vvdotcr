@@ -26,19 +26,29 @@ export default async (context, req) => {
   } else {
     if (req.params.form) {
       const formName = req.params.form.toString();
+      const drivingFormEnabled = (req.query.driving === "on");
+      const ratingFormEnabled = (req.query.rating === "on");
+      const submitEnabled = (drivingFormEnabled || ratingFormEnabled);
       if (formName === "driving") {
-        console.log("Driving");
         response = eta.render(
-          "./message_submit/driving_form"
+          "./message_submit/driving_form",
+          {
+            formEnabled: drivingFormEnabled,
+            updateSubmit: true,
+            submitEnabled: submitEnabled
+          }
         );
       } else if (formName === "rating") {
-        console.log("Rating");
         response = eta.render(
-          "./message_submit/rating_form"
+          "./message_submit/rating_form",
+          {
+            formEnabled: ratingFormEnabled,
+            updateSubmit: true,
+            submitEnabled: submitEnabled
+          }
         );
       }
     } else {
-      console.log("Normal form");
       response = eta.render(
         "./message_submit/new"
       );

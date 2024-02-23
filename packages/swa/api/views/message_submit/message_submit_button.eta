@@ -1,0 +1,15 @@
+<button id="message-submit-button"
+        class="btn btn-primary"
+        <% if (!it.submitEnabled) { %>
+        disabled="disabled"
+        <% } %>
+        <% if (it.replace) { %>
+        hx-swap-oob="true"
+        <% } %>
+        >
+  <% if (it.submitEnabled) { %>
+  Send x messages!
+  <% } else { %>
+  Pick something to send above!
+  <% } %>
+</button>
