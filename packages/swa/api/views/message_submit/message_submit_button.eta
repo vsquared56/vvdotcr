@@ -8,7 +8,7 @@
         <% } %>
         >
   <% if (it.submitEnabled) { %>
-  Send x messages!
+  Send <%= it.numMessages %> message<% if (it.numMessages > 1) { %>s<% } %>!
   <% } else { %>
   Pick something to send above!
   <% } %>
