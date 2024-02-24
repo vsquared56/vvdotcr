@@ -111,29 +111,18 @@
             }
           }
         </script>
-        <input id='latitude' name='latitude' type='hidden'>
-        <input id='longitude' name='longitude' type='hidden'>
-        <input id='accuracy' name='accuracy' type='hidden'>
-        <input id='timestamp' name='timestamp' type='hidden'>
+        
 
-        <div class="form-control">
-          Can we grab your location?
-          <label class="label cursor-pointer">
-            <span class="label-text">Deny location</span> 
-            <input type="checkbox"
-                    name="location-enable"
-                    class="toggle toggle-success"
-                    hx-on:click="toggleLocation(event);"
-                    checked="checked"/>
-            <span class="label-text">Include my location</span> 
-          </label>
-          <div id="location-allowed">
-            Messages with a location usually send notifications to the owner right away!
-          </div>
-          <div id="location-denied" style="display:none">
-            Messages without a location get seen too... eventually.  They get compiled into a report that's snail-mailed quarterly...
-          </div>
+        <div>
+          <input id='latitude' name='latitude' type='hidden'>
+          <input id='longitude' name='longitude' type='hidden'>
+          <input id='accuracy' name='accuracy' type='hidden'>
+          <input id='timestamp' name='timestamp' type='hidden'>
         </div>
+        
+
+        <%~ include("./location_toggle", { locationEnabled: true, locationPermission: it.locationPermission }) %>
+
         <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
       </div>
     </form>

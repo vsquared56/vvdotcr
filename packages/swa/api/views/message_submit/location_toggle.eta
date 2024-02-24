@@ -1,0 +1,32 @@
+<div id="location-toggle" class="form-control">
+  Can we grab your location?
+  <label class="label cursor-pointer">
+    <span class="label-text">Deny location</span> 
+    <input type="checkbox"
+            name="location-enable"
+            class="toggle toggle-success"
+            hx-get="/api/messages/new/location"
+            hx-target="#location-toggle"
+            hx-swap="outerHTML"
+            hx-on::confirm="addLocationPermissionParam(event);"
+            <% if (it.locationEnabled && (it.locationPermission === "prompt" || it.locationPermission === "granted")) { %>
+            checked="checked"
+            <% } else if (it.locationPermission === "denied") { %>
+            disabled="disabled"
+            <% } %>
+    />
+    <% if (it.locationPermission === "prompt" || it.locationPermission === "granted") { %>
+    <span class="label-text">Include my location</span>
+    <% } else if (it.locationPermission === "denied") { %>
+    <span class="label-text">Location permission is denied</span>
+    <% } %>
+  </label>
+  
+  <div>
+    <% if (it.locationEnabled) { %>
+    Messages with a location usually send notifications to the owner right away!
+    <% } else { %>
+    Messages without a location get seen too... eventually.  They get compiled into a report that's snail-mailed quarterly...
+    <% } %>
+  </div>
+</div>

@@ -52,10 +52,32 @@ export default async (context, req) => {
             submitEnabled: submitEnabled
           }
         );
+      } else if (formName === "location") {
+        if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
+          locationPermission = req.query.locationPermission;
+        } else {
+          throw new Error("Invalid locationPermission query parameter.");
+        }
+        response = eta.render(
+          "./message_submit/location_toggle",
+          {
+            locationEnabled: req.query["location-enable"] === "on",
+            locationPermission: locationPermission
+          }
+        );
       }
     } else {
+      var locationPermission;
+      if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
+        locationPermission = req.query.locationPermission;
+      } else {
+        throw new Error("Invalid locationPermission query parameter.");
+      }
       response = eta.render(
-        "./message_submit/new"
+        "./message_submit/new",
+        {
+          locationPermission: locationPermission
+        }
       );
     }
   }

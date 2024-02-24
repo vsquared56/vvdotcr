@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rimraf ./packages/swa/public",
     "build-css": "tailwindcss -i ./packages/swa/src/input.css -o ./packages/swa/public/styles.css",
-    "copy": "copyfiles --up 3 ./packages/swa/src/**/*.html ./packages/swa/src/**/*.json ./packages/swa/src/images/* ./packages/swa/public",
+    "copy": "copyfiles --up 3 ./packages/swa/src/**/*.html ./packages/swa/src/**/*.js ./packages/swa/src/**/*.json ./packages/swa/src/images/* ./packages/swa/public",
     "build": "yarn run copy && yarn run build-css",
     "start-swa": "swa start packages/swa/public --api-location packages/swa/api",
     "start-functions": "func host start --script-root packages/functions",
