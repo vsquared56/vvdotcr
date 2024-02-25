@@ -69,9 +69,15 @@
         </div>
         <div class="separator"></div>
 
-        <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
-
-        <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
+        <div id="message-send" class="collapse collapse-open bg-secondary">
+          <div class="collapse-title text-xl text-secondary-content font-medium">
+            Send!
+          </div>
+          <div class="collapse-content bg-base-300">
+            <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
+            <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
+          </div>    
+        </div>
       </div>
     </form>
   </div>
