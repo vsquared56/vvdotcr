@@ -8,7 +8,7 @@
     <form id="message-form"
           hx-post="/api/messages"
           hx-swap="beforeend"
-          hx-on::confirm="getLocation(event);">
+          hx-on::confirm="addLocationParams(event, 'message-form', 'location-enable');">
       <div class="flex flex-wrap gap-4 max-w-full p-4">
         <div id="message-driving-form" class="collapse collapse-plus bg-secondary" >
           <%~ include("./message_form_checkbox", { checkboxName: "driving", formEnabled: false, updateSubmit: false }) %>
@@ -68,60 +68,8 @@
           </div>
         </div>
         <div class="separator"></div>
-        <script>
-          function toggleLocation(event) {
-            var locationAllowed = document.getElementById("location-allowed");
-            var locationDenied = document.getElementById("location-denied");
-            if (event.target.checked) {
-              locationAllowed.style.display = 'block';
-              locationDenied.style.display = 'none';
-            } else {
-              locationAllowed.style.display = 'none';
-              locationDenied.style.display = 'block';
-            }
-          }
 
-          function locationError(event, err) {
-            console.log(err);
-            event.detail.issueRequest();
-          }
-
-          function locationSuccess(event, position) {
-            var positionInfo = {
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-              accuracy: position.coords.accuracy,
-              timestamp: position.timestamp
-            }
-
-            htmx.find('#latitude').setAttribute('value', position.coords.latitude);
-            htmx.find('#longitude').setAttribute('value', position.coords.longitude);
-            htmx.find('#accuracy').setAttribute('value', position.coords.accuracy);
-            htmx.find('#timestamp').setAttribute('value', position.timestamp);
-            event.detail.issueRequest();
-          }
-
-          function getLocation(event) {
-            if (event.detail.target.id === "message-form") {
-              event.preventDefault();
-              navigator.geolocation.getCurrentPosition(
-                function (position) {locationSuccess(event, position);},
-                function (err) {locationError(event, err);}
-                );
-            }
-          }
-        </script>
-        
-
-        <div>
-          <input id='latitude' name='latitude' type='hidden'>
-          <input id='longitude' name='longitude' type='hidden'>
-          <input id='accuracy' name='accuracy' type='hidden'>
-          <input id='timestamp' name='timestamp' type='hidden'>
-        </div>
-        
-
-        <%~ include("./location_toggle", { locationEnabled: true, locationPermission: it.locationPermission }) %>
+        <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
 
         <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
       </div>

@@ -3,17 +3,19 @@
   <label class="label cursor-pointer">
     <span class="label-text">Deny location</span> 
     <input type="checkbox"
-            name="location-enable"
-            class="toggle toggle-success"
-            hx-get="/api/messages/new/location"
-            hx-target="#location-toggle"
-            hx-swap="outerHTML"
-            hx-on::confirm="addLocationPermissionParam(event);"
-            <% if (it.locationEnabled && (it.locationPermission === "prompt" || it.locationPermission === "granted")) { %>
-            checked="checked"
-            <% } else if (it.locationPermission === "denied") { %>
-            disabled="disabled"
-            <% } %>
+           id="location-enable"
+           name="location-enable"
+           class="toggle toggle-success"
+           hx-get="/api/messages/new/location"
+           hx-target="#location-toggle"
+           hx-swap="outerHTML"
+           hx-trigger="click, locationPermissionsChange from:body"
+           hx-on::confirm="addLocationPermissionParam(event);"
+           <% if (it.locationEnabled && (it.locationPermission === "prompt" || it.locationPermission === "granted")) { %>
+           checked="checked"
+           <% } else if (it.locationPermission === "denied") { %>
+           disabled="disabled"
+           <% } %>
     />
     <% if (it.locationPermission === "prompt" || it.locationPermission === "granted") { %>
     <span class="label-text">Include my location</span>
@@ -22,11 +24,16 @@
     <% } %>
   </label>
   
-  <div>
+  <div class="flex flex-col">
+    <% if (it.locationPermission === "denied") { %>
+    <div>
+    You have location permissions denied in your browser.  For full functionality, please grant or reset the locations permission for this site.
+    </div>
+    <% } %>
     <% if (it.locationEnabled) { %>
-    Messages with a location usually send notifications to the owner right away!
+    <div>Messages with a location usually send notifications to the owner right away!</div>
     <% } else { %>
-    Messages without a location get seen too... eventually.  They get compiled into a report that's snail-mailed quarterly...
+    <div>Messages without a location get seen ... eventually.  They get compiled into a report that's snail-mailed quarterly...</div>
     <% } %>
   </div>
 </div>

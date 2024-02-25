@@ -76,6 +76,7 @@ export default async (context, req) => {
       response = eta.render(
         "./message_submit/new",
         {
+          locationEnabled: true,
           locationPermission: locationPermission
         }
       );
