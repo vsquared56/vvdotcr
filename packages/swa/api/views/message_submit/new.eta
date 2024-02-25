@@ -74,8 +74,10 @@
             Send!
           </div>
           <div class="collapse-content bg-base-300">
-            <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
-            <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
+            <div class="flex flex-col gap-4 p-4">
+              <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
+              <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
+            </div>
           </div>    
         </div>
       </div>

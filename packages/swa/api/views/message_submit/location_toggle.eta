@@ -24,13 +24,13 @@
     <% } %>
   </label>
   
-  <div class="flex flex-col">
+  <div class="flex flex-col gap-4">
     <% if (it.locationPermission === "denied") { %>
     <div>
     You have location permissions denied in your browser.  For full functionality, please grant or reset the locations permission for this site.
     </div>
     <% } %>
-    <% if (it.locationEnabled) { %>
+    <% if (it.locationPermission !== "denied" && it.locationEnabled) { %>
     <div>Messages with a location usually send notifications to the owner right away!</div>
     <% } else { %>
     <div>Messages without a location get seen ... eventually.  They get compiled into a report that's snail-mailed quarterly...</div>
