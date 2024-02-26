@@ -26,29 +26,21 @@ export default async (context, req) => {
   } else {
     if (req.params.form) {
       const formName = req.params.form.toString();
-      const drivingFormEnabled = (req.query.driving === "on");
-      const ratingFormEnabled = (req.query.rating === "on");
-      const formStatuses = [drivingFormEnabled, ratingFormEnabled];
-      const submitEnabled = (drivingFormEnabled || ratingFormEnabled);
-      if (formName === "driving") {
+      const enabledForms = {
+        driving: req.query.driving === "on",
+        parking: req.query.parking === "on",
+        rating: req.query.rating === "on"
+      }
+      const enabledFormsCount = Object.values(enabledForms).reduce((accumulator, item) => accumulator + item, 0);
+      const submitEnabled = (enabledFormsCount > 0);
+      if (formName.match(/^(driving|parking|rating)$/)) {
         response = eta.render(
           "./message_submit/message_form_checkbox",
           {
-            checkboxName: "driving",
-            formEnabled: drivingFormEnabled,
+            checkboxName: formName,
+            formEnabled: enabledForms[formName],
             updateSubmit: true,
-            numMessages: formStatuses.filter(Boolean).length,
-            submitEnabled: submitEnabled
-          }
-        );
-      } else if (formName === "rating") {
-        response = eta.render(
-          "./message_submit/message_form_checkbox",
-          {
-            checkboxName: "rating",
-            formEnabled: ratingFormEnabled,
-            updateSubmit: true,
-            numMessages: formStatuses.filter(Boolean).length,
+            numMessages: enabledFormsCount,
             submitEnabled: submitEnabled
           }
         );

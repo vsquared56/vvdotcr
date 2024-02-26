@@ -10,7 +10,7 @@
           hx-swap="beforeend"
           hx-on::confirm="addLocationParams(event, 'message-form', 'location-enable');">
       <div class="flex flex-row flex-wrap gap-4 p-4">
-        <div id="message-driving-form" class="collapse collapse-plus bg-secondary min-w-64 w-5/12 max-w-lg shrink grow h-fit" >
+        <div id="message-driving-form" class="collapse collapse-plus bg-secondary min-w-64 w-3/12 max-w-full shrink grow h-fit" >
           <%~ include("./message_form_checkbox", { checkboxName: "driving", formEnabled: false, updateSubmit: false }) %>
           <div class="collapse-title text-xl text-secondary-content font-medium">
             How am I driving?
@@ -23,7 +23,23 @@
             </div>
           </div>
         </div>
-        <div id="message-rating-form" class="collapse collapse-plus bg-secondary min-w-64 w-5/12 max-w-lg shrink grow h-fit">
+
+        <div id="message-parking-form" class="collapse collapse-plus bg-secondary min-w-64 w-3/12 max-w-full shrink grow h-fit" >
+          <%~ include("./message_form_checkbox", { checkboxName: "parking", formEnabled: false, updateSubmit: false }) %>
+          <div class="collapse-title text-xl text-secondary-content font-medium">
+            Parking problems?
+          </div>
+          <div class="collapse-content bg-base-300">
+            <div class="flex flex-col gap-4 p-4">
+              <div><input type="radio" name="parking" value="bad" class="radio" /> Get a coloring book and practice staying within the lines!</div>
+              <div><input type="radio" name="parking" value="too-close" class="radio" /> Parked too close, I had to climb in through the window!</div>
+              <div><input type="radio" name="parking" value="too-far" class="radio" /> It's the city, don't waste so much space!</div>
+              <div><input type="radio" name="parking" value="ok" class="radio" checked /> Just right</div>
+            </div>
+          </div>
+        </div>
+
+        <div id="message-rating-form" class="collapse collapse-plus bg-secondary min-w-64 w-3/12 max-w-full shrink grow h-fit">
           <%~ include("./message_form_checkbox", { checkboxName: "rating", formEnabled: false, updateSubmit: false }) %>
           <div class="collapse-title text-xl text-secondary-content font-medium">
             Leave some stars!
