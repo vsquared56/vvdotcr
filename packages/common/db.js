@@ -4,8 +4,14 @@ export class Database {
     constructor() {
         this.client = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
         this.database = this.client.database(process.env.COSMOS_DB_DATABASE_NAME);
+        this.messagesContainer = this.database.container("vvdotcr-messages-dev");
         this.sightingsContainer = this.database.container("vvdotcr-sightings-dev");
         this.settingsContainer = this.database.container("vvdotcr-settings-dev");
+    }
+
+    async saveMessage(message) {
+        message.modifyDate = Date.now();
+        const { upsert } = await this.messagesContainer.items.upsert(message);
     }
 
     async getSighting(id) {

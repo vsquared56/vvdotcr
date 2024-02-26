@@ -126,13 +126,12 @@ export default async (context, req) => {
       messageLocation: messageLocation,
       notificationStatus: notificationStatus,
       notificationStatusReason: notificationStatusReason,
-      messageDate: formResults
+      messageData: formResults
     }
 
-    // Save message to CosmosDB
-    //await db.saveMessage(item);
+    //Save message to CosmosDB
+    await db.saveMessage(item);
 
-    /*
     // Send a Service Bus Message
     const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
     const sbSender = sbClient.createSender('new-message-submissions');
@@ -141,7 +140,6 @@ export default async (context, req) => {
     } finally {
       await sbClient.close();
     }
-    */
 
     response = eta.render(
       "./message_submit/submitted",
