@@ -1,6 +1,6 @@
 <div id="location-toggle" class="form-control">
   Can we grab your location?
-  <label class="label cursor-pointer">
+  <label class="label cursor-pointer flex flex-nowrap	justify-start gap-4">
     <span class="label-text">Deny location</span> 
     <input type="checkbox"
            id="location-enable"
