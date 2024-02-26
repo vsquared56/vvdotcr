@@ -26,6 +26,7 @@ export default async (context, req) => {
   }
 
   const form = req.parseFormBody();
+  const messageLocation = utils.parseLocationForm(form);
   //const settingId = form.get('name').value.toString();
   //const settingValue = JSON.parse(form.get('value').value.toString());
 
@@ -42,6 +43,7 @@ export default async (context, req) => {
     originalIP: clientIp,
     createDate: createDate,
     modifyDate: createDate,
+    messageLocation: messageLocation
   }
 
   // Save image data to CosmosDB
@@ -61,7 +63,7 @@ export default async (context, req) => {
   response = eta.render(
     "./message_submit/submitted",
     {
-      message: item
+      message: JSON.stringify(item)
     }
   );
 
