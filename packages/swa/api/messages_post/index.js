@@ -16,6 +16,7 @@ export default async (context, req) => {
   const storage = new utils.Storage;
 
   var response;
+  var notificationStatus, notificationStatusReason;
 
   var clientIp = null;
   if (req.headers.hasOwnProperty("x-forwarded-for")) {
@@ -27,8 +28,26 @@ export default async (context, req) => {
 
   const form = req.parseFormBody();
   const messageLocation = utils.parseLocationForm(form);
-  //const settingId = form.get('name').value.toString();
-  //const settingValue = JSON.parse(form.get('value').value.toString());
+
+  const minLocationAccuracy = await db.getSetting("min_location_accuracy_meters");
+  if (messageLocation.latitude === null || messageLocation.longitude === null) {
+    notificationStatus = 'neverNotify';
+    notificationStatusReason = 'missingLocation';
+  } else if (messageLocation.latitude.accuracy > minLocationAccuracy) {
+    notificationStatus = 'neverNotify';
+    notificationStatusReason = 'inaccurateBrowserLocation';
+  } else {
+    const validLocations = await db.getSetting("valid_locations");
+    const locationValid = utils.isLocationInFeatureCollection(messageLocation, validLocations);
+
+    if (!locationValid) {
+      notificationStatus = 'neverNotify';
+      notificationStatusReason = 'invalidLocation';
+    } else {
+      notificationStatus = 'queued';
+      notificationStatusReason = null;
+    }
+}
 
   const messageId = crypto.randomUUID();
 
@@ -43,7 +62,9 @@ export default async (context, req) => {
     originalIP: clientIp,
     createDate: createDate,
     modifyDate: createDate,
-    messageLocation: messageLocation
+    messageLocation: messageLocation,
+    notificationStatus: notificationStatus,
+    notificationStatusReason: notificationStatusReason
   }
 
   // Save image data to CosmosDB

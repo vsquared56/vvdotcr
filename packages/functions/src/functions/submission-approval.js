@@ -3,8 +3,6 @@ import { ServiceBusClient } from "@azure/service-bus";
 import exifr from "exifr";
 import fetch from 'node-fetch';
 import sharp from "sharp";
-import circle from '@turf/circle';
-import booleanIntersects from '@turf/boolean-intersects';
 
 import * as utils from "@vvdotcr/common";
 
@@ -28,17 +26,7 @@ app.serviceBusQueue('submission-approval', {
         }
         else {
             const geolockedLocations = await db.getSetting("geolocked_locations");
-            const center = [item.imageLocation.longitude, item.imageLocation.latitude];
-            const radius = item.imageLocation.accuracy;
-            const options = { steps: 20, units: 'meters' };
-            const imageCircle = circle(center, radius, options);
-            var isGeolocked = false;
-
-            for (const geolock of geolockedLocations.features) {
-                if (booleanIntersects(geolock, imageCircle)) {
-                    isGeolocked = true;
-                }
-            }
+            const isGeolocked = utils.isLocationInFeatureCollection(item.imageLocation, geolockedLocations);
 
             if (isGeolocked) {
                 item.submissionStatus = 'needsManualApproval';

@@ -1,3 +1,6 @@
+import circle from '@turf/circle';
+import booleanIntersects from '@turf/boolean-intersects';
+
 export function parseLocationForm(form) {
     const latitude = parseFloat(form.get('latitude').value.toString());
     const longitude = parseFloat(form.get('longitude').value.toString());
@@ -13,4 +16,20 @@ export function parseLocationForm(form) {
     };
 
     return location;
+}
+
+export function isLocationInFeatureCollection(location, featureCollection) {
+    const center = [location.longitude, location.latitude];
+    const radius = location.accuracy;
+    const options = { steps: 20, units: 'meters' };
+    const locationCircle = circle(center, radius, options);
+    var isInCollection = false;
+
+    for (const feature of featureCollection.features) {
+        if (booleanIntersects(feature, locationCircle)) {
+            isInCollection = true;
+        }
+    }
+
+    return isInCollection;
 }
