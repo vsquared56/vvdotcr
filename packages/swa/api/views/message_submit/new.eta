@@ -9,8 +9,8 @@
           hx-post="/api/messages"
           hx-swap="beforeend"
           hx-on::confirm="addLocationParams(event, 'message-form', 'location-enable');">
-      <div class="flex flex-wrap gap-4 max-w-full p-4">
-        <div id="message-driving-form" class="collapse collapse-plus bg-secondary" >
+      <div class="flex flex-row flex-wrap gap-4 p-4">
+        <div id="message-driving-form" class="collapse collapse-plus bg-secondary min-w-64 w-5/12 max-w-lg shrink grow h-fit" >
           <%~ include("./message_form_checkbox", { checkboxName: "driving", formEnabled: false, updateSubmit: false }) %>
           <div class="collapse-title text-xl text-secondary-content font-medium">
             How am I driving?
@@ -23,7 +23,7 @@
             </div>
           </div>
         </div>
-        <div id="message-rating-form" class="collapse collapse-plus bg-secondary">
+        <div id="message-rating-form" class="collapse collapse-plus bg-secondary min-w-64 w-5/12 max-w-lg shrink grow h-fit">
           <%~ include("./message_form_checkbox", { checkboxName: "rating", formEnabled: false, updateSubmit: false }) %>
           <div class="collapse-title text-xl text-secondary-content font-medium">
             Leave some stars!
@@ -67,8 +67,11 @@
             </div>
           </div>
         </div>
-        <div class="separator"></div>
-
+      </div>
+      
+      <div class="separator"></div>
+      
+      <div class="p-4">
         <div id="message-send" class="collapse collapse-open bg-secondary">
           <div class="collapse-title text-xl text-secondary-content font-medium">
             Send!
