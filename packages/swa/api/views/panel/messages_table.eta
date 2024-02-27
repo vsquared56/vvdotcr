@@ -5,7 +5,7 @@
   </div>
   <div class="collapse-content">
     <div class="px-1">
-      <table id="panel-messages-table" class="table table-fixed">
+      <table id="panel-messages-table" class="table table-xs">
         <thead>
           <tr>
             <th class="">Date</th>
@@ -24,16 +24,23 @@
       </table>
       Page: 
       <div class="join">
+        <% var skipRendered = false; %>
         <% for (var i=1; i <= it.totalPages; i++) { %>
-        <% if (i == it.currentPage) { %>
-        <button class="join-item btn btn-primary [pointer-events:none]"
-        <% } else { %>
-        <button class="join-item btn"
-        <% } %>
-                hx-get="/api/panel/messages?page=<%= i %>"
-                hx-target="#messages-collapse">
-          <%= i %>
-        </button>
+          <% if (i < 3 || i == it.currentPage || ((it.currentPage - i < 2) && (it.currentPage - i > 0)) || ((i - it.currentPage < 2) && (i - it.currentPage > 0)) || (it.totalPages - i < 2)) { %>
+            <% skipRendered = false; %>
+            <% if (i == it.currentPage) { %>
+            <button class="join-item btn btn-sm btn-primary [pointer-events:none]"
+            <% } else { %>
+            <button class="join-item btn btn-sm"
+            <% } %>
+                    hx-get="/api/panel/messages?page=<%= i %>"
+                    hx-target="#messages-collapse">
+              <%= i %>
+            </button>
+          <% } else if (!skipRendered) { %>
+            <% skipRendered = true; %>
+            <button class="join-item btn btn-sm btn-disabled">...</button>
+          <% } %>
         <% } %>
       </div>
     </div>

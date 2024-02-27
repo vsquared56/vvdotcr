@@ -10,7 +10,7 @@ export default async (context, req) => {
     });
   const db = new utils.Database;
 
-  const messagesPerPage = 2;
+  const messagesPerPage = 1;
 
   var response = "";
 
@@ -27,7 +27,6 @@ export default async (context, req) => {
       }
     );
   } else {
-
     const page = req.query.page ? parseInt(req.query.page) : 1;
     const messages = await db.getPaginatedMessages(messagesPerPage, page);
 

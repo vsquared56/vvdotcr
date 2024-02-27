@@ -29,19 +29,18 @@
 
       <div class="divider"></div>
 
-      <div class="px-2 lg:px-10">
-        <div id="panel-messages" class="collapse bg-base-200" hx-get="/api/panel/messages" hx-trigger="click"
-          hx-swap="outerHTML">
-          <input type="checkbox" />
-          <div class="collapse-title text-xl font-medium">
-            Messages
-          </div>
-          <div class="collapse-content">
-            <p>Loading...</p>
-          </div>
+      <div id="panel-messages" class="collapse bg-base-200" hx-get="/api/panel/messages" hx-trigger="click"
+        hx-swap="outerHTML">
+        <input type="checkbox" />
+        <div class="collapse-title text-xl font-medium">
+          Messages
         </div>
-  
-        <div class="divider"></div>
+        <div class="collapse-content">
+          <p>Loading...</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
 
       <div id="panel-sightings" class="collapse bg-base-200">
         <input type="checkbox" />
@@ -56,7 +55,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </main>
 </body>
