@@ -10,7 +10,7 @@ export default async (context, req) => {
     });
   const db = new utils.Database;
 
-  const messagesPerPage = 1;
+  const messagesPerPage = 5;
 
   var response = "";
 
@@ -38,10 +38,18 @@ export default async (context, req) => {
     else {
       const messageCount = await db.countMessages();
       const totalPages = Math.ceil(messageCount / messagesPerPage);
+      const dateOptions = {
+        timeStyle: "medium",
+        dateStyle: "short",
+      };
       response = eta.render(
         "./panel/messages_table",
         {
-          messages: messages.items,
+          messages: messages.items.map(item => (
+            {
+              ...item,
+              messageDate: new Date(item.createDate).toLocaleString('en-US', dateOptions)
+            })),
           currentPage: page,
           totalPages: totalPages
         }

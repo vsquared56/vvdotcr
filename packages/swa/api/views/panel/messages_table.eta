@@ -5,9 +5,9 @@
   </div>
   <div class="collapse-content">
     <div class="px-1">
-      <table id="panel-messages-table" class="table table-xs">
+      <table id="panel-messages-table" class="table table-xs max-w-md">
         <thead>
-          <tr>
+          <tr class="border-secondary">
             <th class="">Date</th>
             <th class="">Location</th>
             <th class="">Driving</th>
@@ -22,7 +22,8 @@
           <% }) %>
         </tbody>
       </table>
-      Page: 
+      <div class="divider"></div>
+      <div class="badge badge-primary">Page: </div>
       <div class="join">
         <% var skipRendered = false; %>
         <% for (var i=1; i <= it.totalPages; i++) { %>

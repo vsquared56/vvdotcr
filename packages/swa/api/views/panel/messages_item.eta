@@ -1,6 +1,12 @@
-<tr>
-  <td class="text-xs lg:text-sm"><%= it.message.createDate %></td>
-  <td class="text-xs lg:text-sm"><%~ it.message.messageLocation.latitude %></td>
+<tr class="border-secondary">
+  <td class="text-xs lg:text-sm"><%= it.message.messageDate %></td>
+  <td class="text-xs lg:text-sm">
+    <a class="link link-primary"
+      href="https://maps.google.com/?q=<%~ it.message.messageLocation.latitude %>,<%~ it.message.messageLocation.longitude %>"
+      target="_blank">
+      link
+    </a>
+  </td>
   <td class="text-xs lg:text-sm">
     <% if (it.message.messageData.driving) { %>
     <%= it.message.messageData.driving.speed %>
