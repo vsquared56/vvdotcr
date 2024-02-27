@@ -8,7 +8,7 @@
       "methods": [
         "get"
       ],
-      "route": "panel/messages/{sightingId:guid?}/{edit?}"
+      "route": "panel/messages/{messageId:guid?}/{edit?}"
     },
     {
       "type": "http",

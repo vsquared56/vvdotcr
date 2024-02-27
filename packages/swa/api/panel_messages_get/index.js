@@ -20,7 +20,7 @@ export default async (context, req) => {
   if (messageId && edit === 'edit') {
     const message = await db.getMessage(messageId);
     response = eta.render(
-      "./panel/messages_item",
+      "./panel/messages_edit",
       {
         message: message,
         messageDate: (new Date(message.createDate)).toLocaleString()

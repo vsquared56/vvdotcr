@@ -23,7 +23,12 @@
     <% } %>
   </td>
   <td>
-    <button class="btn btn-primary btn-xs" hx-get="/api/panel/messages/<%= it.message.id %>/edit" hx-trigger="edit" onClick="htmx.trigger(this, 'edit')">
+    <button class="btn btn-primary btn-xs"
+            hx-get="/api/panel/messages/<%= it.message.id %>/edit"
+            hx-trigger="edit"
+            hx-target="body"
+            hx-swap="beforeend"
+            onClick="htmx.trigger(this, 'edit')">
       Edit
     </button>
   </td>
