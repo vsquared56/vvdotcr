@@ -1,5 +1,5 @@
 <dialog id="message-details" class="modal" hx-on::load="htmx.find('#message-details').showModal()">
-  <div class="flex flex-col justify-normal modal-box max-w-screen-xl h-5/6 p-0 overflow-hidden bg-gray-600"
+  <div class="flex flex-col justify-normal modal-box max-w-screen-xl max-h-5/6 p-0 overflow-hidden bg-gray-600"
     hx-target="this" hx-swap="outerHTML">
     <div class="navbar bg-base-100 min-h-8">
       <div class="navbar-start">
@@ -20,7 +20,7 @@
           </ul>
         </details>
       </div>
-      <div class="navbar-center badge badge-success">Message</div>
+      <div class="navbar-center badge badge-success"><%= it.message.id %></div>
       <div class="navbar-end">
         <button class="btn btn-sm btn-circle btn-ghost"
           hx-on:click="htmx.find('#message-details').close();htmx.find('#message-details').outerHTML='';">✕</button>
@@ -28,15 +28,38 @@
     </div>
     <div class="flex-1"></div>
     <div class="flex flex-col overflow-y-auto">
-      <div class="flex-none text-center"><%= it.message.id %></div>
-      <div class="flex-none text-center"><%= it.messageDate %></div>
+      <div>
+        <a class="link link-primary"
+           href="https://maps.google.com/?q=<%~ it.message.messageLocation.latitude %>,<%~ it.message.messageLocation.longitude %>"
+           target="_blank">
+          Location
+        </a>
+      </div>
+      <div>
+        Driving: 
+        <% if (it.message.messageData.driving) { %>
+        <%= it.message.messageData.driving.speed %>
+        <% } %>
+      </div>
+      <div>
+        Parking: 
+        <% if (it.message.messageData.parking) { %>
+        <%= it.message.messageData.parking.parkingQuality %>
+        <% } %>
+      </div>
+      <div>
+        Rating: 
+        <% if (it.message.messageData.rating) { %>
+        <%= it.message.messageData.rating.ratingValue %>
+        <% } %>
+      </div>
       <div id="message-information"></div>
     </div>
     <div class="flex-1"></div>
     <div class="navbar bg-base-100 min-h-8">
       <div class="navbar-start">
       </div>
-      <div class="navbar-center">This is a message!</div>
+      <div class="navbar-center"><%= it.messageDate %></div>
       <div class="navbar-end">
         <details class="dropdown dropdown-top dropdown-end">
           <summary class="btn btn-square btn-ghost btn-sm">
