@@ -18,7 +18,7 @@
         </thead>
         <tbody id="panel-messages-table" hx-target="closest tr" hx-swap="outerHTML">
           <% it.messages.forEach(function(message){ %>
-          <%~ include("./messages_item", { message: message }) %>
+          <%~ include("./messages_table_item", { message: message }) %>
           <% }) %>
         </tbody>
       </table>
