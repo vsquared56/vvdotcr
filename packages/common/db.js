@@ -19,11 +19,23 @@ export class Database {
         }
     }
 
+    async countMessages() {
+        const querySpec = {
+            query: "SELECT VALUE COUNT(c.id) FROM messages c"
+        };
+
+        const results = await this.messagesContainer.items.query(querySpec, {
+            partitionKey: undefined
+        }).fetchNext();
+
+        return results.resources[0];
+    }
+
     async getPaginatedMessages(count, page) {
         var querySpec;
 
         if (page) {
-            const offset = count * page;
+            const offset = count * (page - 1);
             querySpec = {
                 query: `SELECT * FROM c ORDER BY c.createDate DESC OFFSET ${offset} LIMIT ${count}`
             };

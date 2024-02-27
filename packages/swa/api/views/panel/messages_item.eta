@@ -1,0 +1,24 @@
+<tr>
+  <td class="text-xs lg:text-sm"><%= it.message.createDate %></td>
+  <td class="text-xs lg:text-sm"><%~ it.message.messageLocation.latitude %></td>
+  <td class="text-xs lg:text-sm">
+    <% if (it.message.messageData.driving) { %>
+    <%= it.message.messageData.driving.speed %>
+    <% } %>
+  </td>
+  <td class="text-xs lg:text-sm">
+    <% if (it.message.messageData.parking) { %>
+    <%= it.message.messageData.parking.parkingQuality %>
+    <% } %>
+  </td>
+  <td class="text-xs lg:text-sm">
+    <% if (it.message.messageData.rating) { %>
+    <%= it.message.messageData.rating.ratingValue %>
+    <% } %>
+  </td>
+  <td>
+    <button class="btn btn-primary btn-sm" hx-get="/api/panel/messages/<%= it.message.id %>/edit" hx-trigger="edit" onClick="htmx.trigger(this, 'edit')">
+      Edit
+    </button>
+  </td>
+</tr>

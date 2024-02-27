@@ -1,0 +1,41 @@
+<div id="messages-collapse" class="collapse bg-base-200">
+  <input type="checkbox" checked="true" />
+  <div class="collapse-title text-xl font-medium">
+      Messages
+  </div>
+  <div class="collapse-content">
+    <div class="px-1">
+      <table id="panel-messages-table" class="table table-fixed">
+        <thead>
+          <tr>
+            <th class="">Date</th>
+            <th class="">Location</th>
+            <th class="">Driving</th>
+            <th class="">Parking</th>
+            <th class="">Rating</th>
+            <th class="">Edit</th>
+          </tr>
+        </thead>
+        <tbody id="panel-messages-table" hx-target="closest tr" hx-swap="outerHTML">
+          <% it.messages.forEach(function(message){ %>
+          <%~ include("./messages_item", { message: message }) %>
+          <% }) %>
+        </tbody>
+      </table>
+      Page: 
+      <div class="join">
+        <% for (var i=1; i <= it.totalPages; i++) { %>
+        <% if (i == it.currentPage) { %>
+        <button class="join-item btn btn-primary [pointer-events:none]"
+        <% } else { %>
+        <button class="join-item btn"
+        <% } %>
+                hx-get="/api/panel/messages?page=<%= i %>"
+                hx-target="#messages-collapse">
+          <%= i %>
+        </button>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>

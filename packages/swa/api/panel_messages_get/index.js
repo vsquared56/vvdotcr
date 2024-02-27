@@ -10,6 +10,8 @@ export default async (context, req) => {
     });
   const db = new utils.Database;
 
+  const messagesPerPage = 2;
+
   var response = "";
 
   const edit = req.params.edit;
@@ -26,8 +28,8 @@ export default async (context, req) => {
     );
   } else {
 
-    const page = req.query.page ? parseInt(req.query.page) : 0;
-    const messages = await db.getPaginatedMessages(2, page);
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const messages = await db.getPaginatedMessages(messagesPerPage, page);
 
     if (!messages.items) {
       response = eta.render(
@@ -35,20 +37,16 @@ export default async (context, req) => {
       );
     }
     else {
-      var itemCount = 1;
-      for (const message of messages.items) {
-        response += eta.render(
-          "./panel/messages_card",
-          {
-            message: message,
-            messageDate: (new Date(message.createDate)).toLocaleString(),
-            loadMore: (itemCount === messages.items.length && messages.continuationToken !== null),
-            nextPage: page + 1,
-            replace: false
-          }
-        );
-        itemCount++;
-      }
+      const messageCount = await db.countMessages();
+      const totalPages = Math.ceil(messageCount / messagesPerPage);
+      response = eta.render(
+        "./panel/messages_table",
+        {
+          messages: messages.items,
+          currentPage: page,
+          totalPages: totalPages
+        }
+      );
     }
   }
 
