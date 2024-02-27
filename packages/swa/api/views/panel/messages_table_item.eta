@@ -19,7 +19,11 @@
   </td>
   <td class="text-xs lg:text-sm">
     <% if (it.message.messageData.rating) { %>
-    <%= it.message.messageData.rating.ratingValue %>
+      <% if (it.message.messageData.rating.ratingType === "starRating") { %>
+        <span class="badge badge bg-yellow-300 text-black"><%= it.message.messageData.rating.ratingValue %></span>
+      <% } else { %>
+        <span class="badge badge bg-blue-700"><%= it.message.messageData.rating.ratingValue %></span>
+      <% } %>
     <% } %>
   </td>
   <td>
