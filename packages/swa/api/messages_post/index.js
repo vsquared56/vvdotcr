@@ -128,7 +128,7 @@ export default async (context, req) => {
     response = eta.render(
       "./message_submit/submitted",
       {
-        message: JSON.stringify(item)
+        message: item
       }
     );
 

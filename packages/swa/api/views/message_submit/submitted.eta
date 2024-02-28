@@ -1,8 +1,15 @@
 <dialog id="submission-status" class="modal" hx-on::load="htmx.find('#submission-status').showModal()">
   <div class="modal-box" hx-target="this" hx-swap="outerHTML">
-    <h3 class="font-bold text-lg">Congrats! Your message was accepted!</h3>
-    <p class="py-4"><%= it.message.id %></p>
-    <p class="py-4">Message details: <%= it.message %></p>
+    <% if (it.message.notificationStatus === "neverNotify") { %>
+      <h3 class="font-bold text-lg">Thanks for the feedback!</h3>
+    <% } else if (it.message.notificationStatus === "queued") { %>
+      <h3 class="font-bold text-lg">Thanks for the feedback!</h3>
+      <div>Sending a notification straight to vv.cr!</div>
+    <% } %>
+    <% if (it.message.messageData.locationEnable === "locationShared" && !it.message.messageLocation) { %>
+      <div class="divider"></div>
+      <div>You wanted to submit a location with this message, but we didn't get one!  Maybe you have location permissions denied for this site?</div>
+    <% } %>
     <div class="modal-action">
       <button class="btn btn-primary"
               hx-get="/api/messages/new?finished=true"
