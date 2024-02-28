@@ -31,6 +31,10 @@ export class Database {
         return results.resources[0];
     }
 
+    async deleteMessage(id) {
+        await this.messagesContainer.item(id, id).delete();
+    }
+
     async getPaginatedMessages(count, page) {
         var querySpec;
 
@@ -72,7 +76,6 @@ export class Database {
     }
 
     async deleteSighting(id) {
-        const { resource } = await this.sightingsContainer.item(id, id).read();
         await this.sightingsContainer.item(id, id).delete();
     }
 
