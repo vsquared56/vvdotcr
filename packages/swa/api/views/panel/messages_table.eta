@@ -9,10 +9,10 @@
         <thead>
           <tr class="border-secondary">
             <th class="">Date</th>
-            <th class="">Location</th>
-            <th class="">Driving</th>
-            <th class="">Parking</th>
-            <th class="">Rating</th>
+            <th class="">📍</th>
+            <th class="">🚗</th>
+            <th class="">🅿</th>
+            <th class="">⭐</th>
             <th class="">Edit</th>
           </tr>
         </thead>

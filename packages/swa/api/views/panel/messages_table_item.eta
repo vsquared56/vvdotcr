@@ -1,5 +1,7 @@
 <tr class="border-secondary">
-  <td class="text-xs lg:text-sm"><%= it.message.messageDate %></td>
+  <td class="text-xs lg:text-sm">
+    <%= it.message.messageDate %>
+  </td>
   <td class="text-xs lg:text-sm">
     <% if (it.message.messageLocation) { %>
     <a class="link link-primary"
@@ -8,9 +10,9 @@
       link
     </a>
     <% } else if (it.message.messageData.locationEnable === "locationShared") { %>
-      <span class="badge badge-error">Null</span>
+      <span class="badge badge-xs badge-error">Null</span>
     <% } else if (it.message.messageData.locationEnable === "locationNotShared") { %>
-      <span class="badge badge-warning">NotShared</span>
+      <span class="badge badge-xs badge-warning">NotShared</span>
     <% } %>
   </td>
   <td class="text-xs lg:text-sm">
@@ -39,7 +41,7 @@
             hx-target="body"
             hx-swap="beforeend"
             onClick="htmx.trigger(this, 'edit')">
-      Edit
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-3 h-3 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
     </button>
   </td>
 </tr>
