@@ -1,11 +1,17 @@
 <tr class="border-secondary">
   <td class="text-xs lg:text-sm"><%= it.message.messageDate %></td>
   <td class="text-xs lg:text-sm">
+    <% if (it.message.messageLocation) { %>
     <a class="link link-primary"
       href="https://maps.google.com/?q=<%~ it.message.messageLocation.latitude %>,<%~ it.message.messageLocation.longitude %>"
       target="_blank">
       link
     </a>
+    <% } else if (it.message.messageData.locationEnable === "locationShared") { %>
+      <span class="badge badge-error">Null</span>
+    <% } else if (it.message.messageData.locationEnable === "locationNotShared") { %>
+      <span class="badge badge-warning">NotShared</span>
+    <% } %>
   </td>
   <td class="text-xs lg:text-sm">
     <% if (it.message.messageData.driving) { %>
@@ -20,9 +26,9 @@
   <td class="text-xs lg:text-sm">
     <% if (it.message.messageData.rating) { %>
       <% if (it.message.messageData.rating.ratingType === "starRating") { %>
-        <span class="badge badge bg-yellow-300 text-black"><%= it.message.messageData.rating.ratingValue %></span>
+        <span class="badge bg-yellow-300 text-black"><%= it.message.messageData.rating.ratingValue %></span>
       <% } else { %>
-        <span class="badge badge bg-blue-700"><%= it.message.messageData.rating.ratingValue %></span>
+        <span class="badge bg-blue-700"><%= it.message.messageData.rating.ratingValue %></span>
       <% } %>
     <% } %>
   </td>
