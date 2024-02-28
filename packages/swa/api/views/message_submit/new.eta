@@ -8,7 +8,7 @@
     <form id="message-form"
           hx-post="/api/messages"
           hx-swap="beforeend"
-          hx-on::confirm="addLocationParams(event, 'message-form', 'location-enable');">
+          hx-on::confirm="addLocationParams(event, 'message-form', 'locationEnable');">
       <div class="flex flex-row flex-wrap gap-4 p-4">
         <div id="message-driving-form" class="collapse collapse-plus bg-secondary min-w-64 w-3/12 max-w-full shrink grow h-fit" >
           <%~ include("./message_form_checkbox", { checkboxName: "driving", formEnabled: false, updateSubmit: false }) %>

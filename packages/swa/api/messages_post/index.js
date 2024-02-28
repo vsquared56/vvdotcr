@@ -13,7 +13,6 @@ export default async (context, req) => {
       views: path.join(context.executionContext.functionDirectory, '..', 'views')
     });
   const db = new utils.Database;
-  const storage = new utils.Storage;
 
   var response;
   var notificationStatus, notificationStatusReason;
@@ -26,60 +25,45 @@ export default async (context, req) => {
     clientIp = null;
   }
 
-  const form = req.parseFormBody();
-  var formResults = {};
-  const formItems = {
-    driving: {
-      speed: { type: "select", validValues: ["faster", "slower", "ok"] }
+  const formDefinition = [
+    {
+      name: "driving",
+      type: "formToggle",
+      subItems: [
+        { name: "speed", type: "select", validValues: ["faster", "slower", "ok"] }
+      ]
     },
-    parking: {
-      parkingQuality: { type: "select", validValues: ["bad", "too-close", "too-far", "ok"] }
+    {
+      name: "parking",
+      type: "formToggle",
+      subItems: [
+        { name: "parkingQuality", type: "select", validValues: ["bad", "too-close", "too-far", "ok"] }
+      ]
     },
-    rating: {
-      ratingValue: { type: "int", min: 1, max: 5 },
-      ratingType: { type: "toggle", offValue: "starRating", onValue: "gtaRating" },
+    {
+      name: "rating",
+      type: "formToggle",
+      subItems: [
+        { name: "ratingValue", type: "int", min: 1, max: 5 },
+        { name: "ratingType", type: "toggle", offValue: "starRating", onValue: "gtaRating" }
+      ]
+    },
+    {
+      name: "locationEnable",
+      type: "toggle",
+      offValue: "locationNotShared",
+      onValue: "locationShared"
     }
-  }
+  ];
 
-  var badRequest = false;
-  for (let formName in formItems) {
-    var formSent = form.get(formName);
-    if (!formSent || formSent.value.toString() !== "on") { //Individual forms (driving/parking/etc) can be toggled on
-      formResults[formName] = null;
-    } else {
-      formResults[formName] = {};
-      for (let formItem in formItems[formName]) {
-        const formValue = form.get(formItem);
-        var validatedValue;
-        if (formItems[formName][formItem].type === "toggle") { //Toggle values can be missing, check them first
-          if (!formValue) {
-            validatedValue = formItems[formName][formItem].offValue;
-          } else if (formValue.value.toString() === "on") {
-            validatedValue = formItems[formName][formItem].onValue;
-          } else {
-            badRequest = true;
-            console.log(`Bad request -- toggle value ${formItem} is set, but the value is not 'on'.`);
-          }
-        } else if (!formValue) {
-          badRequest = true;
-          validatedValue = null;
-          console.log(`Bad request -- required value ${formItem} is missing.`);
-        } else if (formItems[formName][formItem].type === "select") {
-          validatedValue = formValue.value.toString();
-          if (!formItems[formName][formItem].validValues.includes(validatedValue)) {
-            badRequest = true;
-            console.log(`Bad request -- select value ${formItem} is not one of the allowed options.`);
-          }
-        } else if (formItems[formName][formItem].type === "int") {
-          validatedValue = parseInt(formValue.value.toString());
-          if (validatedValue < formItems[formName][formItem].min || validatedValue > formItems[formName][formItem].max) {
-            badRequest = true;
-            console.log(`Bad request -- int value ${formItem} is out of range.`);
-          }
-        }
-        formResults[formName][formItem] = validatedValue;
-      }
-    }
+  const form = req.parseFormBody();
+  try {
+    var badRequest = false;
+    var formResults = utils.processFormItems(form, formDefinition);
+  }
+  catch(e) {
+    console.log(e);
+    badRequest = true;
   }
 
   if (badRequest) {
@@ -91,7 +75,7 @@ export default async (context, req) => {
     const messageLocation = utils.parseLocationForm(form);
 
     const minLocationAccuracy = await db.getSetting("min_location_accuracy_meters");
-    if (messageLocation.latitude === null || messageLocation.longitude === null) {
+    if (!messageLocation) {
       notificationStatus = 'neverNotify';
       notificationStatusReason = 'missingLocation';
     } else if (messageLocation.latitude.accuracy > minLocationAccuracy) {

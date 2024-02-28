@@ -53,7 +53,7 @@ export default async (context, req) => {
         response = eta.render(
           "./message_submit/location_toggle",
           {
-            locationEnabled: req.query["location-enable"] === "on",
+            locationEnabled: req.query["locationEnable"] === "on",
             locationPermission: locationPermission
           }
         );

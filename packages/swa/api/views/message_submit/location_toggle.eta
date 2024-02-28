@@ -4,7 +4,7 @@
     <span class="label-text">Deny location</span> 
     <input type="checkbox"
            id="location-enable"
-           name="location-enable"
+           name="locationEnable"
            class="toggle toggle-success"
            hx-get="/api/messages/new/location"
            hx-target="#location-toggle"

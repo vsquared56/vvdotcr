@@ -2,20 +2,30 @@ import circle from '@turf/circle';
 import booleanIntersects from '@turf/boolean-intersects';
 
 export function parseLocationForm(form) {
-    const latitude = parseFloat(form.get('latitude').value.toString());
-    const longitude = parseFloat(form.get('longitude').value.toString());
-    const accuracy = parseFloat(form.get('accuracy').value.toString());
-    const timestamp = parseInt(form.get('timestamp').value.toString());
-  
-    const location = {
-      latitude: isNaN(latitude) ? null : latitude,
-      longitude: isNaN(longitude) ? null : longitude,
-      accuracy: isNaN(accuracy) ? null : accuracy,
-      timestamp: isNaN(timestamp) ? null : timestamp,
-      source: 'browser'
-    };
+    var location = { source: 'browser' };
+    var isValid = true;
+    for (var attribute of ['latitude', 'longitude', 'accuracy', 'timestamp']) {
+        const formValue = form.get(attribute);
+        if (formValue) {
+            if (attribute === 'timestamp') {
+                location[attribute] = parseInt(formValue.value.toString());
+            } else {
+                location[attribute] = parseFloat(formValue.value.toString());
+            }
 
-    return location;
+            if (isNaN(location[attribute])) {
+                isValid = false;
+            }
+        } else {
+            isValid = false;
+        }
+    }
+
+    if (isValid) {
+        return location;
+    } else {
+        return null;
+    }
 }
 
 export function isLocationInFeatureCollection(location, featureCollection) {

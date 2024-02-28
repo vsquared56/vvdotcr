@@ -27,7 +27,7 @@ function finishPermissionsQuery(event, result) {
   locationPermission = result.state;
   htmx.on(event.target, "htmx:configRequest", (e) => {
     if (e.detail.triggeringEvent && e.detail.triggeringEvent.type === "locationPermissionsChange" && locationPermission != "denied") {
-      e.detail.parameters["location-enable"] = "on";
+      e.detail.parameters["locationEnable"] = "on";
     }
     e.detail.parameters["locationPermission"] = locationPermission;
   })
