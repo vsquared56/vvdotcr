@@ -1,0 +1,39 @@
+<div id="location-toggle" class="form-control">
+  Can we grab your location?
+  <label class="label cursor-pointer flex flex-nowrap	justify-start gap-4">
+    <span class="label-text">Deny location</span> 
+    <input type="checkbox"
+           id="location-enable"
+           name="locationEnable"
+           class="toggle toggle-success"
+           hx-get="/api/messages/new/location"
+           hx-target="#location-toggle"
+           hx-swap="outerHTML"
+           hx-trigger="click, locationPermissionsChange from:body"
+           hx-on::confirm="addLocationPermissionParam(event);"
+           <% if (it.locationEnabled && (it.locationPermission === "prompt" || it.locationPermission === "granted")) { %>
+           checked="checked"
+           <% } else if (it.locationPermission === "denied") { %>
+           disabled="disabled"
+           <% } %>
+    />
+    <% if (it.locationPermission === "prompt" || it.locationPermission === "granted") { %>
+    <span class="label-text">Include my location</span>
+    <% } else if (it.locationPermission === "denied") { %>
+    <span class="label-text">Location permission is denied</span>
+    <% } %>
+  </label>
+  
+  <div class="flex flex-col gap-4">
+    <% if (it.locationPermission === "denied") { %>
+    <div>
+    You have location permissions denied in your browser.  For full functionality, please grant or reset the locations permission for this site.
+    </div>
+    <% } %>
+    <% if (it.locationPermission !== "denied" && it.locationEnabled) { %>
+    <div>Messages with a location usually send notifications to the owner right away!</div>
+    <% } else { %>
+    <div>Messages without a location get seen ... eventually.  They get compiled into a report that's snail-mailed quarterly...</div>
+    <% } %>
+  </div>
+</div>

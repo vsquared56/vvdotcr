@@ -1,0 +1,14 @@
+<input class="message-form-checkbox"
+       type="checkbox"
+       name="<%= it.checkboxName %>"
+       hx-get="/api/messages/new/<%= it.checkboxName %>"
+       hx-trigger="click"
+       hx-swap="outerHTML"
+       hx-include=".message-form-checkbox"
+       <% if (it.formEnabled) { %>
+       checked="checked"
+       <% } %>
+       />
+<% if (it.updateSubmit) { %>
+<%~ include("./message_submit_button", { submitEnabled: it.submitEnabled, numMessages: it.numMessages, replace: true }) %>
+<% } %>

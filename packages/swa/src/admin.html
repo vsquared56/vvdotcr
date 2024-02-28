@@ -16,33 +16,54 @@
     <div class="divider"></div>
 
     <div class="px-2 lg:px-10">
-      <div id="panel-settings" class="collapse bg-base-200" hx-get="/api/settings" hx-trigger="click"
-        hx-swap="outerHTML">
+      <div id="panel-settings"
+           class="collapse bg-primary"
+           hx-get="/api/settings"
+           hx-trigger="click"
+           hx-swap="outerHTML">
         <input type="checkbox" />
-        <div class="collapse-title text-xl font-medium">
+        <div class="collapse-title text-xl text-primary-content font-medium">
           Settings
         </div>
-        <div class="collapse-content">
+        <div class="collapse-content bg-base-200">
           <p>Loading...</p>
         </div>
       </div>
 
       <div class="divider"></div>
 
-      <div id="panel-sightings" class="collapse bg-base-200">
+      <div id="panel-messages"
+           class="collapse bg-primary"
+           hx-get="/api/panel/messages"
+           hx-trigger="click"
+           hx-swap="outerHTML">
         <input type="checkbox" />
-        <div class="collapse-title text-xl font-medium">
-          All sightings
+        <div class="collapse-title text-xl text-primary-content font-medium">
+          Messages
         </div>
-        <div class="collapse-content">
-          <div id="sightings-grid"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8 place-items-center"
-            hx-get="/api/panel/sightings" hx-trigger="load">
-            <img alt="Sightings loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
-          </div>
+        <div class="collapse-content bg-base-200">
+          <p>Loading...</p>
         </div>
       </div>
 
+      <div class="divider"></div>
+
+      <div id="panel-sightings" class="collapse bg-primary">
+        <input type="checkbox" />
+        <div class="collapse-title text-xl text-primary-content font-medium">
+          All sightings
+        </div>
+        <div class="collapse-content bg-base-200">
+          <div class="py-4">
+            <div id="sightings-grid"
+                 class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8 place-items-center"
+                 hx-get="/api/panel/sightings"
+                 hx-trigger="load">
+              <img alt="Sightings loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </main>
 </body>
