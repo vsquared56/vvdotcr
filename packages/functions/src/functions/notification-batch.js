@@ -28,6 +28,7 @@ app.timer('notification-batch', {
             const message = await db.getMessage(item.body.id);
             emailBody += `New message: ${JSON.stringify(message.messageData)}\n\n`
             message.notificationId = notificationId;
+            message.notificationStatus = "sentViaEmail";
             await db.saveMessage(message);
           } else if (item.body.notificationType === "sighting") {
           }
