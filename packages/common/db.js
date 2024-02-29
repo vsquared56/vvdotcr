@@ -66,6 +66,18 @@ export class Database {
         const { upsert } = await this.messagesContainer.items.upsert(message);
     }
 
+    async countRecentNotifications(minCreateDate) {
+        const querySpec = {
+            query: `SELECT VALUE COUNT(c.id) FROM notifications c WHERE c.createDate > ${minCreateDate}`
+        };
+
+        const results = await this.notificationsContainer.items.query(querySpec, {
+            partitionKey: undefined
+        }).fetchNext();
+
+        return results.resources[0];
+    }
+
     async saveNotification(notification) {
         notification.modifyDate = Date.now();
         const { upsert } = await this.notificationsContainer.items.upsert(notification);
