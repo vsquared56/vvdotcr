@@ -28,7 +28,7 @@ app.serviceBusQueue('process-image', {
             },
             method: "POST",
             body: originalSighting
-        })
+        });
         const visionData = await visionResponse.json();
 
         // Crop the image with Sharp using the vision data bounding box
