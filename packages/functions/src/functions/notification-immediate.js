@@ -69,6 +69,7 @@ app.serviceBusQueue('notification-immediate', {
       await db.saveNotification(notificationItem);
 
       item.notificationStatus = "sentViaNtfy";
+      item.notificationId = notificationItem.id;
       await db.saveMessage(item);
     }
   }

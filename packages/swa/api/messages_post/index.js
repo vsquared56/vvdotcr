@@ -110,6 +110,7 @@ export default async (context, req) => {
       messageLocation: messageLocation,
       notificationStatus: pushNotification ? "queuedPushNotification" : "queuedBatchNotification",
       notificationStatusReason: notificationStatusReason,
+      notificationId: null,
       messageData: formResults
     }
 
