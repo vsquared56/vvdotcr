@@ -11,7 +11,7 @@ const emailFrom = process.env.EMAIL_FROM_ADDRESS;
 const emailTo = process.env.EMAIL_NOTIFICATION_ADDRESS;
 
 app.timer('notification-batch', {
-  schedule: '*/5 * * * *',
+  schedule: '*/15 * * * *',
   handler: async (myTimer, context) => {
     const db = new utils.Database;
     const sbClient = new ServiceBusClient(serviceBusConnectionString);
@@ -19,16 +19,17 @@ app.timer('notification-batch', {
     const queuedItems = await sbReceiver.receiveMessages(2);
 
     if (queuedItems.length > 0) {
+      const notificationId = crypto.randomUUID();
       try {
         var emailTitle = "New vv.cr dev activity";
         var emailBody = "";
         for (const item of queuedItems) {
           if (item.body.notificationType === "message") {
-            console.log("New message");
             const message = await db.getMessage(item.body.id);
             emailBody += `New message: ${JSON.stringify(message.messageData)}\n\n`
+            message.notificationId = notificationId;
+            await db.saveMessage(message);
           } else if (item.body.notificationType === "sighting") {
-            console.log("New sighting");
           }
         }
 
@@ -60,7 +61,7 @@ app.timer('notification-batch', {
 
       const createDate = Date.now();
       const notificationItem = {
-        id: crypto.randomUUID(),
+        id: notificationId,
         type: "batch",
         service: "email",
         destination: emailTo,
