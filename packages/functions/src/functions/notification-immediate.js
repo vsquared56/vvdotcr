@@ -8,7 +8,7 @@ import * as utils from "@vvdotcr/common";
 const serviceBusConnectionString = process.env.SERVICE_BUS_CONNECTION_STRING;
 const ntfyEndpoint = process.env.NTFY_ENDPOINT;
 
-app.serviceBusQueue('immediate-notification', {
+app.serviceBusQueue('notification-immediate', {
   connection: 'SERVICE_BUS_CONNECTION_STRING',
   queueName: 'immediate-notifications',
   handler: async (message, context) => {
