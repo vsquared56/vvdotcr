@@ -5,6 +5,7 @@ export class Database {
         this.client = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
         this.database = this.client.database(process.env.COSMOS_DB_DATABASE_NAME);
         this.messagesContainer = this.database.container("vvdotcr-messages-dev");
+        this.notificationsContainer = this.database.container("vvdotcr-notifications-dev");
         this.sightingsContainer = this.database.container("vvdotcr-sightings-dev");
         this.settingsContainer = this.database.container("vvdotcr-settings-dev");
     }
@@ -63,6 +64,11 @@ export class Database {
     async saveMessage(message) {
         message.modifyDate = Date.now();
         const { upsert } = await this.messagesContainer.items.upsert(message);
+    }
+
+    async saveNotification(notification) {
+        notification.modifyDate = Date.now();
+        const { upsert } = await this.notificationsContainer.items.upsert(notification);
     }
 
     async getSighting(id) {

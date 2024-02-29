@@ -1,8 +1,8 @@
 <dialog id="submission-status" class="modal" hx-on::load="htmx.find('#submission-status').showModal()">
   <div class="modal-box" hx-target="this" hx-swap="outerHTML">
-    <% if (it.message.notificationStatus === "neverNotify") { %>
+    <% if (it.message.notificationStatus === "queuedBatchNotification") { %>
       <h3 class="font-bold text-lg">Thanks for the feedback!</h3>
-    <% } else if (it.message.notificationStatus === "queued") { %>
+    <% } else if (it.message.notificationStatus === "queuedImmediateNotification") { %>
       <h3 class="font-bold text-lg">Thanks for the feedback!</h3>
       <div>Sending a notification straight to vv.cr!</div>
     <% } %>

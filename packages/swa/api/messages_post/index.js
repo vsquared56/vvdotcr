@@ -61,7 +61,7 @@ export default async (context, req) => {
     var badRequest = false;
     var formResults = utils.processFormItems(form, formDefinition);
   }
-  catch(e) {
+  catch (e) {
     console.log(e);
     badRequest = true;
   }
@@ -76,20 +76,20 @@ export default async (context, req) => {
 
     const minLocationAccuracy = await db.getSetting("min_location_accuracy_meters");
     if (!messageLocation) {
-      notificationStatus = 'neverNotify';
+      notificationStatus = 'queuedBatchNotification';
       notificationStatusReason = 'missingLocation';
     } else if (messageLocation.latitude.accuracy > minLocationAccuracy) {
-      notificationStatus = 'neverNotify';
+      notificationStatus = 'queuedBatchNotification';
       notificationStatusReason = 'inaccurateBrowserLocation';
     } else {
       const validLocations = await db.getSetting("valid_locations");
       const locationValid = utils.isLocationInFeatureCollection(messageLocation, validLocations);
 
       if (!locationValid) {
-        notificationStatus = 'neverNotify';
+        notificationStatus = 'queuedBatchNotification';
         notificationStatusReason = 'invalidLocation';
       } else {
-        notificationStatus = 'queued';
+        notificationStatus = 'queuedImmediateNotification';
         notificationStatusReason = null;
       }
     }
@@ -113,17 +113,23 @@ export default async (context, req) => {
       messageData: formResults
     }
 
-    //Save message to CosmosDB
-    await db.saveMessage(item);
-
-    // Send a Service Bus Message
+    // Send Service Bus Messages for notifications
     const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
-    const sbSender = sbClient.createSender('new-message-submissions');
+    var sbQueue;
+    if (notificationStatus === "queuedBatchNotification") {
+      sbQueue = "batch-notifications";
+    } else if (notificationStatus === "queuedImmediateNotification") {
+      sbQueue = "immediate-notifications";
+    }
+    const sbSender = sbClient.createSender(sbQueue);
     try {
-      await sbSender.sendMessages({ body: messageId });
+      await sbSender.sendMessages({ body: { notificationType: "message", id: messageId }});
     } finally {
       await sbClient.close();
     }
+
+    //Save message to CosmosDB
+    await db.saveMessage(item);
 
     response = eta.render(
       "./message_submit/submitted",
