@@ -33,6 +33,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@azure/abort-controller@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@azure/abort-controller@npm:2.0.0"
+  dependencies:
+    tslib: "npm:^2.2.0"
+  checksum: 8530b8fe3b10413162e02e6de0788f0cc482a6be92b58c068fbb9d5d96ef5adacdec100fa49dc159848282c582bdb0d61003130ac50ca456d14c5c3400043078
+  languageName: node
+  linkType: hard
+
 "@azure/arm-appservice@npm:^12.0.0":
   version: 12.0.0
   resolution: "@azure/arm-appservice@npm:12.0.0"
@@ -78,6 +87,38 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@azure/communication-common@npm:^2.2.0":
+  version: 2.3.1
+  resolution: "@azure/communication-common@npm:2.3.1"
+  dependencies:
+    "@azure/abort-controller": "npm:^1.0.0"
+    "@azure/core-auth": "npm:^1.3.0"
+    "@azure/core-rest-pipeline": "npm:^1.3.2"
+    "@azure/core-tracing": "npm:^1.0.0"
+    "@azure/core-util": "npm:^1.0.0"
+    events: "npm:^3.0.0"
+    jwt-decode: "npm:^4.0.0"
+    tslib: "npm:^2.2.0"
+  checksum: f987bfd911f4ca34d0ad13d3b8168386e225afd34d6a2694a1951d85d45de85cf6c9da31de2ba29678cd71ff6f147c0da71a2b28c8ac8323c499b6405a268b48
+  languageName: node
+  linkType: hard
+
+"@azure/communication-email@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@azure/communication-email@npm:1.0.0"
+  dependencies:
+    "@azure/communication-common": "npm:^2.2.0"
+    "@azure/core-auth": "npm:^1.3.0"
+    "@azure/core-client": "npm:^1.3.2"
+    "@azure/core-lro": "npm:^2.5.0"
+    "@azure/core-rest-pipeline": "npm:^1.8.0"
+    "@azure/logger": "npm:^1.0.0"
+    tslib: "npm:^1.9.3"
+    uuid: "npm:^8.3.2"
+  checksum: 20705256d365a98c6e65ecbaceb24cab15f1149dfcc7d87c9e863d9a2d9128f67b0db4ee6d8c223f4eaf61b713b15b2f1cb6aa3f89231f4eea7d5a7e79df6dd8
+  languageName: node
+  linkType: hard
+
 "@azure/core-amqp@npm:^4.1.0":
   version: 4.1.0
   resolution: "@azure/core-amqp@npm:4.1.0"
@@ -120,6 +161,21 @@ __metadata:
     "@azure/logger": "npm:^1.0.0"
     tslib: "npm:^2.2.0"
   checksum: 410f03e6ee7e76c19c7c18790b87ec6e5a10c9de4023215b02496e0e5e338359b728e4cc9a71a38dc524ce7d06803ab27b042e011ec2dd027638b38bf09fa8db
+  languageName: node
+  linkType: hard
+
+"@azure/core-client@npm:^1.3.2":
+  version: 1.8.0
+  resolution: "@azure/core-client@npm:1.8.0"
+  dependencies:
+    "@azure/abort-controller": "npm:^2.0.0"
+    "@azure/core-auth": "npm:^1.4.0"
+    "@azure/core-rest-pipeline": "npm:^1.9.1"
+    "@azure/core-tracing": "npm:^1.0.0"
+    "@azure/core-util": "npm:^1.0.0"
+    "@azure/logger": "npm:^1.0.0"
+    tslib: "npm:^2.2.0"
+  checksum: 73be469669543bb2ecc95f1e4a19f09125c56615c367d44ece5bfac3bcf427b258f3eda1ff4d2828510d74df1d2260040cdab76db3ed3ab68c650508d6f6ab0e
   languageName: node
   linkType: hard
 
@@ -179,6 +235,22 @@ __metadata:
     https-proxy-agent: "npm:^5.0.0"
     tslib: "npm:^2.2.0"
   checksum: b12a97e244a9ef90b70efaa4abe151fe6671d42d758d9e28053e7bfff03714bc003463c88068d46a4124bc9e5996dddb23bdf6c3654a888b6e2426ea7707e251
+  languageName: node
+  linkType: hard
+
+"@azure/core-rest-pipeline@npm:^1.3.2":
+  version: 1.14.0
+  resolution: "@azure/core-rest-pipeline@npm:1.14.0"
+  dependencies:
+    "@azure/abort-controller": "npm:^2.0.0"
+    "@azure/core-auth": "npm:^1.4.0"
+    "@azure/core-tracing": "npm:^1.0.1"
+    "@azure/core-util": "npm:^1.3.0"
+    "@azure/logger": "npm:^1.0.0"
+    http-proxy-agent: "npm:^5.0.0"
+    https-proxy-agent: "npm:^5.0.0"
+    tslib: "npm:^2.2.0"
+  checksum: 859ae83b2065861d72c2f051b20a7cda1c86d5754c0d17423aa16800da33b716df1c5535b275c4576de23617b72465f8646f1b49a2d4dae84938778fa6e95d7d
   languageName: node
   linkType: hard
 
@@ -1120,6 +1192,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@vvdotcr/backend-functions@workspace:packages/functions"
   dependencies:
+    "@azure/communication-email": "npm:^1.0.0"
     "@azure/functions": "npm:^4.0.0"
     "@azure/service-bus": "npm:^7.9.3"
     "@vvdotcr/common": "npm:^1.0.0"
@@ -3300,6 +3373,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jwt-decode@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "jwt-decode@npm:4.0.0"
+  checksum: de75bbf89220746c388cf6a7b71e56080437b77d2edb29bae1c2155048b02c6b8c59a3e5e8d6ccdfd54f0b8bda25226e491a4f1b55ac5f8da04cfbadec4e546c
+  languageName: node
+  linkType: hard
+
 "keytar@npm:^7.9.0":
   version: 7.9.0
   resolution: "keytar@npm:7.9.0"
@@ -5229,7 +5309,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.10.0":
+"tslib@npm:^1.10.0, tslib@npm:^1.9.3":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: 69ae09c49eea644bc5ebe1bca4fa4cc2c82b7b3e02f43b84bd891504edf66dbc6b2ec0eef31a957042de2269139e4acff911e6d186a258fb14069cd7f6febce2
@@ -5406,7 +5486,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^8.3.0":
+"uuid@npm:^8.3.0, uuid@npm:^8.3.2":
   version: 8.3.2
   resolution: "uuid@npm:8.3.2"
   bin:
