@@ -75,24 +75,24 @@ export default async (context, req) => {
     const messageLocation = utils.parseLocationForm(form);
 
     const minLocationAccuracy = await db.getSetting("min_location_accuracy_meters");
+
     if (!messageLocation) {
-      notificationStatus = 'queuedBatchNotification';
       notificationStatusReason = 'missingLocation';
     } else if (messageLocation.latitude.accuracy > minLocationAccuracy) {
-      notificationStatus = 'queuedBatchNotification';
       notificationStatusReason = 'inaccurateBrowserLocation';
     } else {
       const validLocations = await db.getSetting("valid_locations");
       const locationValid = utils.isLocationInFeatureCollection(messageLocation, validLocations);
 
       if (!locationValid) {
-        notificationStatus = 'queuedBatchNotification';
         notificationStatusReason = 'invalidLocation';
       } else {
-        notificationStatus = 'queuedImmediateNotification';
-        notificationStatusReason = null;
+        notificationStatusReason = 'validLocation';
       }
     }
+
+    const notificationSettings = await db.getSetting("message_push_notifications");
+    const pushNotification = notificationSettings[notificationStatusReason];
 
     const messageId = crypto.randomUUID();
 
@@ -108,19 +108,14 @@ export default async (context, req) => {
       createDate: createDate,
       modifyDate: createDate,
       messageLocation: messageLocation,
-      notificationStatus: notificationStatus,
+      notificationStatus: pushNotification ? "queuedPushNotification" : "queuedBatchNotification",
       notificationStatusReason: notificationStatusReason,
       messageData: formResults
     }
 
     // Send Service Bus Messages for notifications
     const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
-    var sbQueue;
-    if (notificationStatus === "queuedBatchNotification") {
-      sbQueue = "batch-notifications";
-    } else if (notificationStatus === "queuedImmediateNotification") {
-      sbQueue = "immediate-notifications";
-    }
+    const sbQueue = pushNotification ? "immediate-notifications" : "batch-notifications";
     const sbSender = sbClient.createSender(sbQueue);
     try {
       await sbSender.sendMessages({ body: { notificationType: "message", id: messageId }});
