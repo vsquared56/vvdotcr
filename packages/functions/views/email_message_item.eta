@@ -1,0 +1,104 @@
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th>Message Property</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>Date</td>
+    <td><%= it.messageDate %></td>
+  </tr>
+  <tr>
+    <td>Location</td>
+    <td>
+      <% if (it.message.messageLocation) { %>
+      <a class="link link-primary"
+          href="https://maps.google.com/?q=<%~ it.message.messageLocation.latitude %>,<%~ it.message.messageLocation.longitude %>"
+          target="_blank">
+          link
+      </a>
+      <% } else if (it.message.messageData.locationEnable === "locationShared") { %>
+      <span class="badge badge-error">Null</span>
+      <% } else if (it.message.messageData.locationEnable === "locationNotShared") { %>
+      <span class="badge badge-warning">NotShared</span>
+      <% } %>
+    </td>
+  </tr>
+  <tr>
+    <td>Driving Speed</td>
+    <td>
+      <% if (it.message.messageData.driving) { %>
+      <%= it.message.messageData.driving.speed %>
+      <% } %>
+    </td>
+  </tr>
+  <tr>
+    <td>Parking Quality</td>
+    <td>
+      <% if (it.message.messageData.parking) { %>
+      <%= it.message.messageData.parking.parkingQuality %>
+      <% } %>
+    </td>
+  </tr>
+  <tr>
+    <td>Rating</td>
+    <td>
+      <% if (it.message.messageData.rating) { %>
+        <% if (it.message.messageData.rating.ratingType === "starRating") { %>
+          <span class="badge bg-yellow-300 text-black"><%= it.message.messageData.rating.ratingValue %></span>
+        <% } else { %>
+          <span class="badge bg-blue-700"><%= it.message.messageData.rating.ratingValue %></span>
+        <% } %>
+      <% } %>
+    </td>
+  </tr>
+  <tr>
+    <td>submissionStatus</td>
+    <td>
+      <% if (it.message.submissionStatus === "saved") { %>
+        <span class="badge badge-warning">
+      <% } else { %>
+        <span class="badge badge-success">
+      <% } %>
+        <%= it.message.submissionStatus %>
+        </span>
+    </td>
+  </tr>
+  <tr>
+    <td>notificationStatus</td>
+    <td>
+      <% if (it.message.notificationStatus === "queued") { %>
+        <span class="badge badge-warning">
+      <% } else { %>
+        <span class="badge badge-success">
+      <% } %>
+        <%= it.message.notificationStatus %>
+        </span>
+    </td>
+  </tr>
+  <tr>
+    <td>notificationReason</td>
+    <td>
+      <% if (it.message.notificationStatusReason) { %>
+        <span class="badge badge-warning">
+      <% } else { %>
+        <span class="badge badge-success">
+      <% } %>
+        <%= it.message.notificationStatusReason %>
+        </span>
+    </td>
+  </tr>
+  <tr>
+    <td>originalUserAgent</td>
+    <td><%= it.message.originalUserAgent %></td>
+  </tr>
+  <tr>
+    <td>originalIP</td>
+    <td><%= it.message.originalIP %></td>
+  </tr>
+  <tr>
+    <td>ID</td>
+    <td><%= it.message.id %></td>
+  </tr>
+</table>

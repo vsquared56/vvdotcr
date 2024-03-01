@@ -1197,6 +1197,7 @@ __metadata:
     "@azure/service-bus": "npm:^7.9.3"
     "@vvdotcr/common": "npm:^1.0.0"
     azure-functions-core-tools: "npm:^4.x"
+    eta: "npm:^3.2.0"
     exifr: "npm:^7.1.3"
     node-fetch: "npm:^3.3.2"
     sharp: "npm:^0.33.1"

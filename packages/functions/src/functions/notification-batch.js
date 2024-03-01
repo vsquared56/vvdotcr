@@ -1,3 +1,5 @@
+import { Eta } from "eta";
+import * as url from 'url';
 import * as crypto from "crypto";
 import { app } from "@azure/functions";
 import { EmailClient } from "@azure/communication-email";
@@ -11,22 +13,27 @@ const emailFrom = process.env.EMAIL_FROM_ADDRESS;
 const emailTo = process.env.EMAIL_NOTIFICATION_ADDRESS;
 
 app.timer('notification-batch', {
-  schedule: '*/3 * * * *',
+  schedule: '*/15 * * * *',
   handler: async (myTimer, context) => {
+    const eta = new Eta(
+      {
+        views: url.fileURLToPath(new URL('../../views', import.meta.url))
+      });
+
     const db = new utils.Database;
     const sbClient = new ServiceBusClient(serviceBusConnectionString);
     const sbReceiver = sbClient.createReceiver("batch-notifications");
-    const queuedItems = await sbReceiver.receiveMessages(2, {maxWaitTimeInMs: 100});
+    const queuedItems = await sbReceiver.receiveMessages(5, {maxWaitTimeInMs: 100});
 
     if (queuedItems.length > 0) {
       const notificationId = crypto.randomUUID();
       try {
         var emailTitle = "New vv.cr dev activity";
-        var emailBody = "";
+        var submittedMessages = [];
         for (const item of queuedItems) {
           if (item.body.notificationType === "message") {
             const message = await db.getMessage(item.body.id);
-            emailBody += `New message: ${JSON.stringify(message.messageData)}\n\n`
+            submittedMessages.push(message);
             message.notificationId = notificationId;
             message.notificationStatus = "sentViaEmail";
             await db.saveMessage(message);
@@ -34,13 +41,20 @@ app.timer('notification-batch', {
           }
         }
 
+        var emailBody = eta.render(
+          "./email_notification",
+          {
+            submittedMessages: submittedMessages
+          }
+        );
+
         //Send email
         const client = new EmailClient(emailConnectionString);
         const emailMessage = {
           senderAddress: emailFrom,
           content: {
             subject: emailTitle,
-            plainText: emailBody,
+            html: emailBody
           },
           recipients: {
             to: [{ address: emailTo }],

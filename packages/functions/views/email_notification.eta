@@ -1,0 +1,11 @@
+<html>
+  <body>
+    <div><%= it.submittedMessages.length %> new messages:
+    <div>
+      <% it.submittedMessages.forEach(function(message){ %>
+      <%~ include("./email_message_item", { message: message }) %>
+      <br />
+      <% }) %>
+    </div>
+  </body>
+</html>
