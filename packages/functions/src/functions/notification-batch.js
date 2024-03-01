@@ -11,12 +11,12 @@ const emailFrom = process.env.EMAIL_FROM_ADDRESS;
 const emailTo = process.env.EMAIL_NOTIFICATION_ADDRESS;
 
 app.timer('notification-batch', {
-  schedule: '*/15 * * * *',
+  schedule: '*/3 * * * *',
   handler: async (myTimer, context) => {
     const db = new utils.Database;
     const sbClient = new ServiceBusClient(serviceBusConnectionString);
     const sbReceiver = sbClient.createReceiver("batch-notifications");
-    const queuedItems = await sbReceiver.receiveMessages(2);
+    const queuedItems = await sbReceiver.receiveMessages(2, {maxWaitTimeInMs: 100});
 
     if (queuedItems.length > 0) {
       const notificationId = crypto.randomUUID();
