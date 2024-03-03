@@ -93,6 +93,12 @@ export default async (context, req) => {
 
     const notificationSettings = await db.getSetting("message_push_notifications");
     const pushNotification = notificationSettings[notificationStatusReason];
+    var notificationStatus;
+    if (pushNotification) {
+      notificationStatus = {batch: {status: null, notificationId: null}, push: {status: "queued", notificationId: null}};
+    } else {
+      notificationStatus = {batch: {status: "queued", notificationId: null}, push: {status: null, notificationId: null}};
+    }
 
     const messageId = crypto.randomUUID();
 
@@ -108,9 +114,8 @@ export default async (context, req) => {
       createDate: createDate,
       modifyDate: createDate,
       messageLocation: messageLocation,
-      notificationStatus: pushNotification ? ["queuedPushNotification"] : ["queuedBatchNotification"],
+      notificationStatus: notificationStatus,
       notificationStatusReason: notificationStatusReason,
-      notificationId: null,
       messageData: formResults
     }
 

@@ -58,7 +58,7 @@
   </tr>
   <tr>
     <td>notificationStatus</td>
-    <td><%= it.sighting.notificationStatus %></td>
+    <td><%~ JSON.stringify(it.sighting.notificationStatus) %></td>
   </tr>
   <tr>
     <td>notificationReason</td>

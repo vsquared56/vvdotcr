@@ -61,6 +61,11 @@ export class Database {
         };
     }
 
+    async patchMessage(id, operations) {
+        operations.push({op: 'replace', path: '/modifyDate', value: Date.now()});
+        const { updated } = await this.messagesContainer.item(id, id).patch(operations);
+    }
+
     async saveMessage(message) {
         message.modifyDate = Date.now();
         const { upsert } = await this.messagesContainer.items.upsert(message);
@@ -124,6 +129,11 @@ export class Database {
             items: results.resources,
             continuationToken: results.continuationToken
         };
+    }
+
+    async patchSighting(id, operations) {
+        operations.push({op: 'replace', path: '/modifyDate', value: Date.now()});
+        const { updated } = await this.sightingsContainer.item(id, id).patch(operations);
     }
 
     async saveSighting(sighting) {

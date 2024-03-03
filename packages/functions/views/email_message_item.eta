@@ -78,7 +78,7 @@
   </tr>
   <tr>
     <td>notificationStatus</td>
-    <td><%= it.message.notificationStatus %></td>
+    <td><%~ JSON.stringify(it.message.notificationStatus) %></td>
   </tr>
   <tr>
     <td>notificationReason</td>

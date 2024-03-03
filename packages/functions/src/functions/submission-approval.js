@@ -36,7 +36,9 @@ app.serviceBusQueue('submission-approval', {
       }
     }
 
-    sighting.notificationStatus.push("queuedPushNotification");
+    sighting.notificationStatus.push.status = "queued";
+    await db.saveSighting(sighting);
+
     const sbClient = new ServiceBusClient(serviceBusConnectionString);
     const sbSender = sbClient.createSender("immediate-notifications");
     try {
@@ -44,7 +46,5 @@ app.serviceBusQueue('submission-approval', {
     } finally {
       await sbClient.close();
     }
-
-    await db.saveSighting(sighting);
   },
 });

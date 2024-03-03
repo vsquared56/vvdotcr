@@ -104,9 +104,8 @@ export default async (context, req) => {
         largeImageUrl: null,
         imageLocation: null,
         visionData: null,
-        notificationStatus: [],
+        notificationStatus: {batch: {status: null, notificationId: null}, push: {status: null, notificationId: null}},
         notificationStatusReason: null,
-        notificationId: null,
         viewCount: 0
       }
 

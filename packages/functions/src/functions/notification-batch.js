@@ -1,5 +1,5 @@
 import { Eta } from "eta";
-import * as url from 'url';
+import * as url from "url";
 import * as crypto from "crypto";
 import { app } from "@azure/functions";
 import { EmailClient } from "@azure/communication-email";
@@ -12,12 +12,12 @@ const emailConnectionString = process.env.COMMUNICATION_SERVICES_CONNECTION_STRI
 const emailFrom = process.env.EMAIL_FROM_ADDRESS;
 const emailTo = process.env.EMAIL_NOTIFICATION_ADDRESS;
 
-app.timer('notification-batch', {
-  schedule: '*/1 * * * *',
+app.timer("notification-batch", {
+  schedule: "*/1 * * * *",
   handler: async (myTimer, context) => {
     const eta = new Eta(
       {
-        views: url.fileURLToPath(new URL('../../views', import.meta.url))
+        views: url.fileURLToPath(new URL("../../views", import.meta.url))
       });
 
     const db = new utils.Database;
@@ -32,21 +32,23 @@ app.timer('notification-batch', {
         var submittedMessages = [];
         var submittedSightings = [];
         for (const item of queuedItems) {
+          const patchOps =
+          [
+            { op: "replace", path: "/notificationStatus/batch/notificationId", value: notificationId},
+            { op: "replace", path: "/notificationStatus/batch/status", value: "sentViaEmail"},
+          ];
+
           if (item.body.notificationType === "message") {
             var message = await db.getMessage(item.body.id);
-            message.notificationId = notificationId;
-            message.notificationStatus = message.notificationStatus.map(function (status) {
-              return (status === "queuedBatchNotification" ? "sentViaEmail" : status);
-            });
-            await db.saveMessage(message);
+            db.patchMessage(message.id, patchOps);
+            message.notificationStatus.batch.notificationId = notificationId;
+            message.notificationStatus.batch.status = "sentViaEmail";
             submittedMessages.push(message);
           } else if (item.body.notificationType === "sighting") {
             var sighting = await db.getSighting(item.body.id);
-            sighting.notificationId = notificationId;
-            sighting.notificationStatus = sighting.notificationStatus.map(function (status) {
-              return (status === "queuedBatchNotification" ? "sentViaEmail" : status);
-            });
-            await db.saveSighting(sighting);
+            db.patchSighting(sighting.id, patchOps);
+            sighting.notificationStatus.batch.notificationId = notificationId;
+            sighting.notificationStatus.batch.status = "sentViaEmail";
             submittedSightings.push(sighting);
           }
         }

@@ -39,6 +39,7 @@ app.serviceBusQueue('notification-immediate', {
       }
     }
 
+    var targetItemPatchOps;
     if (isRateLimited) {
       try {
         await batchNotificationsSender.sendMessages({ body: sbMessage});
@@ -46,17 +47,11 @@ app.serviceBusQueue('notification-immediate', {
         await sbClient.close();
       }
 
-      targetItem.notificationStatus = targetItem.notificationStatus.map(function (status) {
-        return (status === "queuedPushNotification" ? "rateLimitedPushNotification" : status);
-      });
-      targetItem.notificationStatus.push("queuedBatchNotification");
-      targetItem.notificationId = notificationItem.id;
-
-      if (sbMessage.notificationType === "message") {
-        await db.saveMessage(targetItem);
-      } else if (sbMessage.notificationType === "sighting") {
-        await db.saveSighting(targetItem);
-      }
+      targetItemPatchOps =
+      [
+        { op: "replace", path: "/notificationStatus/push/status", value: "rateLimited"},
+        { op: "replace", path: "/notificationStatus/batch/status", value: "queued"},
+      ];
     } else {
       var notificationTitle, notificationTags, notificationBody;
       var notificationActions = "";
@@ -131,16 +126,19 @@ app.serviceBusQueue('notification-immediate', {
         await sbClient.close();
       }
 
-      targetItem.notificationStatus = targetItem.notificationStatus.map(function (status) {
-        return (status === "queuedPushNotification" ? "sentViaNtfy" : status);
-      });
-      targetItem.notificationStatus.push("queuedBatchNotification");
-      targetItem.notificationId = notificationItem.id;
-      if (sbMessage.notificationType === "message") {
-        await db.saveMessage(targetItem);
-      } else if (sbMessage.notificationType === "sighting") {
-        await db.saveSighting(targetItem);
-      }
+      targetItemPatchOps =
+      [
+        { op: "replace", path: "/notificationStatus/push/status", value: "sentViaNtfy"},
+        { op: "replace", path: "/notificationStatus/push/notificationId", value: notificationItem.id},
+        { op: "replace", path: "/notificationStatus/batch/status", value: "queued"},
+      ];
+    }
+
+    // Patch update the target item regardless of rate limiting or not
+    if (sbMessage.notificationType === "message") {
+      await db.patchMessage(targetItem.id, targetItemPatchOps);
+    } else if (sbMessage.notificationType === "sighting") {
+      await db.patchSighting(targetItem.id, targetItemPatchOps);
     }
   }
 });

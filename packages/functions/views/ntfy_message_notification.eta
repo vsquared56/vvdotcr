@@ -10,8 +10,8 @@ Parking Quality: <% if (it.message.messageData.parking) { %><%= it.message.messa
 
 Rating: <% if (it.message.messageData.rating) { %><%= it.message.messageData.rating.ratingValue %> <% if (it.message.messageData.rating.ratingType === "starRating") { %>yellow rating<% } else { %>blue GTA<% } %> stars<% } %>
 
-notificationReason: <%= it.message.notificationStatusReason %>
+Notification Reason: <%= it.message.notificationStatusReason %>
 
-originalUserAgent: <%= it.message.originalUserAgent %>
+Original UA: <%= it.message.originalUserAgent %>
 
-originalIP: <%= it.message.originalIP %>
+Original IP: <%= it.message.originalIP %>
