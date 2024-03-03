@@ -32,11 +32,13 @@ app.timer('notification-batch', {
         var submittedMessages = [];
         for (const item of queuedItems) {
           if (item.body.notificationType === "message") {
-            const message = await db.getMessage(item.body.id);
-            submittedMessages.push(message);
+            var message = await db.getMessage(item.body.id);
             message.notificationId = notificationId;
-            message.notificationStatus = "sentViaEmail";
+            message.notificationStatus = message.notificationStatus.map(function (status) {
+              return (status === "queuedBatchNotification" ? "sentViaEmail" : status);
+            });
             await db.saveMessage(message);
+            submittedMessages.push(message);
           } else if (item.body.notificationType === "sighting") {
           }
         }

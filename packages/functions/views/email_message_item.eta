@@ -78,15 +78,7 @@
   </tr>
   <tr>
     <td>notificationStatus</td>
-    <td>
-      <% if (it.message.notificationStatus === "queued") { %>
-        <span class="badge badge-warning">
-      <% } else { %>
-        <span class="badge badge-success">
-      <% } %>
-        <%= it.message.notificationStatus %>
-        </span>
-    </td>
+    <td><%= it.message.notificationStatus %></td>
   </tr>
   <tr>
     <td>notificationReason</td>

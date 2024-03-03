@@ -15,7 +15,7 @@ export default async (context, req) => {
   const db = new utils.Database;
 
   var response;
-  var notificationStatus, notificationStatusReason;
+  var notificationStatusReason;
 
   var clientIp = null;
   if (req.headers.hasOwnProperty("x-forwarded-for")) {
@@ -108,7 +108,7 @@ export default async (context, req) => {
       createDate: createDate,
       modifyDate: createDate,
       messageLocation: messageLocation,
-      notificationStatus: pushNotification ? "queuedPushNotification" : "queuedBatchNotification",
+      notificationStatus: pushNotification ? ["queuedPushNotification"] : ["queuedBatchNotification"],
       notificationStatusReason: notificationStatusReason,
       notificationId: null,
       messageData: formResults

@@ -13,12 +13,22 @@ const ntfyEndpoint = process.env.NTFY_ENDPOINT;
 app.serviceBusQueue('notification-immediate', {
   connection: 'SERVICE_BUS_CONNECTION_STRING',
   queueName: 'immediate-notifications',
-  handler: async (message, context) => {
+  handler: async (sbMessage, context) => {
     const eta = new Eta(
       {
         views: url.fileURLToPath(new URL('../../views', import.meta.url))
       });
     const db = new utils.Database;
+
+    const sbClient = new ServiceBusClient(serviceBusConnectionString);
+    const batchNotificationsSender = sbClient.createSender("batch-notifications");
+
+    var targetItem;
+    if (sbMessage.notificationType === "message") { //New message form submissions
+      targetItem = await db.getMessage(sbMessage.id);
+    } else if (sbMessage.notificationType === "sighting") {
+      targetItem = await db.getSighting(sbMessage.id);
+    }
 
     const rateLimits = await db.getSetting("notification-rate-limits");
     var isRateLimited = false;
@@ -30,32 +40,41 @@ app.serviceBusQueue('notification-immediate', {
     }
 
     if (isRateLimited) {
-      const sbClient = new ServiceBusClient(serviceBusConnectionString);
-      const sbSender = sbClient.createSender("batch-notifications");
       try {
-        await sbSender.sendMessages({ body: message});
+        await batchNotificationsSender.sendMessages({ body: sbMessage});
       } finally {
         await sbClient.close();
       }
+
+      targetItem.notificationStatus = targetItem.notificationStatus.map(function (status) {
+        return (status === "queuedPushNotification" ? "rateLimitedPushNotification" : status);
+      });
+      targetItem.notificationStatus.push("queuedBatchNotification");
+      targetItem.notificationId = notificationItem.id;
+
+      if (sbMessage.notificationType === "message") {
+        await db.saveMessage(targetItem);
+      } else if (sbMessage.notificationType === "sighting") {
+        await db.saveSighting(targetItem);
+      }
     } else {
-      var item, notificationTitle, notificationTags, notificationBody;
+      var notificationTitle, notificationTags, notificationBody;
       var notificationActions = "";
-      if (message.notificationType === "message") { //New message form submissions
-        item = await db.getMessage(message.id);
+      if (sbMessage.notificationType === "message") { //New message form submissions
         notificationTitle = "New vv.cr message";
         notificationTags = "mailbox";
         notificationBody = eta.render(
           "./ntfy_message_notification",
           {
-            message: item,
-            messageDate: (new Date(item.createDate)).toLocaleString()
+            message: targetItem,
+            messageDate: (new Date(targetItem.createDate)).toLocaleString()
           }
         );
-        if (item.messageLocation) {
-          notificationActions += `view, See Location, 'geo:0,0?q=${item.messageLocation.latitude},${item.messageLocation.longitude}';`;
+        if (targetItem.messageLocation) {
+          notificationActions += `view, See Location, 'geo:0,0?q=${targetItem.messageLocation.latitude},${targetItem.messageLocation.longitude}';`;
         }
-      } else if (message.notificationType === "sighting") {
-        item = await db.getSighting(message.id);
+      } else if (sbMessage.notificationType === "sighting") {
+        targetItem = await db.getSighting(sbMessage.id);
       }
 
       // Send a push notification via ntfy.sh
@@ -72,7 +91,7 @@ app.serviceBusQueue('notification-immediate', {
       const createDate = Date.now();
       const notificationItem = {
         id: crypto.randomUUID(),
-        type: message.notificationType,
+        type: sbMessage.notificationType,
         service: "ntfy",
         serviceUrl: ntfyEndpoint,
         serviceResponse: ntfyResponse.status,
@@ -85,9 +104,23 @@ app.serviceBusQueue('notification-immediate', {
 
       await db.saveNotification(notificationItem);
 
-      item.notificationStatus = "sentViaNtfy";
-      item.notificationId = notificationItem.id;
-      await db.saveMessage(item);
+      try {
+        await batchNotificationsSender.sendMessages({ body: sbMessage});
+      } finally {
+        await sbClient.close();
+      }
+
+      targetItem.notificationStatus = targetItem.notificationStatus.map(function (status) {
+        return (status === "queuedPushNotification" ? "sentViaNtfy" : status);
+      });
+      targetItem.notificationStatus.push("queuedBatchNotification");
+      targetItem.notificationId = notificationItem.id;
+      if (sbMessage.notificationType === "message") {
+        await db.saveMessage(targetItem);
+      } else if (sbMessage.notificationType === "sighting") {
+        await db.saveSighting(targetItem);
+      }
+      console.log(targetItem);
     }
   }
 });
