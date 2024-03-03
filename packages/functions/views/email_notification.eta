@@ -44,5 +44,14 @@
       <br />
       <% }) %>
     </div>
+    <hr />
+    <hr />
+    <div><%= it.submittedSightings.length %> new sightings:
+    <div>
+      <% it.submittedSightings.forEach(function(sighting){ %>
+      <%~ include("./email_sighting_item", { sighting: sighting }) %>
+      <br />
+      <% }) %>
+    </div>
   </body>
 </html>

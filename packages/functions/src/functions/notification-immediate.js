@@ -74,7 +74,28 @@ app.serviceBusQueue('notification-immediate', {
           notificationActions += `view, See Location, 'geo:0,0?q=${targetItem.messageLocation.latitude},${targetItem.messageLocation.longitude}';`;
         }
       } else if (sbMessage.notificationType === "sighting") {
-        targetItem = await db.getSighting(sbMessage.id);
+        if (targetItem.submissionStatus === "needsManualApproval") {
+          notificationTitle = "New vv.cr sighting needs approval";
+          notificationTags = "camera,question"
+        } else if (targetItem.submissionStatus === "approved") {
+          notificationTitle = "New vv.cr sighting automatically approved";
+          notificationTags = "camera,white_check_mark	"
+        } else {
+          notificationTitle = "New vv.cr sighting with unknown status";
+          notificationTags = "camera,error"
+        }
+        
+        notificationBody = eta.render(
+          "./ntfy_sighting_notification",
+          {
+            sighting: targetItem,
+            sightingDate: (new Date(targetItem.createDate)).toLocaleString()
+          }
+        );
+        notificationActions = `view, See Image, '${targetItem.largeImageUrl}';`;
+        if (targetItem.imageLocation) {
+          notificationActions += `view, See Location, 'geo:0,0?q=${targetItem.imageLocation.latitude},${targetItem.imageLocation.longitude}';`;
+        }
       }
 
       // Send a push notification via ntfy.sh

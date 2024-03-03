@@ -104,6 +104,9 @@ export default async (context, req) => {
         largeImageUrl: null,
         imageLocation: null,
         visionData: null,
+        notificationStatus: [],
+        notificationStatusReason: null,
+        notificationId: null,
         viewCount: 0
       }
 

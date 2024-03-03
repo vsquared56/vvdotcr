@@ -1,0 +1,11 @@
+Sighting date: <%= it.sightingDate %>
+
+Location: <% if (it.sighting.messageLocation) { %>Accuracy: <%= it.sighting.messageLocation.accuracy %> <% } %>
+
+Submission Status: <%= it.sighting.submissionStatus %>
+
+Automatic Approval Denied: <%= it.sighting.automaticApprovalDenied %>
+
+originalUserAgent: <%= it.sighting.originalUserAgent %>
+
+originalIP: <%= it.sighting.originalIP %>

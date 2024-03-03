@@ -13,7 +13,7 @@ const emailFrom = process.env.EMAIL_FROM_ADDRESS;
 const emailTo = process.env.EMAIL_NOTIFICATION_ADDRESS;
 
 app.timer('notification-batch', {
-  schedule: '*/15 * * * *',
+  schedule: '*/1 * * * *',
   handler: async (myTimer, context) => {
     const eta = new Eta(
       {
@@ -30,6 +30,7 @@ app.timer('notification-batch', {
       try {
         var emailTitle = "New vv.cr dev activity";
         var submittedMessages = [];
+        var submittedSightings = [];
         for (const item of queuedItems) {
           if (item.body.notificationType === "message") {
             var message = await db.getMessage(item.body.id);
@@ -40,6 +41,13 @@ app.timer('notification-batch', {
             await db.saveMessage(message);
             submittedMessages.push(message);
           } else if (item.body.notificationType === "sighting") {
+            var sighting = await db.getSighting(item.body.id);
+            sighting.notificationId = notificationId;
+            sighting.notificationStatus = sighting.notificationStatus.map(function (status) {
+              return (status === "queuedBatchNotification" ? "sentViaEmail" : status);
+            });
+            await db.saveSighting(sighting);
+            submittedSightings.push(sighting);
           }
         }
 
@@ -50,6 +58,11 @@ app.timer('notification-batch', {
               {
                 ...msg,
                 messageDate: new Date(msg.createDate).toLocaleString()
+              })),
+            submittedSightings: submittedSightings.map(s => (
+              {
+                ...s,
+                sightingDate: new Date(s.createDate).toLocaleString()
               })),
           }
         );
