@@ -52,11 +52,11 @@
       <% if (it.message.messageData.rating) { %>
         <% if (it.message.messageData.rating.ratingType === "starRating") { %>
           <span class="badge badge-rating-stars">
-            <%= it.message.messageData.rating.ratingValue %>
+            <%= it.message.messageData.rating.ratingValue %> yellow rating stars
           </span>
         <% } else { %>
           <span class="badge badge-gta-stars">
-            <%= it.message.messageData.rating.ratingValue %>
+            <%= it.message.messageData.rating.ratingValue %> blue GTA stars
           </span>
         <% } %>
       <% } else { %>
