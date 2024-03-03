@@ -76,7 +76,7 @@ app.serviceBusQueue('process-image', {
         item.largeFileName = largeFileName;
         item.largeImageUrl = largeImageUrl;
         item.visionData = visionData;
-        item.processingLatency = item.modifyDate - item.createDate;
+        item.processingLatency = Date.now() - item.createDate;
 
         await db.saveSighting(item);
 
