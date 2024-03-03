@@ -74,7 +74,7 @@ app.timer('notification-batch', {
         }
       }
       catch(e){
-        console.log(e);
+        context.error(e);
         for (const item of queuedItems) {
           sbReceiver.deadLetterMessage(item);
         }

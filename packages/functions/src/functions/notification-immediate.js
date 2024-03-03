@@ -120,7 +120,6 @@ app.serviceBusQueue('notification-immediate', {
       } else if (sbMessage.notificationType === "sighting") {
         await db.saveSighting(targetItem);
       }
-      console.log(targetItem);
     }
   }
 });
