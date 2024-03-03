@@ -1,3 +1,4 @@
+<hr />
 <table class="table table-sm">
   <thead>
     <tr>
@@ -7,7 +8,7 @@
   </thead>
   <tr>
     <td>Date</td>
-    <td><%= it.messageDate %></td>
+    <td><%= it.message.messageDate %></td>
   </tr>
   <tr>
     <td>Location</td>

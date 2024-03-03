@@ -13,7 +13,7 @@ const emailFrom = process.env.EMAIL_FROM_ADDRESS;
 const emailTo = process.env.EMAIL_NOTIFICATION_ADDRESS;
 
 app.timer('notification-batch', {
-  schedule: '*/15 * * * *',
+  schedule: '*/1 * * * *',
   handler: async (myTimer, context) => {
     const eta = new Eta(
       {
@@ -44,7 +44,11 @@ app.timer('notification-batch', {
         var emailBody = eta.render(
           "./email_notification",
           {
-            submittedMessages: submittedMessages
+            submittedMessages: submittedMessages.map(msg => (
+              {
+                ...msg,
+                messageDate: new Date(msg.createDate).toLocaleString()
+              })),
           }
         );
 
