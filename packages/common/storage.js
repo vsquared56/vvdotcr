@@ -55,12 +55,13 @@ export class Storage {
         return downloadBlobResponse;
     }
 
-    async uploadSighting(type, filename, buffer) {
+    async uploadSighting(type, contentType, filename, buffer) {
         const container = this.getContainer(type);
         const path = this.getPath(type, filename);
 
+        const blobOptions = { blobHTTPHeaders: { blobContentType: contentType } };
         const uploadBlobClient = container.getBlockBlobClient(path);
-        const uploadBlobResponse = await uploadBlobClient.uploadData(buffer);
+        const uploadBlobResponse = await uploadBlobClient.uploadData(buffer, blobOptions);
         const sightingUrl = `${this.storageUrl}/${container.containerName}/${path}`;
     
         return sightingUrl;

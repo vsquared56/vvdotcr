@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <style>
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 1.25rem;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        width: fit-content;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        border-radius: 2rem;
+        border-width: 1px;
+      }
+
+      .badge-warning {
+        background-color: rgb(249 115 22);
+        color: rgb(0 0 0);
+      }
+
+      .badge-success {
+        background-color: rgb(34 197 34);
+        color: rgb(0 0 0);
+      }
+
+      .badge-rating-stars {
+        background-color: rgb(253 224 71);
+        color: rgb(0 0 0);
+      }
+
+      .badge-gta-stars {
+        background-color: rgb(29 78 216);
+        color: rgb(255 255 255);
+      }
+    </style>
+  </head>
+  <body>
+    <div><%= it.submittedMessages.length %> new messages:
+    <div>
+      <% it.submittedMessages.forEach(function(message){ %>
+      <%~ include("./email_message_item", { message: message }) %>
+      <br />
+      <% }) %>
+    </div>
+    <hr />
+    <hr />
+    <div><%= it.submittedSightings.length %> new sightings:
+    <div>
+      <% it.submittedSightings.forEach(function(sighting){ %>
+      <%~ include("./email_sighting_item", { sighting: sighting }) %>
+      <br />
+      <% }) %>
+    </div>
+  </body>
+</html>

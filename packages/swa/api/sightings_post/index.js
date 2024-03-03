@@ -72,7 +72,7 @@ export default async (context, req) => {
         { error: "Images must be at least 600x600." }
       );
     } else {
-      const originalImageUrl = await storage.uploadSighting('original', originalFileName, fileData);
+      const originalImageUrl = await storage.uploadSighting('original', contentType, originalFileName, fileData);
 
       // Set DB item
       const createDate = Date.now();
@@ -104,6 +104,8 @@ export default async (context, req) => {
         largeImageUrl: null,
         imageLocation: null,
         visionData: null,
+        notificationStatus: {batch: {status: null, notificationId: null}, push: {status: null, notificationId: null}},
+        notificationStatusReason: null,
         viewCount: 0
       }
 

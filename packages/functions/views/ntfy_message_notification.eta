@@ -1,0 +1,17 @@
+Message date: <%= it.messageDate %>
+
+Location: <% if (it.message.messageLocation) { %>Accuracy: <%= it.message.messageLocation.accuracy %> <% } %>
+
+Location enabled: <% if (it.message.messageData.locationEnable === "locationShared") { %>Shared<% } else if (it.message.messageData.locationEnable === "locationNotShared") {%>Not Shared<% } %>
+
+Driving Speed: <% if (it.message.messageData.driving) { %><%= it.message.messageData.driving.speed %><% } %>
+
+Parking Quality: <% if (it.message.messageData.parking) { %><%= it.message.messageData.parking.parkingQuality %><% } %>
+
+Rating: <% if (it.message.messageData.rating) { %><%= it.message.messageData.rating.ratingValue %> <% if (it.message.messageData.rating.ratingType === "starRating") { %>yellow rating<% } else { %>blue GTA<% } %> stars<% } %>
+
+Notification Reason: <%= it.message.notificationStatusReason %>
+
+Original UA: <%= it.message.originalUserAgent %>
+
+Original IP: <%= it.message.originalIP %>

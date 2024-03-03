@@ -5,6 +5,7 @@ export class Database {
         this.client = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
         this.database = this.client.database(process.env.COSMOS_DB_DATABASE_NAME);
         this.messagesContainer = this.database.container("vvdotcr-messages-dev");
+        this.notificationsContainer = this.database.container("vvdotcr-notifications-dev");
         this.sightingsContainer = this.database.container("vvdotcr-sightings-dev");
         this.settingsContainer = this.database.container("vvdotcr-settings-dev");
     }
@@ -60,9 +61,31 @@ export class Database {
         };
     }
 
+    async patchMessage(id, operations) {
+        operations.push({op: 'replace', path: '/modifyDate', value: Date.now()});
+        const { updated } = await this.messagesContainer.item(id, id).patch(operations);
+    }
+
     async saveMessage(message) {
         message.modifyDate = Date.now();
         const { upsert } = await this.messagesContainer.items.upsert(message);
+    }
+
+    async countRecentNotifications(minCreateDate) {
+        const querySpec = {
+            query: `SELECT VALUE COUNT(c.id) FROM notifications c WHERE c.createDate > ${minCreateDate}`
+        };
+
+        const results = await this.notificationsContainer.items.query(querySpec, {
+            partitionKey: undefined
+        }).fetchNext();
+
+        return results.resources[0];
+    }
+
+    async saveNotification(notification) {
+        notification.modifyDate = Date.now();
+        const { upsert } = await this.notificationsContainer.items.upsert(notification);
     }
 
     async getSighting(id) {
@@ -106,6 +129,11 @@ export class Database {
             items: results.resources,
             continuationToken: results.continuationToken
         };
+    }
+
+    async patchSighting(id, operations) {
+        operations.push({op: 'replace', path: '/modifyDate', value: Date.now()});
+        const { updated } = await this.sightingsContainer.item(id, id).patch(operations);
     }
 
     async saveSighting(sighting) {

@@ -28,7 +28,7 @@ app.serviceBusQueue('process-image', {
             },
             method: "POST",
             body: originalSighting
-        })
+        });
         const visionData = await visionResponse.json();
 
         // Crop the image with Sharp using the vision data bounding box
@@ -41,7 +41,7 @@ app.serviceBusQueue('process-image', {
             .toBuffer();
 
         const thumbFileName = `${item.id}.jpeg`;
-        const thumbImageUrl = await storage.uploadSighting('thumb', thumbFileName, croppedBuffer);
+        const thumbImageUrl = await storage.uploadSighting('thumb', 'image/jpeg', thumbFileName, croppedBuffer);
 
         // Resize the image to a reasonable size
         const largeBuffer = await sharp(originalSighting)
@@ -50,7 +50,7 @@ app.serviceBusQueue('process-image', {
             .toBuffer();
 
         const largeFileName = `${item.id}.jpeg`;
-        const largeImageUrl = await storage.uploadSighting('large', largeFileName, largeBuffer);
+        const largeImageUrl = await storage.uploadSighting('large', 'image/jpeg', largeFileName, largeBuffer);
 
         // Parse location from EXIF data
         var submissionStatus;
@@ -76,7 +76,7 @@ app.serviceBusQueue('process-image', {
         item.largeFileName = largeFileName;
         item.largeImageUrl = largeImageUrl;
         item.visionData = visionData;
-        item.processingLatency = item.modifyDate - item.createDate;
+        item.processingLatency = Date.now() - item.createDate;
 
         await db.saveSighting(item);
 

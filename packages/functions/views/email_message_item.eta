@@ -1,0 +1,107 @@
+<hr />
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th>Message Property</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>Date</td>
+    <td><%= it.message.messageDate %></td>
+  </tr>
+  <tr>
+    <td>Location</td>
+    <td>
+      <% if (it.message.messageLocation) { %>
+      <a class="link link-primary"
+          href="https://maps.google.com/?q=<%~ it.message.messageLocation.latitude %>,<%~ it.message.messageLocation.longitude %>"
+          target="_blank">
+          link
+      </a>
+      <% } else if (it.message.messageData.locationEnable === "locationShared") { %>
+      <span class="badge badge-error">Null</span>
+      <% } else if (it.message.messageData.locationEnable === "locationNotShared") { %>
+      <span class="badge badge-warning">NotShared</span>
+      <% } %>
+    </td>
+  </tr>
+  <tr>
+    <td>Driving Speed</td>
+    <td>
+      <% if (it.message.messageData.driving) { %>
+      <%= it.message.messageData.driving.speed %>
+      <% } else { %>
+      Null
+      <% } %>
+    </td>
+  </tr>
+  <tr>
+    <td>Parking Quality</td>
+    <td>
+      <% if (it.message.messageData.parking) { %>
+      <%= it.message.messageData.parking.parkingQuality %>
+      <% } else { %>
+      Null
+      <% } %>
+    </td>
+  </tr>
+  <tr>
+    <td>Rating</td>
+    <td>
+      <% if (it.message.messageData.rating) { %>
+        <% if (it.message.messageData.rating.ratingType === "starRating") { %>
+          <span class="badge badge-rating-stars">
+            <%= it.message.messageData.rating.ratingValue %> yellow rating stars
+          </span>
+        <% } else { %>
+          <span class="badge badge-gta-stars">
+            <%= it.message.messageData.rating.ratingValue %> blue GTA stars
+          </span>
+        <% } %>
+      <% } else { %>
+      Null
+      <% } %>
+    </td>
+  </tr>
+  <tr>
+    <td>submissionStatus</td>
+    <td>
+      <% if (it.message.submissionStatus === "saved") { %>
+        <span class="badge badge-success">
+      <% } else { %>
+        <span class="badge badge-warning">
+      <% } %>
+        <%= it.message.submissionStatus %>
+        </span>
+    </td>
+  </tr>
+  <tr>
+    <td>notificationStatus</td>
+    <td><%~ JSON.stringify(it.message.notificationStatus) %></td>
+  </tr>
+  <tr>
+    <td>notificationReason</td>
+    <td>
+      <% if (it.message.notificationStatusReason !== "validLocation") { %>
+        <span class="badge badge-warning">
+      <% } else { %>
+        <span class="badge badge-sucess">
+      <% } %>
+        <%= it.message.notificationStatusReason %>
+        </span>
+    </td>
+  </tr>
+  <tr>
+    <td>originalUserAgent</td>
+    <td><%= it.message.originalUserAgent %></td>
+  </tr>
+  <tr>
+    <td>originalIP</td>
+    <td><%= it.message.originalIP %></td>
+  </tr>
+  <tr>
+    <td>ID</td>
+    <td><%= it.message.id %></td>
+  </tr>
+</table>

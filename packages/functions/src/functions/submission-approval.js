@@ -1,44 +1,50 @@
 import { app } from '@azure/functions';
 import { ServiceBusClient } from "@azure/service-bus";
-import exifr from "exifr";
-import fetch from 'node-fetch';
-import sharp from "sharp";
 
 import * as utils from "@vvdotcr/common";
 
-const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
+const serviceBusConnectionString = process.env.SERVICE_BUS_CONNECTION_STRING;
 
 app.serviceBusQueue('submission-approval', {
-    connection: 'SERVICE_BUS_CONNECTION_STRING',
-    queueName: 'new-sightings-to-validate',
-    handler: async (message, context) => {
-        const db = new utils.Database;
+  connection: 'SERVICE_BUS_CONNECTION_STRING',
+  queueName: 'new-sightings-to-validate',
+  handler: async (message, context) => {
+    const db = new utils.Database;
 
-        const item = await db.getSighting(message);
-        const minLocationAccuracy = await db.getSetting("min_location_accuracy_meters");
+    const sighting = await db.getSighting(message);
+    const minLocationAccuracy = await db.getSetting("min_location_accuracy_meters");
 
-        if (item.imageLocation === null || item.imageLocation.latitude === null || item.imageLocation.longitude === null) {
-            item.submissionStatus = 'needsManualApproval';
-            item.automaticApprovalDenied = 'missingLocation';
-        } else if (item.imageLocation.source === 'browser' && item.imageLocation.accuracy > minLocationAccuracy) {
-            item.submissionStatus = 'needsManualApproval';
-            item.automaticApprovalDenied = 'inaccurateBrowserLocation';
-        }
-        else {
-            const geolockedLocations = await db.getSetting("geolocked_locations");
-            const isGeolocked = utils.isLocationInFeatureCollection(item.imageLocation, geolockedLocations);
+    if (sighting.imageLocation === null || sighting.imageLocation.latitude === null || sighting.imageLocation.longitude === null) {
+      sighting.submissionStatus = 'needsManualApproval';
+      sighting.automaticApprovalDenied = 'missingLocation';
+    } else if (sighting.imageLocation.source === 'browser' && sighting.imageLocation.accuracy > minLocationAccuracy) {
+      sighting.submissionStatus = 'needsManualApproval';
+      sighting.automaticApprovalDenied = 'inaccurateBrowserLocation';
+    }
+    else {
+      const geolockedLocations = await db.getSetting("geolocked_locations");
+      const isGeolocked = utils.isLocationInFeatureCollection(sighting.imageLocation, geolockedLocations);
 
-            if (isGeolocked) {
-                item.submissionStatus = 'needsManualApproval';
-                item.automaticApprovalDenied = 'geolocked';
-            } else {
-                item.submissionStatus = 'approved';
-                item.isPublished = true;
-                item.publishDate = Date.now();
-                item.publishedBy = "automaticApproval";
-            }
-        }
+      if (isGeolocked) {
+        sighting.submissionStatus = 'needsManualApproval';
+        sighting.automaticApprovalDenied = 'geolocked';
+      } else {
+        sighting.submissionStatus = 'approved';
+        sighting.isPublished = true;
+        sighting.publishDate = Date.now();
+        sighting.publishedBy = "automaticApproval";
+      }
+    }
 
-        await db.saveSighting(item);
-    },
+    sighting.notificationStatus.push.status = "queued";
+    await db.saveSighting(sighting);
+
+    const sbClient = new ServiceBusClient(serviceBusConnectionString);
+    const sbSender = sbClient.createSender("immediate-notifications");
+    try {
+      await sbSender.sendMessages({ body: { notificationType: "sighting", id: sighting.id }});
+    } finally {
+      await sbClient.close();
+    }
+  },
 });

@@ -15,7 +15,7 @@ export default async (context, req) => {
   const db = new utils.Database;
 
   var response;
-  var notificationStatus, notificationStatusReason;
+  var notificationStatusReason;
 
   var clientIp = null;
   if (req.headers.hasOwnProperty("x-forwarded-for")) {
@@ -61,7 +61,7 @@ export default async (context, req) => {
     var badRequest = false;
     var formResults = utils.processFormItems(form, formDefinition);
   }
-  catch(e) {
+  catch (e) {
     console.log(e);
     badRequest = true;
   }
@@ -75,23 +75,29 @@ export default async (context, req) => {
     const messageLocation = utils.parseLocationForm(form);
 
     const minLocationAccuracy = await db.getSetting("min_location_accuracy_meters");
+
     if (!messageLocation) {
-      notificationStatus = 'neverNotify';
       notificationStatusReason = 'missingLocation';
     } else if (messageLocation.latitude.accuracy > minLocationAccuracy) {
-      notificationStatus = 'neverNotify';
       notificationStatusReason = 'inaccurateBrowserLocation';
     } else {
       const validLocations = await db.getSetting("valid_locations");
       const locationValid = utils.isLocationInFeatureCollection(messageLocation, validLocations);
 
       if (!locationValid) {
-        notificationStatus = 'neverNotify';
         notificationStatusReason = 'invalidLocation';
       } else {
-        notificationStatus = 'queued';
-        notificationStatusReason = null;
+        notificationStatusReason = 'validLocation';
       }
+    }
+
+    const notificationSettings = await db.getSetting("message_push_notifications");
+    const pushNotification = notificationSettings[notificationStatusReason];
+    var notificationStatus;
+    if (pushNotification) {
+      notificationStatus = {batch: {status: null, notificationId: null}, push: {status: "queued", notificationId: null}};
+    } else {
+      notificationStatus = {batch: {status: "queued", notificationId: null}, push: {status: null, notificationId: null}};
     }
 
     const messageId = crypto.randomUUID();
@@ -113,17 +119,18 @@ export default async (context, req) => {
       messageData: formResults
     }
 
-    //Save message to CosmosDB
-    await db.saveMessage(item);
-
-    // Send a Service Bus Message
+    // Send Service Bus Messages for notifications
     const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
-    const sbSender = sbClient.createSender('new-message-submissions');
+    const sbQueue = pushNotification ? "immediate-notifications" : "batch-notifications";
+    const sbSender = sbClient.createSender(sbQueue);
     try {
-      await sbSender.sendMessages({ body: messageId });
+      await sbSender.sendMessages({ body: { notificationType: "message", id: messageId }});
     } finally {
       await sbClient.close();
     }
+
+    //Save message to CosmosDB
+    await db.saveMessage(item);
 
     response = eta.render(
       "./message_submit/submitted",

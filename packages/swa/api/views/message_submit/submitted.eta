@@ -1,10 +1,8 @@
 <dialog id="submission-status" class="modal" hx-on::load="htmx.find('#submission-status').showModal()">
   <div class="modal-box" hx-target="this" hx-swap="outerHTML">
-    <% if (it.message.notificationStatus === "neverNotify") { %>
-      <h3 class="font-bold text-lg">Thanks for the feedback!</h3>
-    <% } else if (it.message.notificationStatus === "queued") { %>
-      <h3 class="font-bold text-lg">Thanks for the feedback!</h3>
-      <div>Sending a notification straight to vv.cr!</div>
+    <h3 class="font-bold text-lg">Thanks for the feedback!</h3>
+    <% if (it.message.notificationStatusReason === "validLocation" ) { %>
+      <div>Looks like you're near the vv.cr car, so we'll send a notification straight to the driver's phone!</div>
     <% } %>
     <% if (it.message.messageData.locationEnable === "locationShared" && !it.message.messageLocation) { %>
       <div class="divider"></div>
