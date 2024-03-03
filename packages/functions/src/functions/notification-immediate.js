@@ -38,7 +38,8 @@ app.serviceBusQueue('notification-immediate', {
         await sbClient.close();
       }
     } else {
-      var item, notificationTitle, notificationTags, notificationBody, notificationBody;
+      var item, notificationTitle, notificationTags, notificationBody;
+      var notificationActions = "";
       if (message.notificationType === "message") { //New message form submissions
         item = await db.getMessage(message.id);
         notificationTitle = "New vv.cr message";
@@ -50,6 +51,10 @@ app.serviceBusQueue('notification-immediate', {
             messageDate: (new Date(item.createDate)).toLocaleString()
           }
         );
+        if (item.messageLocation) {
+          notificationActions += `view, See Location, 'geo:0,0?q=${item.messageLocation.latitude},${item.messageLocation.longitude}';`;
+          console.log(notificationActions);
+        }
       } else if (message.notificationType === "sighting") {
         item = await db.getSighting(message.id);
       }
@@ -58,7 +63,8 @@ app.serviceBusQueue('notification-immediate', {
       const ntfyResponse = await fetch(`${ntfyEndpoint}`, {
         headers: {
           "Title": notificationTitle,
-          "Tags": notificationTags
+          "Tags": notificationTags,
+          "Actions": notificationActions
         },
         method: "POST",
         body: notificationBody

@@ -1,6 +1,6 @@
 Message date: <%= it.messageDate %>
 
-Location: <% if (it.message.messageLocation) { %>Included <% } %>
+Location: <% if (it.message.messageLocation) { %>Accuracy: <%= it.message.messageLocation.accuracy %> <% } %>
 
 Location enabled: <% if (it.message.messageData.locationEnable === "locationShared") { %>Shared<% } else if (it.message.messageData.locationEnable === "locationNotShared") {%>Not Shared<% } %>
 
