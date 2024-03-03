@@ -2,36 +2,6 @@
      id="modal-dialog"
      hx-target="this"
      hx-swap="outerHTML">
-  <script>
-    function locationError(err) {
-      console.log(err);
-      htmx.find('#submitLocation').setAttribute('disabled', true);
-      htmx.find('#submitLocation').innerHTML = 'Location denied';
-    }
-
-    function locationSuccess(event, position) {
-      var positionInfo = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-        accuracy: position.coords.accuracy,
-        timestamp: position.timestamp
-      }
-
-      htmx.find('#latitude').setAttribute('value', position.coords.latitude);
-      htmx.find('#longitude').setAttribute('value', position.coords.longitude);
-      htmx.find('#accuracy').setAttribute('value', position.coords.accuracy);
-      htmx.find('#timestamp').setAttribute('value', position.timestamp);
-      event.detail.issueRequest();
-    }
-
-    function confirmLocation(event) {
-      event.preventDefault();
-      navigator.geolocation.getCurrentPosition(function (position) {
-        locationSuccess(event, position);
-      }, locationError);
-    }
-
-  </script>
   <h3 class="font-bold text-lg">Can we get your location?</h3>
   <div class="modal-action">
     <form id='location'>
@@ -40,7 +10,7 @@
       <input id='accuracy' name='accuracy' type='hidden'>
       <input id='timestamp' name='timestamp' type='hidden'>
       <button id='submitLocation' class='btn btn-primary' hx-post='/api/sightings/<%= it.sighting.id %>/location'
-        hx-on:htmx:confirm='confirmLocation(event);' hx-target='#modal-dialog'>
+        hx-on::confirm="addLocationParams(event);" hx-target='#modal-dialog'>
         Submit my location
       </button>
       <button id='submitWithoutLocation' class='btn btn-neutral'
