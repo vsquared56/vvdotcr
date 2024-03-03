@@ -53,7 +53,6 @@ app.serviceBusQueue('notification-immediate', {
         );
         if (item.messageLocation) {
           notificationActions += `view, See Location, 'geo:0,0?q=${item.messageLocation.latitude},${item.messageLocation.longitude}';`;
-          console.log(notificationActions);
         }
       } else if (message.notificationType === "sighting") {
         item = await db.getSighting(message.id);
