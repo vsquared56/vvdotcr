@@ -13,7 +13,7 @@ const emailFrom = process.env.EMAIL_FROM_ADDRESS;
 const emailTo = process.env.EMAIL_NOTIFICATION_ADDRESS;
 
 app.timer("notification-batch", {
-  schedule: "*/1 * * * *",
+  schedule: "*/15 * * * *",
   handler: async (myTimer, context) => {
     const eta = new Eta(
       {
