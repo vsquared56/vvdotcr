@@ -1,3 +1,5 @@
+import { Eta } from "eta";
+import * as url from 'url';
 import * as crypto from "crypto";
 import { app } from '@azure/functions';
 import { ServiceBusClient } from "@azure/service-bus";
@@ -12,6 +14,10 @@ app.serviceBusQueue('notification-immediate', {
   connection: 'SERVICE_BUS_CONNECTION_STRING',
   queueName: 'immediate-notifications',
   handler: async (message, context) => {
+    const eta = new Eta(
+      {
+        views: url.fileURLToPath(new URL('../../views', import.meta.url))
+      });
     const db = new utils.Database;
 
     const rateLimits = await db.getSetting("notification-rate-limits");
@@ -37,7 +43,13 @@ app.serviceBusQueue('notification-immediate', {
         item = await db.getMessage(message.id);
         notificationTitle = "New vv.cr message";
         notificationTags = "mailbox";
-        notificationBody = `${item.id}`;
+        notificationBody = eta.render(
+          "./ntfy_message_notification",
+          {
+            message: item,
+            messageDate: (new Date(item.createDate)).toLocaleString()
+          }
+        );
       } else if (message.notificationType === "sighting") {
         item = await db.getSighting(message.id);
       }
