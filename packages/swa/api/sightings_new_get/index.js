@@ -19,7 +19,7 @@ export default async (context, req) => {
 
   const sessionData = await utils.getOrCreateSession(req.headers.cookie);
   if (sessionData.err) {
-    context.error(sessionData.err);
+    console.log(sessionData.err);
     context.res = {
       status: 400
     };

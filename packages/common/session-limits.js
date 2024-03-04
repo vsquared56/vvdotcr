@@ -47,7 +47,7 @@ export async function getSession(cookieHeader) {
     const parsedCookies = cookie.parse(cookieHeader);
     if (parsedCookies[SESSION_COOKIE_NAME]) {
       if (uuidValidate(parsedCookies[SESSION_COOKIE_NAME])) {
-        if (db.countSessionsById(parsedCookies[SESSION_COOKIE_NAME]) === 1) {
+        if (await db.countSessionsById(parsedCookies[SESSION_COOKIE_NAME]) === 1) {
           return { sessionId: parsedCookies[SESSION_COOKIE_NAME], new: false, err: null };
         } else {
           return { sessionId: null, new: false, err: `No existing session with ID ${parsedCookies[SESSION_COOKIE_NAME]}` };
