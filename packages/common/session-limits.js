@@ -18,7 +18,7 @@ export async function getOrCreateSession(cookieHeader) {
           return (await createSession(db));
         }
       } else {
-        return { sessionId: null, new: false, err: "Invalid sessionID parsed from cookie" };
+        return { sessionId: null, new: false, err: "Invalid sessionId parsed from cookie" };
       }
     } else {
       return (await createSession(db));
@@ -53,7 +53,7 @@ export async function getSession(cookieHeader) {
           return { sessionId: null, new: false, err: `No existing session with ID ${parsedCookies[SESSION_COOKIE_NAME]}` };
         }
       } else {
-        return { sessionId: null, new: false, err: "Invalid sessionID parsed from cookie" };
+        return { sessionId: null, new: false, err: "Invalid sessionId parsed from cookie" };
       }
     } else {
       return { sessionId: null, new: false, err: "No session defined in cookies" };

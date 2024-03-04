@@ -73,6 +73,10 @@
     </td>
   </tr>
   <tr>
+    <td>Session ID</td>
+    <td><%= it.sighting.sessionId %></td>
+  </tr>
+  <tr>
     <td>originalUserAgent</td>
     <td><%= it.sighting.originalUserAgent %></td>
   </tr>
