@@ -6,8 +6,9 @@ export class Database {
         this.database = this.client.database(process.env.COSMOS_DB_DATABASE_NAME);
         this.messagesContainer = this.database.container("vvdotcr-messages-dev");
         this.notificationsContainer = this.database.container("vvdotcr-notifications-dev");
-        this.sightingsContainer = this.database.container("vvdotcr-sightings-dev");
+        this.sessionsContainer = this.database.container("vvdotcr-sessions-dev");
         this.settingsContainer = this.database.container("vvdotcr-settings-dev");
+        this.sightingsContainer = this.database.container("vvdotcr-sightings-dev");
     }
 
     async getMessage(id) {
@@ -86,6 +87,37 @@ export class Database {
     async saveNotification(notification) {
         notification.modifyDate = Date.now();
         const { upsert } = await this.notificationsContainer.items.upsert(notification);
+    }
+
+    async countSessionsById(id) {
+        const querySpec = {
+            query: `SELECT VALUE COUNT(c.id) FROM sessions c WHERE c.id = '${id}'`
+        };
+
+        const results = await this.sessionsContainer.items.query(querySpec, {
+            partitionKey: undefined
+        }).fetchNext();
+
+        return results.resources[0];
+    }
+
+    async getSession(id) {
+        const { resource } = await this.sessionsContainer.item(id, id).read();
+        if (resource === undefined) {
+            throw new Error(`Error reading session ${id} from CosmosDB`);
+        }
+        else {
+            return resource;
+        }
+    }
+
+    async deleteSession(id) {
+        await this.sessionsContainer.item(id, id).delete();
+    }
+
+    async saveSession(session) {
+        session.modifyDate = Date.now();
+        const { upsert } = await this.sessionsContainer.items.upsert(session);
     }
 
     async getSighting(id) {
