@@ -24,7 +24,6 @@ export default async (context, req) => {
     });
   const db = new utils.Database;
   const storage = new utils.Storage;
-
   var response;
 
   var clientIp = null;
@@ -33,6 +32,23 @@ export default async (context, req) => {
   }
   else {
     clientIp = null;
+  }
+
+  const sessionData = await utils.getSession(req.headers.cookie);
+  if (sessionData.err) {
+    console.log(sessionData.err);
+    context.res = {
+      status: 401,
+      body: "Sighting submissions require a valid session token."
+    };
+    return;
+  } else if (await utils.isActionRateLimited(clientIp, sessionData.sessionId, "newSighting")) {
+    console.log("Rate limited POST request for new sighting.");
+    context.res = {
+      status: 429,
+      body: "Too many sighting submissions."
+    };
+    return;
   }
 
   const { fields, files } = await parseMultipartFormData.default(req);
@@ -86,9 +102,10 @@ export default async (context, req) => {
         originalHeight: fileMetadata.height,
         originalWidth: fileMetadata.width,
         originalComment: null,
-        uploadUserAgent: req.headers['user-agent'],
-        uploadXFF: req.headers['x-forwarded-for'],
-        uploadIP: clientIp,
+        originalUserAgent: req.headers['user-agent'],
+        originalXFF: req.headers['x-forwarded-for'],
+        originalIP: clientIp,
+        sessionId: sessionData.sessionId,
         createDate: createDate,
         modifyDate: createDate,
         processingLatency: null,
@@ -104,7 +121,7 @@ export default async (context, req) => {
         largeImageUrl: null,
         imageLocation: null,
         visionData: null,
-        notificationStatus: {batch: {status: null, notificationId: null}, push: {status: null, notificationId: null}},
+        notificationStatus: { batch: { status: null, notificationId: null }, push: { status: null, notificationId: null } },
         notificationStatusReason: null,
         viewCount: 0
       }
@@ -120,6 +137,9 @@ export default async (context, req) => {
       } finally {
         await sbClient.close();
       }
+
+      //Save this action for rate limiting
+      await utils.saveAction(clientIp, sessionData.sessionId, "newSighting", sightingId);
 
       response = eta.render(
         "./sighting_submit/submitted",

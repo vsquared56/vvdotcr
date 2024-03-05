@@ -6,6 +6,8 @@ Submission Status: <%= it.sighting.submissionStatus %>
 
 Automatic Approval Denied: <%= it.sighting.automaticApprovalDenied %>
 
+Session ID: <%= it.sighting.sessionId %>
+
 originalUserAgent: <%= it.sighting.originalUserAgent %>
 
 originalIP: <%= it.sighting.originalIP %>

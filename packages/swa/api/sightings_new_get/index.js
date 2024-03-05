@@ -9,8 +9,6 @@ export default async (context, req) => {
       views: path.join(context.executionContext.functionDirectory, '..', 'views')
     });
 
-  var response;
-
   var clientIp = null;
   if (req.headers.hasOwnProperty("x-forwarded-for")) {
     clientIp = await utils.parseXff(req.headers["x-forwarded-for"]);
@@ -19,19 +17,35 @@ export default async (context, req) => {
     clientIp = null;
   }
 
-  if (req.query.finished) {
-    response = eta.render(
-      "./sighting_submit/finished"
-    );
+  const sessionData = await utils.getOrCreateSession(req.headers.cookie);
+  if (sessionData.err) {
+    console.log(sessionData.err);
+    context.res = {
+      status: 400
+    };
   } else {
-    response = eta.render(
-      "./sighting_submit/new",
-      { retrySubmission: (req.query.retry === "true") }
-    );
-  }
+    var response;
+    if (req.query.finished) {
+      response = eta.render(
+        "./sighting_submit/finished"
+      );
+    } else if (await utils.isActionRateLimited(clientIp, sessionData.sessionId, "newSighting")) {
+      response = eta.render(
+        "./sighting_submit/rate_limited",
+        null
+      );
+    } else {
+      response = eta.render(
+        "./sighting_submit/new",
+        { retrySubmission: (req.query.retry === "true") }
+      );
+    }
 
-  context.res = {
-    status: 200,
-    body: response
-  };
+    var cookie = await utils.getResponseCookie(sessionData);
+    context.res = {
+      status: 200,
+      body: response,
+      cookies: cookie ? [cookie] : null
+    };
+  }
 };

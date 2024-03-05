@@ -16,6 +16,16 @@ export default async (context, req) => {
   const sighting = await db.getSighting(sightingId);
   const submissionStatus = sighting.submissionStatus;
 
+  const sessionData = await utils.getSession(req.headers.cookie);
+  if (sessionData.err || sessionData.sessionId !== sighting.sessionId) {
+    console.log(sessionData.err);
+    context.res = {
+      status: 401,
+      body: "Sighting status requires a valid session token."
+    };
+    return;
+  }
+
   if (recheckCount >= 8) {
     response = eta.render(
       "./sighting_submit/status_timeout",

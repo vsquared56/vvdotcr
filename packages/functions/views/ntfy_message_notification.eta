@@ -12,6 +12,8 @@ Rating: <% if (it.message.messageData.rating) { %><%= it.message.messageData.rat
 
 Notification Reason: <%= it.message.notificationStatusReason %>
 
+Session ID: <%= it.message.sessionId %>
+
 Original UA: <%= it.message.originalUserAgent %>
 
 Original IP: <%= it.message.originalIP %>

@@ -109,6 +109,10 @@
           </td>
         </tr>
         <tr>
+          <td>Session ID</td>
+          <td><%= it.message.sessionId %></td>
+        </tr>
+        <tr>
           <td>originalUserAgent</td>
           <td><%= it.message.originalUserAgent %></td>
         </tr>

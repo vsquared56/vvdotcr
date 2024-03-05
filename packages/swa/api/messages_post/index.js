@@ -25,6 +25,22 @@ export default async (context, req) => {
     clientIp = null;
   }
 
+  const sessionData = await utils.getSession(req.headers.cookie);
+  if (sessionData.err) {
+    console.log(sessionData.err);
+    context.res = {
+      status: 401,
+      body: "Message submissions require a valid session token."
+    };
+    return;
+  } else if (await utils.isActionRateLimited(clientIp, sessionData.sessionId, "newMessage")) {
+    console.log("Rate limited POST request for new messages.");
+    context.res = {
+      status: 429,
+      body: "Too many message submissions."
+    };
+    return;
+  }
   const formDefinition = [
     {
       name: "driving",
@@ -95,9 +111,9 @@ export default async (context, req) => {
     const pushNotification = notificationSettings[notificationStatusReason];
     var notificationStatus;
     if (pushNotification) {
-      notificationStatus = {batch: {status: null, notificationId: null}, push: {status: "queued", notificationId: null}};
+      notificationStatus = { batch: { status: null, notificationId: null }, push: { status: "queued", notificationId: null } };
     } else {
-      notificationStatus = {batch: {status: "queued", notificationId: null}, push: {status: null, notificationId: null}};
+      notificationStatus = { batch: { status: "queued", notificationId: null }, push: { status: null, notificationId: null } };
     }
 
     const messageId = crypto.randomUUID();
@@ -111,6 +127,7 @@ export default async (context, req) => {
       originalUserAgent: req.headers['user-agent'],
       originalXFF: req.headers['x-forwarded-for'],
       originalIP: clientIp,
+      sessionId: sessionData.sessionId,
       createDate: createDate,
       modifyDate: createDate,
       messageLocation: messageLocation,
@@ -124,13 +141,16 @@ export default async (context, req) => {
     const sbQueue = pushNotification ? "immediate-notifications" : "batch-notifications";
     const sbSender = sbClient.createSender(sbQueue);
     try {
-      await sbSender.sendMessages({ body: { notificationType: "message", id: messageId }});
+      await sbSender.sendMessages({ body: { notificationType: "message", id: messageId } });
     } finally {
       await sbClient.close();
     }
 
     //Save message to CosmosDB
     await db.saveMessage(item);
+
+    //Save this action for rate limiting
+    await utils.saveAction(clientIp, sessionData.sessionId, "newMessage", messageId);
 
     response = eta.render(
       "./message_submit/submitted",
