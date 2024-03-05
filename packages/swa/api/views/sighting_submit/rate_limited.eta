@@ -5,6 +5,8 @@
     Submit a new sighting!
   </div>
   <div class="collapse-content bg-base-200">
-    Looks like you've already sent a sighting recently!  Please try again tomorrow.
+    <div class="p-4">
+      Looks like you've already sent a sighting recently!  Please try again tomorrow.
+    </div>
   </div>
 </div>
