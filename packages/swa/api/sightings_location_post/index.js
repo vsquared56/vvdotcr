@@ -27,6 +27,13 @@ export default async (context, req) => {
       body: "Sighting location updates requires a valid session token."
     };
     return;
+  } else if (sighting.submissionStatus !== "locationRequest") {
+    console.log(`Invalid attempt to update locations for sighting ${sighting.id}`);
+    context.res = {
+      status: 400,
+      body: "Sighting location not required."
+    };
+    return;
   }
 
   const form = req.parseFormBody();
