@@ -1,6 +1,6 @@
 <div id="message-submit"
      class="collapse collapse-arrow bg-primary"
-     hx-on::after-settle="if(event.detail.target.id==='message-submit'){turnstile.render('#turnstile-message', { sitekey: '<%= it.turnstileSiteKey %>', callback: function(token) {console.log(`Challenge Success ${token}`);},});}">
+     hx-on::after-settle="if(event.detail.target.id==='message-submit'){turnstile.render('#turnstile-message', { sitekey: '<%= it.turnstileSiteKey %>', size:'compact', callback: function(token) {console.log(`Challenge Success ${token}`);},});}">
   <input type="checkbox" checked="true"/>
   <div class="collapse-title text-xl text-primary-content font-medium">
     Send a message!

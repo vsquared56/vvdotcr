@@ -3,7 +3,7 @@
      hx-swap-oob="true"
      <% } %>
      class="collapse collapse-arrow bg-primary"
-     hx-on::after-settle="if(event.detail.target.id==='sighting-submit'){turnstile.render('#turnstile-sighting', { sitekey: '<%= it.turnstileSiteKey %>', callback: function(token) {console.log(`Challenge Success ${token}`);},});}">>
+     hx-on::after-settle="if(event.detail.target.id==='sighting-submit'){turnstile.render('#turnstile-sighting', { sitekey: '<%= it.turnstileSiteKey %>', size:'compact', callback: function(token) {console.log(`Challenge Success ${token}`);},});}">>
   <input type="checkbox" checked="true"/>
   <div class="collapse-title text-xl text-primary-content font-medium">
     Submit a new sighting!
