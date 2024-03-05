@@ -26,7 +26,13 @@ export default async (context, req) => {
   const storage = new utils.Storage;
   var response;
 
-
+  var clientIp = null;
+  if (req.headers.hasOwnProperty("x-forwarded-for")) {
+    clientIp = await utils.parseXff(req.headers["x-forwarded-for"]);
+  }
+  else {
+    clientIp = null;
+  }
 
   const sessionData = await utils.getSession(req.headers.cookie);
   if (sessionData.err) {
@@ -36,14 +42,13 @@ export default async (context, req) => {
       body: "Sighting submissions require a valid session token."
     };
     return;
-  }
-
-  var clientIp = null;
-  if (req.headers.hasOwnProperty("x-forwarded-for")) {
-    clientIp = await utils.parseXff(req.headers["x-forwarded-for"]);
-  }
-  else {
-    clientIp = null;
+  } else if (await utils.isActionRateLimited(clientIp, sessionData.sessionId, "newSighting")) {
+    console.log("Rate limited POST request for new sighting.");
+    context.res = {
+      status: 429,
+      body: "Too many sighting submissions."
+    };
+    return;
   }
 
   const { fields, files } = await parseMultipartFormData.default(req);
@@ -132,6 +137,9 @@ export default async (context, req) => {
       } finally {
         await sbClient.close();
       }
+
+      //Save this action for rate limiting
+      await utils.saveAction(clientIp, sessionData.sessionId, "newSighting", sightingId);
 
       response = eta.render(
         "./sighting_submit/submitted",

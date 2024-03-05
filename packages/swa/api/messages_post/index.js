@@ -32,127 +32,136 @@ export default async (context, req) => {
       status: 401,
       body: "Message submissions require a valid session token."
     };
+    return;
+  } else if (await utils.isActionRateLimited(clientIp, sessionData.sessionId, "newMessage")) {
+    console.log("Rate limited POST request for new messages.");
+    context.res = {
+      status: 429,
+      body: "Too many message submissions."
+    };
+    return;
+  }
+  const formDefinition = [
+    {
+      name: "driving",
+      type: "formToggle",
+      subItems: [
+        { name: "speed", type: "select", validValues: ["faster", "slower", "ok"] }
+      ]
+    },
+    {
+      name: "parking",
+      type: "formToggle",
+      subItems: [
+        { name: "parkingQuality", type: "select", validValues: ["bad", "too-close", "too-far", "ok"] }
+      ]
+    },
+    {
+      name: "rating",
+      type: "formToggle",
+      subItems: [
+        { name: "ratingValue", type: "int", min: 1, max: 5 },
+        { name: "ratingType", type: "toggle", offValue: "starRating", onValue: "gtaRating" }
+      ]
+    },
+    {
+      name: "locationEnable",
+      type: "toggle",
+      offValue: "locationNotShared",
+      onValue: "locationShared"
+    }
+  ];
+
+  const form = req.parseFormBody();
+  try {
+    var badRequest = false;
+    var formResults = utils.processFormItems(form, formDefinition);
+  }
+  catch (e) {
+    console.log(e);
+    badRequest = true;
+  }
+
+  if (badRequest) {
+    context.res = {
+      status: 400,
+      body: ""
+    };
   } else {
+    const messageLocation = utils.parseLocationForm(form);
 
-    const formDefinition = [
-      {
-        name: "driving",
-        type: "formToggle",
-        subItems: [
-          { name: "speed", type: "select", validValues: ["faster", "slower", "ok"] }
-        ]
-      },
-      {
-        name: "parking",
-        type: "formToggle",
-        subItems: [
-          { name: "parkingQuality", type: "select", validValues: ["bad", "too-close", "too-far", "ok"] }
-        ]
-      },
-      {
-        name: "rating",
-        type: "formToggle",
-        subItems: [
-          { name: "ratingValue", type: "int", min: 1, max: 5 },
-          { name: "ratingType", type: "toggle", offValue: "starRating", onValue: "gtaRating" }
-        ]
-      },
-      {
-        name: "locationEnable",
-        type: "toggle",
-        offValue: "locationNotShared",
-        onValue: "locationShared"
-      }
-    ];
+    const minLocationAccuracy = await db.getSetting("min_location_accuracy_meters");
 
-    const form = req.parseFormBody();
-    try {
-      var badRequest = false;
-      var formResults = utils.processFormItems(form, formDefinition);
-    }
-    catch (e) {
-      console.log(e);
-      badRequest = true;
-    }
-
-    if (badRequest) {
-      context.res = {
-        status: 400,
-        body: ""
-      };
+    if (!messageLocation) {
+      notificationStatusReason = 'missingLocation';
+    } else if (messageLocation.latitude.accuracy > minLocationAccuracy) {
+      notificationStatusReason = 'inaccurateBrowserLocation';
     } else {
-      const messageLocation = utils.parseLocationForm(form);
+      const validLocations = await db.getSetting("valid_locations");
+      const locationValid = utils.isLocationInFeatureCollection(messageLocation, validLocations);
 
-      const minLocationAccuracy = await db.getSetting("min_location_accuracy_meters");
-
-      if (!messageLocation) {
-        notificationStatusReason = 'missingLocation';
-      } else if (messageLocation.latitude.accuracy > minLocationAccuracy) {
-        notificationStatusReason = 'inaccurateBrowserLocation';
+      if (!locationValid) {
+        notificationStatusReason = 'invalidLocation';
       } else {
-        const validLocations = await db.getSetting("valid_locations");
-        const locationValid = utils.isLocationInFeatureCollection(messageLocation, validLocations);
-
-        if (!locationValid) {
-          notificationStatusReason = 'invalidLocation';
-        } else {
-          notificationStatusReason = 'validLocation';
-        }
+        notificationStatusReason = 'validLocation';
       }
-
-      const notificationSettings = await db.getSetting("message_push_notifications");
-      const pushNotification = notificationSettings[notificationStatusReason];
-      var notificationStatus;
-      if (pushNotification) {
-        notificationStatus = { batch: { status: null, notificationId: null }, push: { status: "queued", notificationId: null } };
-      } else {
-        notificationStatus = { batch: { status: "queued", notificationId: null }, push: { status: null, notificationId: null } };
-      }
-
-      const messageId = crypto.randomUUID();
-
-      // Set DB item
-      const createDate = Date.now();
-      const submissionStatus = "saved";
-      const item = {
-        id: messageId,
-        submissionStatus: submissionStatus,
-        originalUserAgent: req.headers['user-agent'],
-        originalXFF: req.headers['x-forwarded-for'],
-        originalIP: clientIp,
-        sessionId: sessionData.sessionId,
-        createDate: createDate,
-        modifyDate: createDate,
-        messageLocation: messageLocation,
-        notificationStatus: notificationStatus,
-        notificationStatusReason: notificationStatusReason,
-        messageData: formResults
-      }
-
-      // Send Service Bus Messages for notifications
-      const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
-      const sbQueue = pushNotification ? "immediate-notifications" : "batch-notifications";
-      const sbSender = sbClient.createSender(sbQueue);
-      try {
-        await sbSender.sendMessages({ body: { notificationType: "message", id: messageId } });
-      } finally {
-        await sbClient.close();
-      }
-
-      //Save message to CosmosDB
-      await db.saveMessage(item);
-
-      response = eta.render(
-        "./message_submit/submitted",
-        {
-          message: item
-        }
-      );
-
-      context.res = {
-        status: 200,
-        body: response
-      };
     }
+
+    const notificationSettings = await db.getSetting("message_push_notifications");
+    const pushNotification = notificationSettings[notificationStatusReason];
+    var notificationStatus;
+    if (pushNotification) {
+      notificationStatus = { batch: { status: null, notificationId: null }, push: { status: "queued", notificationId: null } };
+    } else {
+      notificationStatus = { batch: { status: "queued", notificationId: null }, push: { status: null, notificationId: null } };
+    }
+
+    const messageId = crypto.randomUUID();
+
+    // Set DB item
+    const createDate = Date.now();
+    const submissionStatus = "saved";
+    const item = {
+      id: messageId,
+      submissionStatus: submissionStatus,
+      originalUserAgent: req.headers['user-agent'],
+      originalXFF: req.headers['x-forwarded-for'],
+      originalIP: clientIp,
+      sessionId: sessionData.sessionId,
+      createDate: createDate,
+      modifyDate: createDate,
+      messageLocation: messageLocation,
+      notificationStatus: notificationStatus,
+      notificationStatusReason: notificationStatusReason,
+      messageData: formResults
+    }
+
+    // Send Service Bus Messages for notifications
+    const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
+    const sbQueue = pushNotification ? "immediate-notifications" : "batch-notifications";
+    const sbSender = sbClient.createSender(sbQueue);
+    try {
+      await sbSender.sendMessages({ body: { notificationType: "message", id: messageId } });
+    } finally {
+      await sbClient.close();
+    }
+
+    //Save message to CosmosDB
+    await db.saveMessage(item);
+
+    //Save this action for rate limiting
+    await utils.saveAction(clientIp, sessionData.sessionId, "newMessage", messageId);
+
+    response = eta.render(
+      "./message_submit/submitted",
+      {
+        message: item
+      }
+    );
+
+    context.res = {
+      status: 200,
+      body: response
+    };
   }
 };

@@ -4,11 +4,36 @@ export class Database {
     constructor() {
         this.client = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
         this.database = this.client.database(process.env.COSMOS_DB_DATABASE_NAME);
+        this.actionsContainer = this.database.container("vvdotcr-actions-dev");
         this.messagesContainer = this.database.container("vvdotcr-messages-dev");
         this.notificationsContainer = this.database.container("vvdotcr-notifications-dev");
         this.sessionsContainer = this.database.container("vvdotcr-sessions-dev");
         this.settingsContainer = this.database.container("vvdotcr-settings-dev");
         this.sightingsContainer = this.database.container("vvdotcr-sightings-dev");
+    }
+
+    async saveAction(action) {
+        action.modifyDate = Date.now();
+        const { upsert } = await this.actionsContainer.items.upsert(action);
+    }
+
+    async countActions(actionType, originatorType, originatorValue, minCreateDate) {
+        var querySpec;
+        if (originatorType === "ip") {
+            querySpec = {
+                query: `SELECT VALUE COUNT(c.id) FROM actions c WHERE c.actionType = '${actionType}' AND c.ip = '${originatorValue}' AND c.createDate > ${minCreateDate}`
+            };
+        } else if (originatorType === "session") {
+            querySpec = {
+                query: `SELECT VALUE COUNT(c.id) FROM actions c WHERE c.actionType = '${actionType}' AND c.session = '${originatorValue}' AND c.createDate > ${minCreateDate}`
+            };
+        }
+
+        const results = await this.actionsContainer.items.query(querySpec, {
+            partitionKey: undefined
+        }).fetchNext();
+
+        return results.resources[0];
     }
 
     async getMessage(id) {

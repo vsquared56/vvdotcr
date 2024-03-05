@@ -77,3 +77,44 @@ export async function getResponseCookie(sessionData) {
     throw new Error("Calling getResponseCookie() with invalid sessionData");
   }
 }
+
+export async function isActionRateLimited(ip, session, actionType) {
+  const db = new Database;
+
+  const rateLimits = await db.getSetting("action_rate_limits");
+  var isRateLimited = false;
+  for (var limit of rateLimits) {
+    if (limit.actionType === actionType) {
+      var recentActions;
+      if (limit.originatorType === "ip") {
+        recentActions = await db.countActions(actionType, "ip", ip, (Date.now() - limit.seconds * 1000));
+      } else if (limit.originatorType === "session") {
+        recentActions = await db.countActions(actionType, "session", session, (Date.now() - limit.seconds * 1000));
+      } else {
+        throw new Error("Invalid rate limit in action_rate_limits");
+      }
+
+      if (recentActions >= limit.limit) {
+        isRateLimited = true;
+      }
+    }
+  }
+
+  return isRateLimited;
+}
+
+export async function saveAction(ip, session, actionType, actionTarget) {
+  const db = new Database;
+  const actionId = uuidv4();
+  const createDate = Date.now();
+  const actionItem = {
+    id: actionId,
+    createDate: createDate,
+    modifyDate: createDate,
+    ip: ip,
+    session: session,
+    actionType: actionType,
+    actionTarget: actionTarget
+  }
+  return db.saveAction(actionItem);
+}

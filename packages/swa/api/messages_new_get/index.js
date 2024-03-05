@@ -65,19 +65,26 @@ export default async (context, req) => {
           );
         }
       } else {
-        var locationPermission;
-        if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
-          locationPermission = req.query.locationPermission;
+        if (await utils.isActionRateLimited(clientIp, sessionData.sessionId, "newMessage")) {
+          response = eta.render(
+            "./message_submit/rate_limited",
+            null
+          );
         } else {
-          throw new Error("Invalid locationPermission query parameter.");
-        }
-        response = eta.render(
-          "./message_submit/new",
-          {
-            locationEnabled: true,
-            locationPermission: locationPermission
+          var locationPermission;
+          if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
+            locationPermission = req.query.locationPermission;
+          } else {
+            throw new Error("Invalid locationPermission query parameter.");
           }
-        );
+          response = eta.render(
+            "./message_submit/new",
+            {
+              locationEnabled: true,
+              locationPermission: locationPermission
+            }
+          );
+        }
       }
     }
 
