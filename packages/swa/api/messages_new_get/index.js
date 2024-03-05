@@ -3,6 +3,8 @@ import * as path from "path";
 
 import * as utils from "@vvdotcr/common";
 
+const turnstileSiteKey = process.env.TURNSTILE_SITE_KEY;
+
 export default async (context, req) => {
   const eta = new Eta(
     {
@@ -81,7 +83,8 @@ export default async (context, req) => {
             "./message_submit/new",
             {
               locationEnabled: true,
-              locationPermission: locationPermission
+              locationPermission: locationPermission,
+              turnstileSiteKey: turnstileSiteKey
             }
           );
         }

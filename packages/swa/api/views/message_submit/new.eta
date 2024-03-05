@@ -1,5 +1,6 @@
 <div id="message-submit"
-     class="collapse collapse-arrow bg-primary">
+     class="collapse collapse-arrow bg-primary"
+     hx-on::after-settle="if(event.detail.target.id==='message-submit'){turnstile.render('#turnstile-message', { sitekey: '<%= it.turnstileSiteKey %>', callback: function(token) {console.log(`Challenge Success ${token}`);},});}">
   <input type="checkbox" checked="true"/>
   <div class="collapse-title text-xl text-primary-content font-medium">
     Send a message!
@@ -95,6 +96,7 @@
           <div class="collapse-content bg-base-300">
             <div class="flex flex-col gap-4 p-4">
               <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
+              <div id="turnstile-message"></div>
               <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
             </div>
           </div>    
