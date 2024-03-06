@@ -95,13 +95,13 @@
           </div>
           <div class="collapse-content bg-base-300 px-0">
             <div class="flex flex-row flex-wrap justify-center items-stretch">
-              <div class="min-w-[304px] w-3/12 gap-4 px-1.5 py-4 max-w-full shrink grow">
+              <div class="min-w-[304px] w-3/12 gap-4 px-1.5 py-4 max-w-full shrink grow flex justify-center items-center">
                 <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
               </div>
-              <div class="min-w-[304px] w-3/12 gap-4 px-1.5 py-4 max-w-full grow">
+              <div class="min-w-[304px] w-3/12 gap-4 px-1.5 py-4 max-w-full grow flex justify-center items-center">
                 <div id="turnstile-message" class="w-[304px] h-[69px] rounded-btn overflow-clip border-2 border-secondary"></div>
               </div>
-              <div class="min-w-[304px] w-3/12 gap-4 px-1.5 py-4 max-w-full shrink grow">
+              <div class="min-w-[304px] w-3/12 gap-4 px-1.5 py-4 max-w-full shrink grow flex justify-center items-center">
                 <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
               </div>
             </div>

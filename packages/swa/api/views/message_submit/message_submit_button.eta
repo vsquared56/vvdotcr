@@ -1,5 +1,5 @@
 <button id="message-submit-button"
-        class="btn btn-primary h-[69px]"
+        class="btn btn-primary min-w-[304px] h-[69px]"
         <% if (!it.submitEnabled) { %>
         disabled="disabled"
         <% } %>

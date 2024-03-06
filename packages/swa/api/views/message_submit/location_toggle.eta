@@ -1,4 +1,4 @@
-<div id="location-toggle" class="form-control px-2">
+<div id="location-toggle" class="flex flex-col flex-nowrap items-center form-control rounded-btn border-2 border-secondary p-4 bg-neutral-800">
   Can we grab your location?
   <label class="label cursor-pointer flex flex-nowrap	justify-start gap-4">
     <span class="label-text">Deny location</span> 
