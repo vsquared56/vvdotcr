@@ -94,15 +94,15 @@
             Send!
           </div>
           <div class="collapse-content bg-base-300 px-0">
-            <div class="flex flex-col justify-items-center gap-4 py-4">
-              <div class="px-1.5">
+            <div class="flex flex-row flex-wrap justify-center items-stretch">
+              <div class="min-w-[304px] w-3/12 gap-4 px-1.5 py-4 max-w-full shrink grow">
                 <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
               </div>
-              <div class="flex flex-row flex-wrap gap-4">
-                <div id="turnstile-message" class="rounded-btn overflow-clip border-2 border-secondary"></div>
-                <div class="px-1.5">
-                  <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
-                </div>
+              <div class="min-w-[304px] w-3/12 gap-4 px-1.5 py-4 max-w-full grow">
+                <div id="turnstile-message" class="w-[304px] h-[69px] rounded-btn overflow-clip border-2 border-secondary"></div>
+              </div>
+              <div class="min-w-[304px] w-3/12 gap-4 px-1.5 py-4 max-w-full shrink grow">
+                <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
               </div>
             </div>
           </div>    
