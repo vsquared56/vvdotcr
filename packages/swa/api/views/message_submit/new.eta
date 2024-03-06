@@ -1,23 +1,23 @@
 <div id="message-submit"
      class="collapse collapse-arrow bg-primary"
-     hx-on::after-settle="if(event.detail.target.id==='message-submit'){turnstile.render('#turnstile-message', { sitekey: '<%= it.turnstileSiteKey %>', callback: function(token) {console.log(`Challenge Success ${token}`);},});}">
+     hx-on::after-settle="if(event.detail.target.id==='message-submit'){turnstile.render('#turnstile-message', { sitekey: '<%= it.turnstileSiteKey %>', theme: 'dark', callback: function(token) {console.log(`Challenge Success ${token}`);},});}">
   <input type="checkbox" checked="true"/>
   <div class="collapse-title text-xl text-primary-content font-medium">
     Send a message!
   </div>
-  <div class="collapse-content bg-base-200">
+  <div class="collapse-content bg-base-200 px-1.5">
     <form id="message-form"
           hx-post="/api/messages"
           hx-swap="beforeend"
           hx-on::confirm="addLocationParams(event, 'message-form', 'location-enable');">
-      <div class="flex flex-row flex-wrap gap-4 p-4">
-        <div id="message-driving-form" class="collapse collapse-plus bg-secondary min-w-64 w-3/12 max-w-full shrink grow h-fit" >
+      <div class="flex flex-row flex-wrap gap-4 px-1.5 py-4">
+        <div id="message-driving-form" class="collapse collapse-plus bg-secondary border border-secondary min-w-64 w-3/12 max-w-full shrink grow h-fit" >
           <%~ include("./message_form_checkbox", { checkboxName: "driving", formEnabled: false, updateSubmit: false }) %>
           <div class="collapse-title text-xl text-secondary-content font-medium">
             How am I driving?
           </div>
           <div class="collapse-content bg-base-300">
-            <div class="flex flex-col gap-4 p-4">
+            <div class="flex flex-col gap-4 px-1.5 py-4">
               <div><input type="radio" name="speed" value="faster" class="radio" /> Speed it up!</div>
               <div><input type="radio" name="speed" value="slower" class="radio" /> Slow down!</div>
               <div><input type="radio" name="speed" value="ok" class="radio" checked /> Just right</div>
@@ -25,13 +25,13 @@
           </div>
         </div>
 
-        <div id="message-parking-form" class="collapse collapse-plus bg-secondary min-w-64 w-3/12 max-w-full shrink grow h-fit" >
+        <div id="message-parking-form" class="collapse collapse-plus bg-secondary border border-secondary min-w-64 w-3/12 max-w-full shrink grow h-fit" >
           <%~ include("./message_form_checkbox", { checkboxName: "parking", formEnabled: false, updateSubmit: false }) %>
           <div class="collapse-title text-xl text-secondary-content font-medium">
             Parking problems?
           </div>
           <div class="collapse-content bg-base-300">
-            <div class="flex flex-col gap-4 p-4">
+            <div class="flex flex-col gap-4 px-1.5 py-4">
               <div><input type="radio" name="parkingQuality" value="bad" class="radio" /> Get a coloring book and practice staying within the lines!</div>
               <div><input type="radio" name="parkingQuality" value="too-close" class="radio" /> Parked too close, I had to climb in through the window!</div>
               <div><input type="radio" name="parkingQuality" value="too-far" class="radio" /> It's the city, don't waste so much space!</div>
@@ -40,12 +40,12 @@
           </div>
         </div>
 
-        <div id="message-rating-form" class="collapse collapse-plus bg-secondary min-w-64 w-3/12 max-w-full shrink grow h-fit">
+        <div id="message-rating-form" class="collapse collapse-plus bg-secondary border border-secondary min-w-64 w-3/12 max-w-full shrink grow h-fit">
           <%~ include("./message_form_checkbox", { checkboxName: "rating", formEnabled: false, updateSubmit: false }) %>
           <div class="collapse-title text-xl text-secondary-content font-medium">
             Leave some stars!
           </div>
-          <div class="collapse-content bg-base-300">
+          <div class="collapse-content bg-base-300 ">
             <script>
               function toggleStarColor(event) {
                 var stars = document.getElementsByClassName("mask-star");
@@ -62,7 +62,7 @@
                 }
               }
             </script>
-            <div class="flex flex-col gap-4 p-4">
+            <div class="flex flex-col gap-4 px-1.5 py-4">
               <div class="rating rating-lg">
                 <input type="radio" name="ratingValue" value=1 class="mask mask-star bg-yellow-300" />
                 <input type="radio" name="ratingValue" value=2 class="mask mask-star bg-yellow-300" />
@@ -88,16 +88,22 @@
       
       <div class="separator"></div>
       
-      <div class="p-4">
-        <div id="message-send" class="collapse collapse-open bg-secondary">
+      <div class="px-1.5 py-4">
+        <div id="message-send" class="collapse collapse-open bg-secondary border border-secondary">
           <div class="collapse-title text-xl text-secondary-content font-medium">
             Send!
           </div>
-          <div class="collapse-content bg-base-300">
-            <div class="flex flex-col gap-4 p-4">
-              <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
-              <div id="turnstile-message"></div>
-              <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
+          <div class="collapse-content bg-base-300 px-0">
+            <div class="flex flex-col justify-items-center gap-4 py-4">
+              <div class="px-1.5">
+                <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
+              </div>
+              <div class="flex flex-row flex-wrap gap-4">
+                <div id="turnstile-message" class="rounded-btn overflow-clip border-2 border-secondary"></div>
+                <div class="px-1.5">
+                  <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
+                </div>
+              </div>
             </div>
           </div>    
         </div>
