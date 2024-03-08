@@ -142,7 +142,7 @@ export default async (context, req) => {
       await utils.saveAction(clientIp, sessionData.sessionId, "newSighting", sightingId);
 
       response = eta.render(
-        "./sighting_submit/submitted",
+        "./sighting_submit/status_recheck",
         {
           sighting: item,
           submissionStatus: submissionStatus,

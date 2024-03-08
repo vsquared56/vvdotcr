@@ -27,11 +27,7 @@ export default async (context, req) => {
     };
   } else {
     var response;
-    if (req.query.finished) {
-      response = eta.render(
-        "./sighting_submit/finished"
-      );
-    } else if (await utils.isActionRateLimited(clientIp, sessionData.sessionId, "newSighting")) {
+    if (await utils.isActionRateLimited(clientIp, sessionData.sessionId, "newSighting")) {
       response = eta.render(
         "./sighting_submit/rate_limited",
         null

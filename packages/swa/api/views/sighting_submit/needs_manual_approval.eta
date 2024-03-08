@@ -1,8 +1,21 @@
-<div class="modal-box" hx-target="this" hx-swap="outerHTML">
-  <h3 class="font-bold text-lg">Your submission will need manual approval!</h3>
-  <p class="py-4"><%= it.sighting.id %></p>
-  <p class="py-4"><%= it.imageData %></p>
-  <div class="modal-action">
-    <button class="btn btn-primary" hx-get="/api/sightings/new?finished=true" hx-swap="outerHTML" hx-target="#submission-status">OK!</button>
+<div id="sighting-submit-status"
+     class="modal-box flex flex-col justify-normal w-11/12 md:w-10/12 lg:w-7/12 xl:w-6/12 h-min p-0 overflow-hidden border-2 border-accent bg-base-100">
+  <div class="navbar bg-base-100 min-h-8">
+    <div class="navbar-start"></div>
+    <div class="navbar-center">Check back soon!</div>
+    <div class="navbar-end">
+      <button class="btn btn-sm btn-circle btn-ghost"
+        hx-on:click="htmx.find('#sighting-submit').close();htmx.find('#sighting-submit').outerHTML='';">✕</button>
+    </div>
   </div>
+  <div class="px-1.5 py-4">
+    Your sighting was saved, but an actual human will have to take a look.  It'll need manual approval, but check back soon to see if it's posted!
+  </div>
+  <div class="modal-action">
+    <button class="btn btn-secondary"
+            hx-on:click="htmx.find('#sighting-submit').close();htmx.find('#sighting-submit').outerHTML='';">Close</button>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button hx-on:click="htmx.find('#sighting-submit').close();htmx.find('#sighting-submit').outerHTML='';">Close</button>
+  </form>
 </div>
