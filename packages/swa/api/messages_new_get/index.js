@@ -2,6 +2,7 @@ import { Eta } from "eta";
 import * as path from "path";
 
 import * as utils from "@vvdotcr/common";
+import { truncate } from "fs";
 
 const turnstileSiteKey = process.env.TURNSTILE_SITE_KEY;
 
@@ -53,6 +54,7 @@ export default async (context, req) => {
             }
           );
         } else if (formName === "location") {
+          var locationPermission;
           if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
             locationPermission = req.query.locationPermission;
           } else {
@@ -66,10 +68,16 @@ export default async (context, req) => {
             }
           );
         } else if (formName === "submit") {
+          var locationPermission;
+          if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
+            locationPermission = req.query.locationPermission;
+          } else {
+            throw new Error("Invalid locationPermission query parameter.");
+          }
           response = eta.render(
             "./message_submit/submit_modal",
             {
-              locationEnabled: req.query["locationEnable"] === "on",
+              locationEnabled: true,
               locationPermission: locationPermission,
               turnstileSiteKey: turnstileSiteKey
             }
@@ -82,12 +90,6 @@ export default async (context, req) => {
             null
           );
         } else {
-          var locationPermission;
-          if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
-            locationPermission = req.query.locationPermission;
-          } else {
-            throw new Error("Invalid locationPermission query parameter.");
-          }
           response = eta.render(
             "./message_submit/new",
             null
