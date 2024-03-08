@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors');
 module.exports = {
   content: ["./packages/swa/src/*.{html,css}","./packages/swa/api/views/**"],
   theme: {
@@ -15,6 +16,9 @@ module.exports = {
         800: '#000000e0',
         900: '#000000ff',
       },
+      yellow: colors.yellow,
+      blue: colors.blue,
+      neutral: colors.neutral
     }
   },
   plugins: [require("daisyui")],
