@@ -41,7 +41,7 @@
       </div>
       <div class="min-w-[304px] row-span-1">
         <button id="message-send-button"
-                class="btn btn-primary min-w-[300px] h-[69px] border-2 border-primary disabled:bg-neutral-800 disabled:border-primary"
+                class="btn btn-primary min-w-[300px] h-[69px] border-2 border-primary disabled:bg-neutral disabled:border-primary disabled:text-neutral-content"
                 disabled="disabled">
           Please verify you're not a bot
         </button>
