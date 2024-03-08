@@ -1,6 +1,5 @@
-<div id="message-submit"
-     class="collapse collapse-arrow bg-primary"
-     hx-on::after-settle="if(event.detail.target.id==='message-submit'){turnstile.render('#turnstile-message', { sitekey: '<%= it.turnstileSiteKey %>', theme: 'dark', callback: function(token) {console.log(`Challenge Success ${token}`);},});}">
+<div id="message-collapse"
+     class="collapse collapse-arrow bg-primary">
   <input type="checkbox" checked="true"/>
   <div class="collapse-title text-xl text-primary-content font-medium">
     Send a message!
@@ -8,8 +7,9 @@
   <div class="collapse-content bg-base-200 px-1.5">
     <form id="message-form"
           hx-post="/api/messages"
-          hx-swap="beforeend"
-          hx-on::confirm="addLocationParams(event, 'message-form', 'location-enable');">
+          hx-target="#message-submit"
+          hx-swap="outerHTML"
+          hx-on::confirm="console.log(event);addLocationParams(event, 'message-form', 'location-enable');">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 xl:gap-8 justify-items-center items-start px-1.5 py-4">
         <div id="message-driving-form" class="collapse collapse-plus bg-secondary border border-secondary" >
           <%~ include("./message_form_checkbox", { checkboxName: "driving", formEnabled: false, updateSubmit: false }) %>
@@ -84,24 +84,8 @@
             </div>
           </div>
         </div>
-
-        <div id="message-send" class="col-span-full collapse collapse-open bg-secondary border border-secondary">
-          <div class="collapse-title text-xl text-secondary-content font-medium">
-            Send!
-          </div>
-          <div class="collapse-content bg-base-300 px-0">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start  px-1.5 py-4">
-              <div class="min-w-[304px] row-span-2">
-                <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
-              </div>
-              <div class="min-w-[304px] row-span-1">
-                <div id="turnstile-message" class="w-[304px] h-[69px] rounded-btn overflow-clip border-2 border-secondary"></div>
-              </div>
-              <div class="min-w-[304px] row-span-1">
-                <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
-              </div>
-            </div>
-          </div>    
+        <div class="col-span-1 md:col-span-2 lg:col-span-3">
+          <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
         </div>
       </div>
     </form>

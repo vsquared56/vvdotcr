@@ -65,6 +65,15 @@ export default async (context, req) => {
               locationPermission: locationPermission
             }
           );
+        } else if (formName === "submit") {
+          response = eta.render(
+            "./message_submit/submit_modal",
+            {
+              locationEnabled: req.query["locationEnable"] === "on",
+              locationPermission: locationPermission,
+              turnstileSiteKey: turnstileSiteKey
+            }
+          );
         }
       } else {
         if (await utils.isActionRateLimited(clientIp, sessionData.sessionId, "newMessage")) {
@@ -81,11 +90,7 @@ export default async (context, req) => {
           }
           response = eta.render(
             "./message_submit/new",
-            {
-              locationEnabled: true,
-              locationPermission: locationPermission,
-              turnstileSiteKey: turnstileSiteKey
-            }
+            null
           );
         }
       }

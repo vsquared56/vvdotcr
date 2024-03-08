@@ -1,4 +1,4 @@
-<dialog id="submission-status" class="modal" hx-on::load="htmx.find('#submission-status').showModal()">
+<dialog id="message-submit" class="modal" hx-on::load="htmx.find('#message-submit').showModal()">
   <div class="modal-box" hx-target="this" hx-swap="outerHTML">
     <h3 class="font-bold text-lg">Thanks for the feedback!</h3>
     <% if (it.message.notificationStatusReason === "validLocation" ) { %>
@@ -10,9 +10,7 @@
     <% } %>
     <div class="modal-action">
       <button class="btn btn-primary"
-              hx-get="/api/messages/new?finished=true"
-              hx-swap="outerHTML"
-              hx-target="#submission-status">
+              hx-get="/api/messages/new?finished=true">
         OK!
       </button>
     </div>

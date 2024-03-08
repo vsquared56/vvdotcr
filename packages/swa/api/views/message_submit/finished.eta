@@ -1,4 +1,4 @@
-<div id="message-submit"
+<div id="message-collapse"
      class="collapse bg-primary"
      hx-get="/api/messages/new"
      hx-trigger="click"

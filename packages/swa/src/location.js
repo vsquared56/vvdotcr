@@ -41,7 +41,7 @@ function finishPermissionsQuery(event, result) {
 
 function addLocationParams(event, targetId, toggleId) {
   // Optionally filter events by their target
-  if (!targetId || event.detail.target.id === targetId) {
+  if (!targetId || event.target.id === targetId) {
     // Optionally enable or disable location sending with a checkbox ID
     if (!toggleId || htmx.find(`#${toggleId}`).checked) {
       event.preventDefault();

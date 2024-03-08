@@ -1,0 +1,39 @@
+<dialog id="message-submit"
+        class="modal"
+        hx-on::load="turnstile.render('#turnstile-message', { sitekey: '<%= it.turnstileSiteKey %>', theme: 'dark', callback: function(token) {console.log(`Challenge Success ${token}`);},});htmx.find('#message-submit').showModal();">
+  <div class="flex flex-col justify-normal modal-box w-11/12 md:w-10/12 lg:w-7/12 xl:w-6/12 h-min p-0 overflow-hidden bg-gray-600"
+    hx-target="this" hx-swap="outerHTML">
+    <div class="navbar bg-base-100 min-h-8">
+      <div class="navbar-start">
+        <button class="btn btn-square btn-ghost btn-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            class="inline-block w-5 h-5 stroke-current">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="navbar-center">Submit messages</div>
+      <div class="navbar-end">
+        <button class="btn btn-sm btn-circle btn-ghost"
+          hx-on:click="htmx.find('#message-submit').close();htmx.find('#message-submit').outerHTML='';">✕</button>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start  px-1.5 py-4">
+      <div class="min-w-[304px] row-span-2">
+        <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
+      </div>
+      <div class="min-w-[304px] row-span-1">
+        <div id="turnstile-message" class="w-[304px] h-[69px] rounded-btn overflow-clip border-2 border-secondary"></div>
+      </div>
+      <div class="min-w-[304px] row-span-1">
+        <button id="message-send-button"
+                class="btn btn-primary min-w-[300px] h-[69px] border-2 border-primary disabled:bg-neutral-800 disabled:border-primary">
+          Send!
+        </button>
+      </div>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button hx-on:click="htmx.find('#message-submit').close();htmx.find('#message-submit').outerHTML='';">Close</button>
+  </form>
+</dialog>
