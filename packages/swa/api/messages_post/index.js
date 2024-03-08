@@ -153,7 +153,7 @@ export default async (context, req) => {
     await utils.saveAction(clientIp, sessionData.sessionId, "newMessage", messageId);
 
     response = eta.render(
-      "./message_submit/submitted",
+      "./message_submit/submitted_modal",
       {
         message: item
       }
