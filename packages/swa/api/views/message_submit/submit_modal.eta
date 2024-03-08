@@ -1,6 +1,6 @@
 <dialog id="message-submit"
         class="modal"
-        hx-on::load="if(event.target.id==='message-submit'){turnstile.render('#turnstile-message', { sitekey: '<%= it.turnstileSiteKey %>', theme: 'dark', callback: function(token) {console.log(`Challenge Success ${token}`);},});htmx.find('#message-submit').showModal();}">
+        hx-on::load="if(event.target.id==='message-submit'){turnstile.render('#turnstile-message', { sitekey: '<%= it.turnstileSiteKey %>', theme: 'dark', callback: function(token) {document.getElementById('message-send-button').disabled = false;},});htmx.find('#message-submit').showModal();}">
   <div class="flex flex-col justify-normal modal-box w-11/12 md:w-10/12 lg:w-7/12 xl:w-6/12 h-min p-0 overflow-hidden bg-gray-600"
     hx-target="this" hx-swap="outerHTML">
     <div class="navbar bg-base-100 min-h-8">
@@ -27,7 +27,8 @@
       </div>
       <div class="min-w-[304px] row-span-1">
         <button id="message-send-button"
-                class="btn btn-primary min-w-[300px] h-[69px] border-2 border-primary disabled:bg-neutral-800 disabled:border-primary">
+                class="btn btn-primary min-w-[300px] h-[69px] border-2 border-primary disabled:bg-neutral-800 disabled:border-primary"
+                disabled="disabled">
           Send!
         </button>
       </div>
