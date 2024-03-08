@@ -22,7 +22,7 @@
       button.innerHTML = "Send!";
     }
   </script>
-  <div class="flex flex-col justify-normal modal-box w-11/12 md:w-10/12 lg:w-7/12 xl:w-6/12 h-min p-0 overflow-hidden bg-gray-600"
+  <div class="modal-box flex flex-col justify-normal w-11/12 md:w-10/12 lg:w-7/12 xl:w-6/12 h-min p-0 overflow-hidden bg-gray-600"
     hx-target="this" hx-swap="outerHTML">
     <div class="navbar bg-base-100 min-h-8">
       <div class="navbar-start">
@@ -39,7 +39,7 @@
           hx-on:click="htmx.find('#message-submit').close();htmx.find('#message-submit').outerHTML='';">✕</button>
       </div>
     </div>
-    <div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start  px-1.5 py-4">
+    <div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start px-1.5 py-4">
       <div class="min-w-[304px] row-span-2">
         <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
       </div>
