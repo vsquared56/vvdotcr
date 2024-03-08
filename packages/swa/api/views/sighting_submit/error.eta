@@ -1,4 +1,4 @@
-<dialog id="submission-status" class="modal" hx-on::load="htmx.find('#submission-status').showModal()">
+<dialog id="submission-status" class="modal bg-transparent-black-700" hx-on::load="htmx.find('#submission-status').showModal()">
   <div class="modal-box" hx-target="this" hx-swap="outerHTML">
     <h3 class="font-bold text-lg">Submission error!</h3>
     <p class="py-4"><%= it.error %></p>

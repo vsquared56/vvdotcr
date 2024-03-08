@@ -1,4 +1,6 @@
-<dialog id="message-submit" class="modal" hx-on::load="htmx.find('#message-submit').showModal()">
+<dialog id="message-submit"
+        class="modal bg-transparent-black-700"
+        hx-on::load="htmx.find('#message-submit').showModal()">
   <div class="modal-box" hx-target="this" hx-swap="outerHTML">
     <h3 class="font-bold text-lg">Thanks for the feedback!</h3>
     <% if (it.message.notificationStatusReason === "validLocation" ) { %>

@@ -1,5 +1,5 @@
 <dialog id="message-submit"
-        class="modal"
+        class="modal bg-transparent-black-700"
         hx-on::load="renderModal(event);">
   <script>
     function renderModal(event) {
