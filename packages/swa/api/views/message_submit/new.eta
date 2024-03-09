@@ -7,7 +7,7 @@
   <div class="collapse-content bg-base-200 px-1.5">
     <form id="message-form"
           hx-post="/api/messages"
-          hx-target="#message-submit"
+          hx-target="#message-submit-status"
           hx-swap="outerHTML"
           hx-on::confirm="console.log(event);addLocationParams(event, 'message-form', 'location-enable');">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 xl:gap-8 justify-items-center items-start px-1.5 py-4">

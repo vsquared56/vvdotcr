@@ -15,7 +15,12 @@
     <div class="navbar-end">
       <% if (it.closable) { %>
       <button class="btn btn-sm btn-circle btn-ghost"
-        hx-on:click="htmx.find('#<%= it.modalId %>').close();htmx.find('#<%= it.modalId %>').outerHTML='';">✕</button>
+        <% if (it.closeUrl) { %>
+        hx-get="<%= it.closeUrl %>"
+        <%  } else { %>
+        hx-on:click="htmx.find('#<%= it.modalId %>').close();htmx.find('#<%= it.modalId %>').outerHTML='';"
+        <% } %>
+        >✕</button>
       <% } %>
     </div>
   </div>
@@ -25,13 +30,24 @@
   <% if (it.closable) { %>
   <div class="modal-action p-4">
     <button class="btn btn-secondary"
-            hx-on:click="htmx.find('#<%= it.modalId %>').close();htmx.find('#<%= it.modalId %>').outerHTML='';">Close</button>
+            <% if (it.closeUrl) { %>
+            hx-get="<%= it.closeUrl %>"
+            <%  } else { %>
+            hx-on:click="htmx.find('#<%= it.modalId %>').close();htmx.find('#<%= it.modalId %>').outerHTML='';"
+            <% } %>
+            >Close</button>
   </div>
   <% } %>
 </div>
 <% if (it.closable) { %>
 <form method="dialog" class="modal-backdrop">
-  <button hx-on:click="htmx.find('#<%= it.modalId %>').close();htmx.find('#<%= it.modalId %>').outerHTML='';">Close</button>
+  <button
+    <% if (it.closeUrl) { %>
+    hx-get="<%= it.closeUrl %>"
+    <%  } else { %>
+    hx-on:click="htmx.find('#<%= it.modalId %>').close();htmx.find('#<%= it.modalId %>').outerHTML='';"
+    <% } %>
+    >Close</button>
 </form>
 <% } %>
 <% if (it.addSightingBehind) { %>

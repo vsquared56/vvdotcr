@@ -1,31 +1,11 @@
-<dialog id="message-submit"
-        class="modal bg-transparent-black-700"
-        hx-on::load="htmx.find('#message-submit').showModal()">
-  <div class="modal-box flex flex-col justify-normal w-11/12 md:w-10/12 lg:w-7/12 xl:w-6/12 h-min p-0 overflow-hidden border-2 border-accent bg-base-100"
-       hx-target="this"
-       hx-swap="outerHTML">
-    <div class="navbar bg-base-100 min-h-8">
-      <div class="navbar-start"></div>
-      <div class="navbar-center">Thanks for the feedback!</div>
-      <div class="navbar-end">
-        <button class="btn btn-sm btn-circle btn-ghost"
-          hx-get="/api/messages/new?finished=true">✕</button>
-      </div>
-    </div>
-    <div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start p-4 md:p-6 xl:p-8">
-      <% if (it.message.notificationStatusReason === "validLocation" ) { %>
-        <div>Looks like you're near the vv.cr car, so we'll send a notification straight to the driver's phone!</div>
-      <% } %>
-      <% if (it.message.messageData.locationEnable === "locationShared" && !it.message.messageLocation) { %>
-        <div class="divider"></div>
-        <div>You wanted to submit a location with this message, but we didn't get one!  Maybe you have location permissions denied for this site?</div>
-      <% } %>
-      <div class="modal-action">
-        <button class="btn btn-primary"
-                hx-get="/api/messages/new?finished=true">
-          OK!
-        </button>
-      </div>
-    </div>
-  </div>
-</dialog>
+<% layout("../layouts/submit_modal_status", {modalId: "message-submit", statusId: "message-submit-status", title: "Thanks for the feedback!", closable: true, closeUrl: "/api/messages/new?finished=true"}) %>
+
+<div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start p-4 md:p-6 xl:p-8">
+  <% if (it.message.notificationStatusReason === "validLocation" ) { %>
+    <div>Looks like you're near the vv.cr car, so we'll send a notification straight to the driver's phone!</div>
+  <% } %>
+  <% if (it.message.messageData.locationEnable === "locationShared" && !it.message.messageLocation) { %>
+    <div class="divider"></div>
+    <div>You wanted to submit a location with this message, but we didn't get one!  Maybe you have location permissions denied for this site?</div>
+  <% } %>
+</div>

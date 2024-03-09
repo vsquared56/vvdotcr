@@ -1,55 +1,38 @@
-<dialog id="message-submit"
-        class="modal bg-transparent-black-700"
-        hx-on::load="renderModal(event);">
-  <script>
-    function renderModal(event) {
-      if (event.target.id==='message-submit') {
-        turnstile.render(
-          '#turnstile-message',
-          {
-            sitekey: '<%= it.turnstileSiteKey %>',
-            theme: 'dark',
-            callback: turnstileCallback,
-          }
-        );
-        htmx.find('#message-submit').showModal();
-      }
-    }
+<% layout("../layouts/submit_modal_status", {modalId: "message-submit", statusId: "message-submit-status", title: "Send messages", closable: true, fullModal: true, customModalRenderer: 'renderModal(event);'}) %>
 
-    function turnstileCallback(token) {
-      var button = document.getElementById('message-send-button');
-      button.disabled = false;
-      button.innerHTML = "Send!";
+<script>
+  function renderModal(event) {
+    if (event.target.id==='message-submit') {
+      turnstile.render(
+        '#turnstile-message',
+        {
+          sitekey: '<%= it.turnstileSiteKey %>',
+          theme: 'dark',
+          callback: turnstileCallback,
+        }
+      );
+      htmx.find('#message-submit').showModal();
     }
-  </script>
-  <div class="modal-box flex flex-col justify-normal w-11/12 md:w-10/12 lg:w-7/12 xl:w-6/12 h-min p-0 overflow-hidden border-2 border-accent bg-base-100"
-       hx-target="this"
-       hx-swap="outerHTML">
-    <div class="navbar bg-base-100 min-h-8">
-      <div class="navbar-start"></div>
-      <div class="navbar-center">Submit messages</div>
-      <div class="navbar-end">
-        <button class="btn btn-sm btn-circle btn-ghost"
-          hx-on:click="htmx.find('#message-submit').close();htmx.find('#message-submit').outerHTML='';">✕</button>
-      </div>
-    </div>
-    <div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start px-1.5 py-4">
-      <div class="min-w-[304px] row-span-2">
-        <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
-      </div>
-      <div class="min-w-[304px] row-span-1">
-        <div id="turnstile-message" class="w-[304px] h-[69px] rounded-btn overflow-clip border-2 border-secondary"></div>
-      </div>
-      <div class="min-w-[304px] row-span-1">
-        <button id="message-send-button"
-                class="btn btn-primary min-w-[300px] h-[69px] border-2 border-primary disabled:bg-neutral disabled:border-primary disabled:text-neutral-content"
-                disabled="disabled">
-          Please verify you're not a bot
-        </button>
-      </div>
-    </div>
+  }
+
+  function turnstileCallback(token) {
+    var button = document.getElementById('message-send-button');
+    button.disabled = false;
+    button.innerHTML = "Send!";
+  }
+</script>
+<div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start px-1.5 py-4">
+  <div class="min-w-[304px] row-span-2">
+    <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
   </div>
-  <form method="dialog" class="modal-backdrop">
-    <button hx-on:click="htmx.find('#message-submit').close();htmx.find('#message-submit').outerHTML='';">Close</button>
-  </form>
-</dialog>
+  <div class="min-w-[304px] row-span-1">
+    <div id="turnstile-message" class="w-[304px] h-[69px] rounded-btn overflow-clip border-2 border-secondary"></div>
+  </div>
+  <div class="min-w-[304px] row-span-1">
+    <button id="message-send-button"
+            class="btn btn-primary min-w-[300px] h-[69px] border-2 border-primary disabled:bg-neutral disabled:border-primary disabled:text-neutral-content"
+            disabled="disabled">
+      Please verify you're not a bot
+    </button>
+  </div>
+</div>
