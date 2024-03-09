@@ -17,6 +17,7 @@
     "@turf/circle": "^6.5.0",
     "cookie": "^0.6.0",
     "ip-range-check": "^0.2.0",
+    "node-fetch": "^3.3.2",
     "uuid": "^9.0.1"
   }
 }

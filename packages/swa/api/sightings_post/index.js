@@ -34,6 +34,19 @@ export default async (context, req) => {
     clientIp = null;
   }
 
+  const form = req.parseFormBody();
+
+  //Validate Turnstile response
+  const turnstileResult = await utils.validateTurnstileResponse(form);
+  if (!turnstileResult.success) {
+    console.log(turnstileResult.err);
+    context.res = {
+      status: 401,
+      body: "Failed turnstile verification."
+    };
+    return;
+  }
+
   const sessionData = await utils.getSession(req.headers.cookie);
   if (sessionData.err) {
     console.log(sessionData.err);
