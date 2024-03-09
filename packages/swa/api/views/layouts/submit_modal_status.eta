@@ -1,9 +1,9 @@
 <% if (it.fullModal) { %>
-  <% layout("./sighting_modal") %>
+  <% layout("./submit_modal") %>
 <% } %>
-<div id="sighting-submit-status"
+<div id="<%= it.id %>"
      class="modal-box flex flex-col justify-normal w-11/12 md:w-10/12 lg:w-7/12 xl:w-6/12 h-min p-0 overflow-hidden border-2 border-accent bg-base-100"
-     <% if (it.recheck) { %>
+     <% if (it.recheckSightings) { %>
      hx-get="/api/sightings/<%= it.sighting.id %>/status?recheckCount=<%= it.recheckCount %>"
      hx-trigger="every <%= it.recheckInterval %>s"
      hx-swap="outerHTML"
@@ -15,7 +15,7 @@
     <div class="navbar-end">
       <% if (it.closable) { %>
       <button class="btn btn-sm btn-circle btn-ghost"
-        hx-on:click="htmx.find('#sighting-submit').close();htmx.find('#sighting-submit').outerHTML='';">✕</button>
+        hx-on:click="htmx.find('#<%= it.id %>').close();htmx.find('#<%= it.id %>').outerHTML='';">✕</button>
       <% } %>
     </div>
   </div>
@@ -25,13 +25,13 @@
   <% if (it.closable) { %>
   <div class="modal-action p-4">
     <button class="btn btn-secondary"
-            hx-on:click="htmx.find('#sighting-submit').close();htmx.find('#sighting-submit').outerHTML='';">Close</button>
+            hx-on:click="htmx.find('#<%= it.id %>').close();htmx.find('#<%= it.id %>').outerHTML='';">Close</button>
   </div>
   <% } %>
 </div>
 <% if (it.closable) { %>
 <form method="dialog" class="modal-backdrop">
-  <button hx-on:click="htmx.find('#sighting-submit').close();htmx.find('#sighting-submit').outerHTML='';">Close</button>
+  <button hx-on:click="htmx.find('#<%= it.id %>').close();htmx.find('#<%= it.id %>').outerHTML='';">Close</button>
 </form>
 <% } %>
 <% if (it.addSightingBehind) { %>
