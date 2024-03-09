@@ -1,20 +1,9 @@
-<div id="sighting-submit-status"
-     class="modal-box flex flex-col justify-normal w-11/12 md:w-10/12 lg:w-7/12 xl:w-6/12 h-min p-0 overflow-hidden border-2 border-accent bg-base-100"
-     hx-get="/api/sightings/<%= it.sighting.id %>/status?recheckCount=<%= it.recheckCount %>"
-     hx-trigger="every <%= it.recheckInterval %>s"
-     hx-swap="outerHTML">
-  <div class="navbar bg-base-100 min-h-8">
-    <div class="navbar-start"></div>
-    <div class="navbar-center">Processing...</div>
-    <div class="navbar-end"></div>
-  </div>
-  <div class="px-1.5 py-4">
-    <span class="loading loading-spinner loading-lg"></span>
-    <p class="py-4">Image saved... rechecking status every <%= it.recheckInterval %> seconds...</p>
-    <% if (it.sighting.submissionStatus === 'saved') { %>
-    <p class="py-4">Current status: pending resizing.</p>
-    <% } else if (it.sighting.submissionStatus === 'pendingAutomaticApproval') { %>
-    <p class="py-4">Current status: pending automatic approval.</p>
-    <% } %>
-  </div>
-</div>
+<% layout("./sighting_modal_status", {title: "Processing...", closable: false, recheck: true}) %>
+
+<span class="loading loading-spinner loading-lg"></span>
+<p class="py-4">Image saved... rechecking status every <%= it.recheckInterval %> seconds...</p>
+<% if (it.sighting.submissionStatus === 'saved') { %>
+<p class="py-4">Current status: pending resizing.</p>
+<% } else if (it.sighting.submissionStatus === 'pendingAutomaticApproval') { %>
+<p class="py-4">Current status: pending automatic approval.</p>
+<% } %>
