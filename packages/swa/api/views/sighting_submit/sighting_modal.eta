@@ -1,0 +1,5 @@
+<dialog id="sighting-submit"
+        class="modal bg-transparent-black-700"
+        hx-on::load="htmx.find('#sighting-submit').showModal();">
+  <%~ it.body %>
+</dialog>
