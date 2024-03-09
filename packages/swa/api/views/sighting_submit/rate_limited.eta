@@ -1,3 +1,3 @@
-<% layout("../layouts/submit_modal_status", {id: "sighting-submit", title: "Please try again", closable: true, fullModal: true}) %>
+<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Please try again", closable: true, fullModal: true}) %>
 
 You've already submitted a sighting today.  Please try again tomorrow!

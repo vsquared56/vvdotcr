@@ -1,4 +1,4 @@
-<% layout("../layouts/submit_modal_status", {id: "sighting-submit", title: "Submit a new sighting", closable: true, fullModal: true, customModalRenderer: 'renderModal(event);'}) %>
+<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Submit a new sighting", closable: true, fullModal: true, customModalRenderer: 'renderModal(event);'}) %>
 
 <script>
   function renderModal(event) {

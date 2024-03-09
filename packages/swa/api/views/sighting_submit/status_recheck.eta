@@ -1,4 +1,4 @@
-<% layout("../layouts/submit_modal_status", {id: "sighting-submit", title: "Processing...", closable: false, recheckSightings: true}) %>
+<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Processing...", closable: false, recheckSightings: true}) %>
 
 <span class="loading loading-spinner loading-lg"></span>
 <p class="py-4">Image saved... rechecking status every <%= it.recheckInterval %> seconds...</p>

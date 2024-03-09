@@ -1,4 +1,4 @@
-<% layout("../layouts/submit_modal_status", {id: "sighting-submit", title: "Can we get your location?", closable: false}) %>
+<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Can we get your location?", closable: false}) %>
 
 <button id="submitLocation"
         class="btn btn-primary"
