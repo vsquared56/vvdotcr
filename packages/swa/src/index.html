@@ -42,12 +42,19 @@
 
       <div class="divider"></div>
 
-      <button id="sighting-submit-btn"
-              class="btn btn-block btn-primary text-xl justify-start rounded-box py-4 h-min"
-              hx-get="/api/sightings/new"
-              hx-swap="afterend">
+      <div id="sighting-submit"
+           class="collapse bg-primary"
+           hx-get="/api/sightings/new"
+           hx-trigger="click"
+           hx-swap="outerHTML">
+        <input type="checkbox" />
+        <div class="collapse-title text-xl text-primary-content font-medium">
         Submit a new sighting!
-      </button>
+        </div>
+        <div class="collapse-content">
+          <p>Loading...</p>
+        </div>
+      </div>
 
       <div class="divider"></div>
 
