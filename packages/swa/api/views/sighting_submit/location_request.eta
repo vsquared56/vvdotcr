@@ -8,17 +8,19 @@
     <div class="navbar-center">Can we get your location?</div>
     <div class="navbar-end"></div>
   </div>
-  <button id='submitLocation'
-          class='btn btn-primary'
-          hx-post='/api/sightings/<%= it.sighting.id %>/location'
-          hx-on::confirm="addLocationParams(event);"
-          hx-target='#sighting-submit-status'>
-    Submit my location
-  </button>
-  <button id='submitWithoutLocation'
-          class='btn btn-neutral'
-          hx-post='/api/sightings/<%= it.sighting.id %>/location'
-          hx-target='#sighting-submit-status'>
-    Submit without a location.
-  </button>
+  <div class="px-1.5 py-4">
+    <button id='submitLocation'
+            class='btn btn-primary'
+            hx-post='/api/sightings/<%= it.sighting.id %>/location'
+            hx-on::confirm="addLocationParams(event);"
+            hx-target='#sighting-submit-status'>
+      Submit my location
+    </button>
+    <button id='submitWithoutLocation'
+            class='btn btn-neutral'
+            hx-post='/api/sightings/<%= it.sighting.id %>/location'
+            hx-target='#sighting-submit-status'>
+      Submit without a location.
+    </button>
+  </div>
 </div>
