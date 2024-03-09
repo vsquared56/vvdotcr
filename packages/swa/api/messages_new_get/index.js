@@ -75,7 +75,7 @@ export default async (context, req) => {
             throw new Error("Invalid locationPermission query parameter.");
           }
           response = eta.render(
-            "./message_submit/submit_modal",
+            "./message_submit/submit",
             {
               locationEnabled: true,
               locationPermission: locationPermission,
