@@ -1,0 +1,22 @@
+<div id="sighting-collapse"
+     class="collapse collapse-arrow bg-primary">
+  <input type="checkbox" checked="true"/>
+  <div class="collapse-title text-xl text-primary-content font-medium">
+    Submit a new sighting!
+  </div>
+  <div class="collapse-content bg-base-200 px-1.5">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 xl:gap-8 justify-items-center items-start px-1.5 py-4">
+      <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full">
+        See a red car with a VV DOT CR license plate?  Snap a photo, submit it here, and share it with others!
+      </div>
+      <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full">
+        <button class="btn btn-secondary w-full"
+                hx-get="/api/sightings/new/submit"
+                hx-target="#sighting-collapse"
+                hx-swap="beforeend">
+          Get started!
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

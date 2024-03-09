@@ -32,13 +32,17 @@ export default async (context, req) => {
         "./sighting_submit/rate_limited",
         null
       );
+    } else if (req.params.submit && req.params.submit === "submit" ) {
+      response = eta.render(
+        "./sighting_submit/submit",
+        {
+          turnstileSiteKey: turnstileSiteKey
+        }
+      );
     } else {
       response = eta.render(
         "./sighting_submit/new",
-        {
-          retrySubmission: (req.query.retry === "true"),
-          turnstileSiteKey: turnstileSiteKey
-        }
+        null
       );
     }
 
