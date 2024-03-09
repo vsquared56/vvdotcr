@@ -27,7 +27,7 @@
   <div class="p-4">
     <%~ it.body %>
   </div>
-  <% if (it.closable) { %>
+  <% if (it.closable && it.closeButton) { %>
   <div class="modal-action p-4">
     <button class="btn btn-secondary"
             <% if (it.closeUrl) { %>
@@ -35,7 +35,7 @@
             <%  } else { %>
             hx-on:click="htmx.find('#<%= it.modalId %>').close();htmx.find('#<%= it.modalId %>').outerHTML='';"
             <% } %>
-            >Close</button>
+            ><%= it.closeButton %></button>
   </div>
   <% } %>
 </div>
