@@ -1,3 +1,3 @@
-<% layout("./sighting_modal_status", {title: "Please try again", closable: true}) %>
+<% layout("../layouts/sighting_modal_status", {title: "Please try again", closable: true}) %>
 
 <%= it.error %>
