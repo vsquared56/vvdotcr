@@ -23,12 +23,8 @@ export async function validateTurnstileResponse(form) {
 
     const outcome = await turnstileResponse.json();
     if (outcome.success) {
-      console.log("SUCCESS");
-      console.log(turnstileResponse);
       return { success: true }
     } else {
-      console.log("FAIL");
-      console.log(turnstileResponse);
       return { success: false, err: outcome['error-codes'] }
     }
   }
