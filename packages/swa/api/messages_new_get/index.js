@@ -2,7 +2,6 @@ import { Eta } from "eta";
 import * as path from "path";
 
 import * as utils from "@vvdotcr/common";
-import { truncate } from "fs";
 
 const turnstileSiteKey = process.env.TURNSTILE_SITE_KEY;
 
