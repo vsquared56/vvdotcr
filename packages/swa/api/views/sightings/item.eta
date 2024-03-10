@@ -17,7 +17,7 @@
     <div class="navbar bg-base-100 min-h-8">
       <div class="navbar-start">
       </div>
-      <div class="navbar-center">This is a sighting submitted by a fellow visitor!</div>
+      <div class="navbar-center">Someone sent this sighting!</div>
       <div class="navbar-end">
         <details class="dropdown dropdown-top dropdown-end">
           <summary class="btn btn-square btn-ghost btn-sm">
