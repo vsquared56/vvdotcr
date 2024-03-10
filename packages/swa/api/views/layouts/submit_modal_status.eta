@@ -11,7 +11,7 @@
      >
   <div class="navbar bg-base-100 min-h-8">
     <div class="navbar-start"></div>
-    <div class="navbar-center"><%= it.title %></div>
+    <div class="navbar-center text-lg"><%= it.title %></div>
     <div class="navbar-end">
       <% if (it.closable) { %>
       <button class="btn btn-sm btn-circle btn-ghost"
