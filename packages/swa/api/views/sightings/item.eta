@@ -2,9 +2,8 @@
   <div class="modal-box flex flex-col justify-normal max-w-screen-xl h-5/6 p-0 overflow-hidden border-2 border-accent bg-base-100"
     hx-target="this" hx-swap="outerHTML">
     <div class="navbar bg-base-100 min-h-8">
-      <div class="navbar-start">
-      </div>
-      <div class="navbar-center"><%= it.sightingDate %></div>
+      <div class="navbar-start"></div>
+      <div class="navbar-center text-lg"><%= it.sightingDate %></div>
       <div class="navbar-end">
         <button class="btn btn-sm btn-circle btn-ghost"
           hx-on:click="htmx.find('#sighting-details').close();htmx.find('#sighting-details').outerHTML='';">✕</button>
