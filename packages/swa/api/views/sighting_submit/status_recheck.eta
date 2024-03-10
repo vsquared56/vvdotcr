@@ -12,7 +12,8 @@
       "Ordering more hard drives...",
       "Reducing sinusoidal depleneration...",
       "Starting JavaScript V8 engine...",
-      "Verifying checkmarks..."
+      "Verifying checkmarks...",
+      "Baking session cookies..."
     ];
     var randomText = progressText[Math.floor(Math.random() * progressText.length)];
   } else if (it.sighting.submissionStatus === 'pendingAutomaticApproval') { 
