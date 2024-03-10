@@ -13,6 +13,7 @@
           <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
             <form>
               <li><button hx-get="/api/panel/sightings/<%= it.sighting.id %>/properties/edit" hx-target="#sighting-information" hx-on:click="htmx.find('#sighting-modal-menu').removeAttribute('open');">Edit properties</button></li>
+              <li><button name="action" value="revalidate" hx-post="/api/panel/sightings/<%= it.sighting.id %>/revalidate" hx-target="#sighting-details">Revalidate</button></li>
               <% if (it.sighting.isPublished) { %>
               <li><button name="action" value="unpublish" hx-put="/api/panel/sightings/<%= it.sighting.id %>" hx-target="#sighting-details">Unpublish sighting</button></li>
               <% } else { %>
@@ -44,7 +45,13 @@
     <div class="navbar bg-base-100 min-h-8">
       <div class="navbar-start">
       </div>
-      <div class="navbar-center">This is a sighting!</div>
+      <div class="navbar-center">
+        <% if (it.sighting.sightingScore >= it.minSightingScore) { %>
+        <span class="badge badge-success">Score: <%= it.sighting.sightingScore %></span>
+        <% } else { %>
+        <span class="badge badge-warning">Score: <%= it.sighting.sightingScore %></span>
+        <% } %>
+      </div>
       <div class="navbar-end">
         <details class="dropdown dropdown-top dropdown-end">
           <summary class="btn btn-square btn-ghost btn-sm">

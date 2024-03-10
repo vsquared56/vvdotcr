@@ -25,5 +25,10 @@
     <% } else { %>
     <span class="badge badge-warning">Not published</span><span class="badge badge-warning"><%= it.sightingDate %></span>
     <% } %>
+    <% if (it.sighting.sightingScore >= it.minSightingScore) { %>
+    <span class="badge badge-success">Score: <%= it.sighting.sightingScore %></span>
+    <% } else { %>
+    <span class="badge badge-warning">Score: <%= it.sighting.sightingScore %></span>
+    <% } %>
   </div>
 </div>

@@ -138,6 +138,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@azure/core-amqp@npm:^4.1.1":
+  version: 4.2.1
+  resolution: "@azure/core-amqp@npm:4.2.1"
+  dependencies:
+    "@azure/abort-controller": "npm:^2.0.0"
+    "@azure/core-auth": "npm:^1.3.0"
+    "@azure/core-util": "npm:^1.1.1"
+    "@azure/logger": "npm:^1.0.0"
+    buffer: "npm:^6.0.0"
+    events: "npm:^3.0.0"
+    process: "npm:^0.11.10"
+    rhea: "npm:^3.0.0"
+    rhea-promise: "npm:^3.0.0"
+    tslib: "npm:^2.2.0"
+    util: "npm:^0.12.1"
+  checksum: dbc6affdcadc3f28c0527319c2cd1acc66eff347aa1536bbdf4c915f0f4c3b821b41638eff74bfaf1741b006eac223f520440fbf59424ab4177296c09581b0a0
+  languageName: node
+  linkType: hard
+
 "@azure/core-auth@npm:^1.3.0, @azure/core-auth@npm:^1.4.0, @azure/core-auth@npm:^1.5.0":
   version: 1.5.0
   resolution: "@azure/core-auth@npm:1.5.0"
@@ -423,6 +442,32 @@ __metadata:
     rhea-promise: "npm:^3.0.0"
     tslib: "npm:^2.2.0"
   checksum: 7341d49e68c93789e9de26df986a7a651957c87bef6b3b074f56cc19f528d2e1df4d703c6925b38f41daadfdc6c79a60fcb684820052be9e81d606c8d6dd79ed
+  languageName: node
+  linkType: hard
+
+"@azure/service-bus@npm:^7.9.4":
+  version: 7.9.4
+  resolution: "@azure/service-bus@npm:7.9.4"
+  dependencies:
+    "@azure/abort-controller": "npm:^1.0.0"
+    "@azure/core-amqp": "npm:^4.1.1"
+    "@azure/core-auth": "npm:^1.3.0"
+    "@azure/core-client": "npm:^1.0.0"
+    "@azure/core-paging": "npm:^1.4.0"
+    "@azure/core-rest-pipeline": "npm:^1.1.0"
+    "@azure/core-tracing": "npm:^1.0.0"
+    "@azure/core-util": "npm:^1.1.1"
+    "@azure/core-xml": "npm:^1.0.0"
+    "@azure/logger": "npm:^1.0.0"
+    "@types/is-buffer": "npm:^2.0.0"
+    buffer: "npm:^6.0.0"
+    is-buffer: "npm:^2.0.3"
+    jssha: "npm:^3.1.0"
+    long: "npm:^5.2.0"
+    process: "npm:^0.11.10"
+    rhea-promise: "npm:^3.0.0"
+    tslib: "npm:^2.2.0"
+  checksum: e1bd8c560726a9afa20b46d00592f7d1b619075caf7dd87bca0a94a0d6a41a6ae2af4761105253e48d40fcbb33afcc933ed0602da9349bb896b61a204f0be185
   languageName: node
   linkType: hard
 
@@ -1209,6 +1254,7 @@ __metadata:
   resolution: "@vvdotcr/common@workspace:packages/common"
   dependencies:
     "@azure/cosmos": "npm:^4.0.0"
+    "@azure/service-bus": "npm:^7.9.4"
     "@azure/storage-blob": "npm:^12.17.0"
     "@turf/boolean-intersects": "npm:^6.5.0"
     "@turf/circle": "npm:^6.5.0"
@@ -1216,6 +1262,16 @@ __metadata:
     ip-range-check: "npm:^0.2.0"
     node-fetch: "npm:^3.3.2"
     uuid: "npm:^9.0.1"
+  languageName: unknown
+  linkType: soft
+
+"@vvdotcr/utility-scripts@workspace:packages/utility-scripts":
+  version: 0.0.0-use.local
+  resolution: "@vvdotcr/utility-scripts@workspace:packages/utility-scripts"
+  dependencies:
+    "@azure/cosmos": "npm:^4.0.0"
+    "@azure/storage-blob": "npm:^12.17.0"
+    "@vvdotcr/common": "npm:^1.0.0"
   languageName: unknown
   linkType: soft
 

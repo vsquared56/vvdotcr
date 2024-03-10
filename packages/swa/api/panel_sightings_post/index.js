@@ -1,7 +1,10 @@
 import { Eta } from "eta";
+import { ServiceBusClient } from "@azure/service-bus";
 import * as path from "path";
 
 import * as utils from "@vvdotcr/common";
+
+const serviceBusConnectionString = process.env.SERVICE_BUS_CONNECTION_STRING;
 
 export default async (context, req) => {
   const eta = new Eta(
@@ -13,28 +16,17 @@ export default async (context, req) => {
   var response;
 
   const sightingId = req.params.sightingId;
+
+  await utils.sightingApproval(db, sightingId, false);
   
-  const form = req.parseFormBody();
-  const actionValue = form.get('action').value.toString();
-
   var sighting = await db.getSighting(sightingId);
-
-  if (actionValue === "publish") {
-    sighting.submissionStatus = "adminPublished";
-    sighting.isPublished = true;
-  } else if (actionValue === "unpublish") {
-    sighting.submissionStatus = "adminUnpublished";
-    sighting.isPublished = false;
-  }
-
-  await db.saveSighting(sighting);
 
   //Update the modal for this sighting
   response = eta.render(
     "./panel/sightings_item",
     {
       sighting: sighting,
-      minSightingScore: await db.getSetting("min_sighting_score")
+      minSightingScore: await db.getSetting("min_sighting_score"),
     }
   );
 
