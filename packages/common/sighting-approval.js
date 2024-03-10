@@ -13,13 +13,11 @@ export async function sightingApproval(db, sightingId, sendNotifications) {
     if (tagScores.tags[tag.name]) {
       if ((tagScores.tags[tag.name].minConfidence && tag.confidence >= tagScores.tags[tag.name].minConfidence) ||
           (!tagScores.tags[tag.name].minConfidence && tag.confidence >= tagScores.defaultMinConfidence)) {
-        console.log(tagScores.tags[tag.name]);
         score += (tagScores.tags[tag.name].score * tag.confidence);
       }
     }
   }
   sighting.sightingScore = score;
-  console.log(`Final score ${score}`);
 
   if (sighting.imageLocation === null || sighting.imageLocation.latitude === null || sighting.imageLocation.longitude === null) {
     sighting.submissionStatus = 'needsManualApproval';
