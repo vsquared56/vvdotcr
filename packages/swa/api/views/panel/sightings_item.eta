@@ -45,7 +45,13 @@
     <div class="navbar bg-base-100 min-h-8">
       <div class="navbar-start">
       </div>
-      <div class="navbar-center">This is a sighting!</div>
+      <div class="navbar-center">
+        <% if (it.sighting.sightingScore >= it.minSightingScore) { %>
+        <span class="badge badge-success">Score: <%= it.sighting.sightingScore %></span>
+        <% } else { %>
+        <span class="badge badge-warning">Score: <%= it.sighting.sightingScore %></span>
+        <% } %>
+      </div>
       <div class="navbar-end">
         <details class="dropdown dropdown-top dropdown-end">
           <summary class="btn btn-square btn-ghost btn-sm">

@@ -33,7 +33,8 @@ export default async (context, req) => {
   response = eta.render(
     "./panel/sightings_item",
     {
-      sighting: sighting
+      sighting: sighting,
+      minSightingScore: await db.getSetting("min_sighting_score")
     }
   );
 
@@ -43,6 +44,7 @@ export default async (context, req) => {
     {
       sighting: sighting,
       sightingDate: (new Date(sighting.createDate)).toLocaleString(),
+      minSightingScore: await db.getSetting("min_sighting_score"),
       loadMore: false,
       nextPage: null,
       replace: true

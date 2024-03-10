@@ -21,7 +21,8 @@ export default async (context, req) => {
       "./panel/sightings_item",
       {
         sighting: sighting,
-        sightingDate: (new Date(sighting.createDate)).toLocaleString()
+        sightingDate: (new Date(sighting.createDate)).toLocaleString(),
+        minSightingScore: await db.getSetting("min_sighting_score")
       }
     );
   } else {
@@ -35,6 +36,7 @@ export default async (context, req) => {
       );
     }
     else {
+      const minSightingScore = await db.getSetting("min_sighting_score");
       var itemCount = 1;
       for (const sighting of sightings.items) {
         response += eta.render(
@@ -42,6 +44,7 @@ export default async (context, req) => {
           {
             sighting: sighting,
             sightingDate: (new Date(sighting.createDate)).toLocaleString(),
+            minSightingScore: minSightingScore,
             loadMore: (itemCount === sightings.items.length && sightings.continuationToken !== null),
             nextPage: page + 1,
             replace: false
