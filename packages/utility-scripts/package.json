@@ -1,0 +1,12 @@
+{
+  "name": "@vvdotcr/utility-scripts",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "main": "*.js",
+  "dependencies": {
+    "@azure/cosmos": "^4.0.0",
+    "@azure/storage-blob": "^12.17.0",
+    "@vvdotcr/common": "^1.0.0"
+  }
+}

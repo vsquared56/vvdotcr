@@ -1219,6 +1219,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@vvdotcr/utility-scripts@workspace:packages/utility-scripts":
+  version: 0.0.0-use.local
+  resolution: "@vvdotcr/utility-scripts@workspace:packages/utility-scripts"
+  dependencies:
+    "@azure/cosmos": "npm:^4.0.0"
+    "@azure/storage-blob": "npm:^12.17.0"
+    "@vvdotcr/common": "npm:^1.0.0"
+  languageName: unknown
+  linkType: soft
+
 "abbrev@npm:^2.0.0":
   version: 2.0.0
   resolution: "abbrev@npm:2.0.0"

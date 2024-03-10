@@ -26,7 +26,8 @@
     "packages": [
       "./packages/common",
       "./packages/functions",
-      "./packages/swa/api"
+      "./packages/swa/api",
+      "./packages/utility-scripts"
     ]
   },
   "packageManager": "yarn@4.0.2"
