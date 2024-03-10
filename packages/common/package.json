@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@azure/cosmos": "^4.0.0",
+    "@azure/service-bus": "^7.9.4",
     "@azure/storage-blob": "^12.17.0",
     "@turf/boolean-intersects": "^6.5.0",
     "@turf/circle": "^6.5.0",

@@ -13,6 +13,7 @@
           <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
             <form>
               <li><button hx-get="/api/panel/sightings/<%= it.sighting.id %>/properties/edit" hx-target="#sighting-information" hx-on:click="htmx.find('#sighting-modal-menu').removeAttribute('open');">Edit properties</button></li>
+              <li><button name="action" value="revalidate" hx-post="/api/panel/sightings/<%= it.sighting.id %>/revalidate" hx-target="#sighting-details">Revalidate</button></li>
               <% if (it.sighting.isPublished) { %>
               <li><button name="action" value="unpublish" hx-put="/api/panel/sightings/<%= it.sighting.id %>" hx-target="#sighting-details">Unpublish sighting</button></li>
               <% } else { %>
