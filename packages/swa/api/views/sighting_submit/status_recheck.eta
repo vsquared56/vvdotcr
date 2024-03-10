@@ -1,9 +1,32 @@
 <% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Processing...", closable: false, recheckSightings: true}) %>
 
+<div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start px-1.5 py-4">
 <span class="loading loading-spinner loading-lg"></span>
-<p class="py-4">Image saved... rechecking status every <%= it.recheckInterval %> seconds...</p>
-<% if (it.sighting.submissionStatus === 'saved') { %>
-<p class="py-4">Current status: pending resizing.</p>
-<% } else if (it.sighting.submissionStatus === 'pendingAutomaticApproval') { %>
-<p class="py-4">Current status: pending automatic approval.</p>
-<% } %>
+<p class="py-4">We're processing your photo, please wait a bit...</p>
+<% if (it.sighting.submissionStatus === 'saved') {
+  const progressText =
+    [
+      "Reticulating splines...",
+      "Performing Lanczos resampling...",
+      "Synchronizing cardinal grammeters...",
+      "Ordering more hard drives...",
+      "Reducing sinusoidal depleneration...",
+      "Starting JavaScript V8 engine...",
+      "Verifying checkmarks..."
+    ];
+    var randomText = progressText[Math.floor(Math.random() * progressText.length)];
+  } else if (it.sighting.submissionStatus === 'pendingAutomaticApproval') { 
+    const progressText =
+    [
+      "Training AI models...",
+      "Sending API requests to Skynet...",
+      "Recalibrating AI self-awareness...",
+      "Checking with Chat-GPT...",
+      "Detecting non-human faces...",
+      "Cold-starting Lambda functions...",
+      "Waiting for eventual consistency..."
+    ];
+    var randomText = progressText[Math.floor(Math.random() * progressText.length)];
+  } %>
+  <p class="py-4"><%= randomText %></p>
+</div>
