@@ -61,14 +61,14 @@ export default async (context, req) => {
       name: "driving",
       type: "formToggle",
       subItems: [
-        { name: "speed", type: "select", validValues: ["faster", "slower", "ok"] }
+        { name: "drivingQuality", type: "select", validValues: ["faster", "slower", "turn-signals", "swearing", "ok"] }
       ]
     },
     {
       name: "parking",
       type: "formToggle",
       subItems: [
-        { name: "parkingQuality", type: "select", validValues: ["bad", "too-close", "too-far", "ok"] }
+        { name: "parkingQuality", type: "select", validValues: ["bad", "too-close", "too-far", "swearing", "ok"] }
       ]
     },
     {
