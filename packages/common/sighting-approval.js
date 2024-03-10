@@ -9,7 +9,6 @@ export async function sightingApproval(db, sightingId, sendNotifications) {
 
   var score = 0;
   for (const tag of sighting.visionData.tagsResult.values) {
-    console.log(`Tag ${tag.name} Confidence: ${tag.confidence}`);
     if (tagScores.tags[tag.name]) {
       if ((tagScores.tags[tag.name].minConfidence && tag.confidence >= tagScores.tags[tag.name].minConfidence) ||
           (!tagScores.tags[tag.name].minConfidence && tag.confidence >= tagScores.defaultMinConfidence)) {
