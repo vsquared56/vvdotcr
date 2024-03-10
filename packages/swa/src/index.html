@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="styles.css" />
   <title>vv.cr</title>
   <script src="https://unpkg.com/htmx.org@1.9.9"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
   <script src="./location.js"></script>
 </head>
 
@@ -23,13 +24,12 @@
 
     <div class="divider"></div>
 
-    <div class="px-4 md:px-8 lg:px-12">
-      <div id="message-submit"
+    <div class="mx-1.5 md:mx-8 lg:mx-16 xl:mx-40 2xl:mx-64">
+      <div id="message-collapse"
            class="collapse bg-primary"
            hx-get="/api/messages/new"
            hx-trigger="click"
-           hx-swap="outerHTML"
-           hx-on::confirm="addLocationPermissionParam(event);">
+           hx-swap="outerHTML">
         <input type="checkbox" />
         <div class="collapse-title text-xl text-primary-content font-medium">
         Send a message!
@@ -41,11 +41,14 @@
 
       <div class="divider"></div>
 
-      <div id="sighting-submit" class="collapse bg-primary" hx-get="/api/sightings/new" hx-trigger="click"
-        hx-swap="outerHTML">
+      <div id="sighting-collapse"
+           class="collapse bg-primary"
+           hx-get="/api/sightings/new"
+           hx-trigger="click"
+           hx-swap="outerHTML">
         <input type="checkbox" />
         <div class="collapse-title text-xl text-primary-content font-medium">
-          Submit a new sighting!
+        Submit a new sighting!
         </div>
         <div class="collapse-content">
           <p>Loading...</p>

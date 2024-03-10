@@ -1,4 +1,4 @@
-<div id="location-toggle" class="form-control">
+<div id="location-toggle" class="w-[304px] flex flex-col flex-nowrap items-center form-control rounded-btn border-2 border-secondary p-4 bg-neutral-800">
   Can we grab your location?
   <label class="label cursor-pointer flex flex-nowrap	justify-start gap-4">
     <span class="label-text">Deny location</span> 
@@ -24,16 +24,18 @@
     <% } %>
   </label>
   
-  <div class="flex flex-col gap-4">
+  <div class="grid">
     <% if (it.locationPermission === "denied") { %>
-    <div>
+    <div class="col-start-1 row-start-1">
     You have location permissions denied in your browser.  For full functionality, please grant or reset the locations permission for this site.
     </div>
     <% } %>
     <% if (it.locationPermission !== "denied" && it.locationEnabled) { %>
-    <div>Messages with a location usually send notifications to the owner right away!</div>
+    <div class="col-start-1 row-start-2">Messages with a location usually send notifications to the owner right away!</div>
+    <div class="col-start-1 row-start-2 invisible">Messages without a location get seen ... eventually.  They get compiled into a report that's snail-mailed quarterly...</div>
     <% } else { %>
-    <div>Messages without a location get seen ... eventually.  They get compiled into a report that's snail-mailed quarterly...</div>
+    <div class="col-start-1 row-start-2 invisible">Messages with a location usually send notifications to the owner right away!</div>
+    <div class="col-start-1 row-start-2">Messages without a location get seen ... eventually.  They get compiled into a report that's snail-mailed quarterly...</div>
     <% } %>
   </div>
 </div>

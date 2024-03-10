@@ -1,12 +1,3 @@
-<div class="modal-box" hx-target="this" hx-swap="outerHTML">
-  <h3 class="font-bold text-lg">Congrats! Your sighting was accepted!</h3>
-  <p class="py-4"><%= it.sighting.id %></p>
-  <p class="py-4">Image details: <%= it.imageData %></p>
-  <div class="modal-action">
-    <button class="btn btn-primary" hx-get="/api/sightings/new?finished=true" hx-swap="outerHTML"
-      hx-target="#submission-status">OK!</button>
-  </div>
-</div>
-<div id='sightings-grid' hx-swap-oob="afterbegin">
-  <%~ include("../sightings/card", { sighting: it.sighting, sightingDate: it.sightingDate, loadMore: false }) %>
-</div>
+<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Congrats!", closable: true, closeButton: "OK", closeUrl: "/api/sightings/new?finished=true", addSightingBehind: true}) %>
+
+Congrats, your sighting looks good!  It was automatically approved, and it's up for everyone to see!

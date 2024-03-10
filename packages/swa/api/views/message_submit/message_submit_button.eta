@@ -1,5 +1,9 @@
 <button id="message-submit-button"
-        class="btn btn-primary"
+        class="btn btn-secondary min-w-[300px] w-full h-[69px] border-2 border-secondary disabled:bg-neutral disabled:border-secondary disabled:text-neutral-content"
+        hx-on::confirm="addLocationPermissionParam(event);"
+        hx-get="/api/messages/new/submit"
+        hx-target="#message-form"
+        hx-swap="beforeend"
         <% if (!it.submitEnabled) { %>
         disabled="disabled"
         <% } %>

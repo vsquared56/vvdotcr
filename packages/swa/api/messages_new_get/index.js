@@ -3,6 +3,8 @@ import * as path from "path";
 
 import * as utils from "@vvdotcr/common";
 
+const turnstileSiteKey = process.env.TURNSTILE_SITE_KEY;
+
 export default async (context, req) => {
   const eta = new Eta(
     {
@@ -51,6 +53,7 @@ export default async (context, req) => {
             }
           );
         } else if (formName === "location") {
+          var locationPermission;
           if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
             locationPermission = req.query.locationPermission;
           } else {
@@ -63,6 +66,21 @@ export default async (context, req) => {
               locationPermission: locationPermission
             }
           );
+        } else if (formName === "submit") {
+          var locationPermission;
+          if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
+            locationPermission = req.query.locationPermission;
+          } else {
+            throw new Error("Invalid locationPermission query parameter.");
+          }
+          response = eta.render(
+            "./message_submit/submit",
+            {
+              locationEnabled: true,
+              locationPermission: locationPermission,
+              turnstileSiteKey: turnstileSiteKey
+            }
+          );
         }
       } else {
         if (await utils.isActionRateLimited(clientIp, sessionData.sessionId, "newMessage")) {
@@ -71,18 +89,9 @@ export default async (context, req) => {
             null
           );
         } else {
-          var locationPermission;
-          if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
-            locationPermission = req.query.locationPermission;
-          } else {
-            throw new Error("Invalid locationPermission query parameter.");
-          }
           response = eta.render(
             "./message_submit/new",
-            {
-              locationEnabled: true,
-              locationPermission: locationPermission
-            }
+            null
           );
         }
       }

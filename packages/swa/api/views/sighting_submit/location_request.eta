@@ -1,22 +1,16 @@
-<div class="modal-box"
-     id="modal-dialog"
-     hx-target="this"
-     hx-swap="outerHTML">
-  <h3 class="font-bold text-lg">Can we get your location?</h3>
-  <div class="modal-action">
-    <form id='location'>
-      <input id='latitude' name='latitude' type='hidden'>
-      <input id='longitude' name='longitude' type='hidden'>
-      <input id='accuracy' name='accuracy' type='hidden'>
-      <input id='timestamp' name='timestamp' type='hidden'>
-      <button id='submitLocation' class='btn btn-primary' hx-post='/api/sightings/<%= it.sighting.id %>/location'
-        hx-on::confirm="addLocationParams(event);" hx-target='#modal-dialog'>
-        Submit my location
-      </button>
-      <button id='submitWithoutLocation' class='btn btn-neutral'
-        hx-post='/api/sightings/<%= it.sighting.id %>/location' hx-target='#modal-dialog'>
-        Submit without a location.
-      </button>
-    </form>
-  </div>
-</div>
+<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Can we get your location?", closable: false}) %>
+
+<button id="submitLocation"
+        class="btn btn-primary"
+        hx-post="/api/sightings/<%= it.sighting.id %>/location"
+        hx-on::confirm="addLocationParams(event);"
+        hx-target="#sighting-submit-status"
+        hx-swap="outerHTML">
+  Submit my location
+</button>
+<button id="submitWithoutLocation"
+        class="btn btn-neutral"
+        hx-post="/api/sightings/<%= it.sighting.id %>/location"
+        hx-target="#sighting-submit-status">
+  Submit without a location.
+</button>

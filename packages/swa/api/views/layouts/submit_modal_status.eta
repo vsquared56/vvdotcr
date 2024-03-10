@@ -1,0 +1,58 @@
+<% if (it.fullModal) { %>
+  <% layout("./submit_modal") %>
+<% } %>
+<div id="<%= it.statusId %>"
+     class="modal-box flex flex-col justify-normal w-11/12 md:w-10/12 lg:w-7/12 xl:w-6/12 h-min p-0 overflow-hidden border-2 border-accent bg-base-100"
+     <% if (it.recheckSightings) { %>
+     hx-get="/api/sightings/<%= it.sighting.id %>/status?recheckCount=<%= it.recheckCount %>"
+     hx-trigger="every <%= it.recheckInterval %>s"
+     hx-swap="outerHTML"
+     <% } %>
+     >
+  <div class="navbar bg-base-100 min-h-8">
+    <div class="navbar-start"></div>
+    <div class="navbar-center"><%= it.title %></div>
+    <div class="navbar-end">
+      <% if (it.closable) { %>
+      <button class="btn btn-sm btn-circle btn-ghost"
+        <% if (it.closeUrl) { %>
+        hx-get="<%= it.closeUrl %>"
+        <%  } else { %>
+        hx-on:click="htmx.find('#<%= it.modalId %>').close();htmx.find('#<%= it.modalId %>').outerHTML='';"
+        <% } %>
+        >✕</button>
+      <% } %>
+    </div>
+  </div>
+  <div class="p-4">
+    <%~ it.body %>
+  </div>
+  <% if (it.closable && it.closeButton) { %>
+  <div class="modal-action p-4">
+    <button class="btn btn-secondary"
+            <% if (it.closeUrl) { %>
+            hx-get="<%= it.closeUrl %>"
+            <%  } else { %>
+            hx-on:click="htmx.find('#<%= it.modalId %>').close();htmx.find('#<%= it.modalId %>').outerHTML='';"
+            <% } %>
+            ><%= it.closeButton %></button>
+  </div>
+  <% } %>
+</div>
+<% if (it.closable) { %>
+<form method="dialog" class="modal-backdrop">
+  <button
+    <% if (it.closeUrl) { %>
+    hx-get="<%= it.closeUrl %>"
+    <%  } else { %>
+    hx-on:click="htmx.find('#<%= it.modalId %>').close();htmx.find('#<%= it.modalId %>').outerHTML='';"
+    <% } %>
+    >Close</button>
+</form>
+<% } %>
+<% if (it.addSightingBehind) { %>
+<div id='sightings-grid'
+     hx-swap-oob="afterbegin">
+  <%~ include("../sightings/card", { sighting: it.sighting, sightingDate: it.sightingDate, loadMore: false }) %>
+</div>
+<% } %>

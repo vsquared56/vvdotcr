@@ -1,20 +1,11 @@
-<dialog id="submission-status" class="modal" hx-on::load="htmx.find('#submission-status').showModal()">
-  <div class="modal-box" hx-target="this" hx-swap="outerHTML">
-    <h3 class="font-bold text-lg">Thanks for the feedback!</h3>
-    <% if (it.message.notificationStatusReason === "validLocation" ) { %>
-      <div>Looks like you're near the vv.cr car, so we'll send a notification straight to the driver's phone!</div>
-    <% } %>
-    <% if (it.message.messageData.locationEnable === "locationShared" && !it.message.messageLocation) { %>
-      <div class="divider"></div>
-      <div>You wanted to submit a location with this message, but we didn't get one!  Maybe you have location permissions denied for this site?</div>
-    <% } %>
-    <div class="modal-action">
-      <button class="btn btn-primary"
-              hx-get="/api/messages/new?finished=true"
-              hx-swap="outerHTML"
-              hx-target="#submission-status">
-        OK!
-      </button>
-    </div>
-  </div>
-</dialog>
+<% layout("../layouts/submit_modal_status", {modalId: "message-submit", statusId: "message-submit-status", title: "Thanks for the feedback!", closable: true, closeButton: "OK", closeUrl: "/api/messages/new?finished=true"}) %>
+
+<div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start p-4 md:p-6 xl:p-8">
+  <% if (it.message.notificationStatusReason === "validLocation" ) { %>
+    <div>Looks like you're near the vv.cr car, so we'll send a notification straight to the driver's phone!</div>
+  <% } %>
+  <% if (it.message.messageData.locationEnable === "locationShared" && !it.message.messageLocation) { %>
+    <div class="divider"></div>
+    <div>You wanted to submit a location with this message, but we didn't get one!  Maybe you have location permissions denied for this site?</div>
+  <% } %>
+</div>

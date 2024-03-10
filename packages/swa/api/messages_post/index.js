@@ -25,6 +25,20 @@ export default async (context, req) => {
     clientIp = null;
   }
 
+  const form = req.parseFormBody();
+
+  //Validate Turnstile response
+  const turnstileResult = await utils.validateTurnstileResponse(form);
+  if (!turnstileResult.success) {
+    console.log(turnstileResult.err);
+    context.res = {
+      status: 401,
+      body: "Failed turnstile verification."
+    };
+    return;
+  }
+
+  //Verify the sesion token and that we're not rate-limited
   const sessionData = await utils.getSession(req.headers.cookie);
   if (sessionData.err) {
     console.log(sessionData.err);
@@ -41,6 +55,7 @@ export default async (context, req) => {
     };
     return;
   }
+
   const formDefinition = [
     {
       name: "driving",
@@ -72,7 +87,6 @@ export default async (context, req) => {
     }
   ];
 
-  const form = req.parseFormBody();
   try {
     var badRequest = false;
     var formResults = utils.processFormItems(form, formDefinition);

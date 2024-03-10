@@ -1214,6 +1214,7 @@ __metadata:
     "@turf/circle": "npm:^6.5.0"
     cookie: "npm:^0.6.0"
     ip-range-check: "npm:^0.2.0"
+    node-fetch: "npm:^3.3.2"
     uuid: "npm:^9.0.1"
   languageName: unknown
   linkType: soft

@@ -1,0 +1,9 @@
+<dialog id="<%= it.modalId %>"
+        class="modal bg-transparent-black-700"
+        <% if (it.customModalRenderer) { %>
+        hx-on::load="<%= it.customModalRenderer %>">
+        <% } else { %>
+        hx-on::load="htmx.find('#<%= it.modalId %>').showModal();">
+        <% } %>
+  <%~ it.body %>
+</dialog>

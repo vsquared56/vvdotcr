@@ -1,4 +1,4 @@
-<div id="sighting-submit"
+<div id="sighting-collapse"
      class="collapse bg-primary"
      hx-get="/api/sightings/new"
      hx-trigger="click"

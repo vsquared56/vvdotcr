@@ -1,9 +1,3 @@
-<dialog id="submission-status" class="modal" hx-on::load="htmx.find('#submission-status').showModal()">
-  <div class="modal-box" hx-target="this" hx-swap="outerHTML">
-    <h3 class="font-bold text-lg">Submission error!</h3>
-    <p class="py-4"><%= it.error %></p>
-    <div class="modal-action">
-      <button class="btn btn-primary" hx-get="/api/sightings/new?finished=true">OK!</button>
-    </div>
-  </div>
-</dialog>
+<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Please try again", closable: true, closeButton: "OK"}) %>
+
+<%= it.error %>

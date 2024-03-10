@@ -8,7 +8,7 @@
       "methods": [
         "get"
       ],
-      "route": "sightings/new"
+      "route": "sightings/new/{submit?}"
     },
     {
       "type": "http",
