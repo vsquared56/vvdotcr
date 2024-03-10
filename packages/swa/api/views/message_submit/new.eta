@@ -1,5 +1,5 @@
 <div id="message-collapse"
-     class="collapse collapse-arrow bg-primary">
+     class="collapse collapse-arrow bg-primary border border-primary">
   <input type="checkbox" checked="true"/>
   <div class="collapse-title text-xl text-primary-content font-medium">
     Send a message!
