@@ -8,24 +8,30 @@
         {
           sitekey: '<%= it.turnstileSiteKey %>',
           theme: 'dark',
-          callback: turnstileCallback,
-          'expired-callback': turnstileExpiredCallback
+          callback: updateSubmit,
+          'expired-callback': updateSubmit
         }
       );
+      const fileInput = document.getElementById("sighting-file-input");
+      fileInput.addEventListener("change", updateSubmit);
       htmx.find('#sighting-submit').showModal();
     }
   }
 
-  function turnstileCallback(token) {
-    var button = document.getElementById('sighting-send-button');
-    button.disabled = false;
-    button.innerHTML = "Send!";
-  }
-
-    function turnstileExpiredCallback() {
-    var button = document.getElementById('sighting-send-button');
-    button.disabled = true;
-    button.innerHTML = "Please verify you're not a bot";
+  function updateSubmit() {
+    const button = document.getElementById("sighting-send-button");
+    const fileInput = document.getElementById("sighting-file-input");
+    const turnstileResponse = document.querySelector("input[name='cf-turnstile-response']");
+    if (fileInput.files.length === 0) {
+      button.disabled = true;
+      button.innerHTML = "Choose a photo first";
+    } else if (!turnstileResponse.value) {
+      button.disabled = true;
+      button.innerHTML = "Please verify you're not a bot";
+    } else {
+      button.disabled = false;
+      button.innerHTML = "Send!";
+    }
   }
 </script>
 <form id="form"
@@ -34,16 +40,17 @@
       hx-target="#sighting-submit-status"
       hx-swap="outerHTML">
   <div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start px-1.5 py-4">
-    <input name="file"
-            type="file"
-            accept="image/jpeg,image/png"
-            class="file-input file-input-secondary w-[304px]">
+    <input id="sighting-file-input"
+           name="file"
+           type="file"
+           accept="image/jpeg,image/png"
+           class="file-input file-input-secondary w-[304px]">
     <div id="turnstile-sighting" class="w-[304px] h-[69px] rounded-btn overflow-clip border-2 border-secondary"></div>
     <div>
       <button class="btn btn-secondary"
               id="sighting-send-button"
               disabled="disabled">
-        Please verify you're not a bot
+        Choose a photo first
       </button>
       <progress id="progress" class="progress w-40 md:w-56" value="0" max="100"></progress>
     </div>
