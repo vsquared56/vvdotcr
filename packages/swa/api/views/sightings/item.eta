@@ -1,16 +1,10 @@
 <dialog id="sighting-details" class="modal bg-transparent-black-700" hx-on::load="htmx.find('#sighting-details').showModal()">
-  <div class="flex flex-col justify-normal modal-box max-w-screen-xl h-5/6 p-0 overflow-hidden bg-gray-600"
+  <div class="modal-box flex flex-col justify-normal max-w-screen-xl h-5/6 p-0 overflow-hidden border-2 border-accent bg-base-100"
     hx-target="this" hx-swap="outerHTML">
     <div class="navbar bg-base-100 min-h-8">
       <div class="navbar-start">
-        <button class="btn btn-square btn-ghost btn-sm">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-            class="inline-block w-5 h-5 stroke-current">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-        </button>
       </div>
-      <div class="navbar-center">Wow!</div>
+      <div class="navbar-center"><%= it.sightingDate %></div>
       <div class="navbar-end">
         <button class="btn btn-sm btn-circle btn-ghost"
           hx-on:click="htmx.find('#sighting-details').close();htmx.find('#sighting-details').outerHTML='';">✕</button>
@@ -18,15 +12,13 @@
     </div>
     <div class="flex-1"></div>
     <div class="flex flex-col overflow-y-auto">
-      <div class="flex-none text-center">Header</div>
       <img class="max-w-screen h-auto rounded-md object-scale-down drop-shadow-md" src="<%= it.sighting.largeImageUrl %>" alt="" />
-      <div class="flex-none text-center"><%= it.sightingDate %></div>
     </div>
     <div class="flex-1"></div>
     <div class="navbar bg-base-100 min-h-8">
       <div class="navbar-start">
       </div>
-      <div class="navbar-center">This is a sighting!</div>
+      <div class="navbar-center">This is a sighting submitted by a fellow visitor!</div>
       <div class="navbar-end">
         <details class="dropdown dropdown-top dropdown-end">
           <summary class="btn btn-square btn-ghost btn-sm">
