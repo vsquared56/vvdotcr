@@ -9,6 +9,7 @@
           sitekey: '<%= it.turnstileSiteKey %>',
           theme: 'dark',
           callback: turnstileCallback,
+          'expired-callback': turnstileExpiredCallback
         }
       );
       htmx.find('#sighting-submit').showModal();
@@ -19,6 +20,12 @@
     var button = document.getElementById('sighting-send-button');
     button.disabled = false;
     button.innerHTML = "Send!";
+  }
+
+    function turnstileExpiredCallback() {
+    var button = document.getElementById('sighting-send-button');
+    button.disabled = true;
+    button.innerHTML = "Please verify you're not a bot";
   }
 </script>
 <form id="form"
@@ -36,7 +43,7 @@
       <button class="btn btn-secondary"
               id="sighting-send-button"
               disabled="disabled">
-        Upload
+        Please verify you're not a bot
       </button>
       <progress id="progress" class="progress w-40 md:w-56" value="0" max="100"></progress>
     </div>

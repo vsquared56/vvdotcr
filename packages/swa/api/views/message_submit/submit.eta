@@ -9,6 +9,7 @@
           sitekey: '<%= it.turnstileSiteKey %>',
           theme: 'dark',
           callback: turnstileCallback,
+          'expired-callback': turnstileExpiredCallback
         }
       );
       htmx.find('#message-submit').showModal();
@@ -19,6 +20,12 @@
     var button = document.getElementById('message-send-button');
     button.disabled = false;
     button.innerHTML = "Send!";
+  }
+
+  function turnstileExpiredCallback() {
+    var button = document.getElementById('message-send-button');
+    button.disabled = true;
+    button.innerHTML = "Please verify you're not a bot";
   }
 </script>
 <div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start px-1.5 py-4">
