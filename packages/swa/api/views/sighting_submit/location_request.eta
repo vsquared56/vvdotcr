@@ -15,8 +15,9 @@
   <button id="submitWithoutLocation"
           class="btn btn-neutral"
           hx-post="/api/sightings/<%= it.sighting.id %>/location"
-          hx-target="#sighting-submit-status">
+          hx-on::confirm="addLocationPermissionParam(event);"
+          hx-target="#sighting-submit-status"
+          hx-swap="outerHTML">
     Submit without a location.
   </button>
-
 </div>
