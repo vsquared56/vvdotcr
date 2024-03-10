@@ -6,6 +6,7 @@ import sharp from "sharp";
 
 import * as utils from "@vvdotcr/common";
 
+const cdnHost = process.env.CDN_HOST;
 const SERVICE_BUS_CONNECTION_STRING = process.env.SERVICE_BUS_CONNECTION_STRING;
 const VISION_API_ENDPOINT = process.env.VISION_API_ENDPOINT;
 const VISION_API_KEY = process.env.VISION_API_KEY;
@@ -41,7 +42,9 @@ app.serviceBusQueue('process-image', {
             .toBuffer();
 
         const thumbFileName = `${item.id}.jpeg`;
-        const thumbImageUrl = await storage.uploadSighting('thumb', 'image/jpeg', thumbFileName, croppedBuffer);
+        const thumbImageStorageUrl = await storage.uploadSighting('thumb', 'image/jpeg', thumbFileName, croppedBuffer);
+        const thumbImageUrl = new URL(thumbImageStorageUrl);
+        thumbImageUrl.hostname = cdnHost;
 
         // Resize the image to a reasonable size
         const largeBuffer = await sharp(originalSighting)
@@ -50,7 +53,9 @@ app.serviceBusQueue('process-image', {
             .toBuffer();
 
         const largeFileName = `${item.id}.jpeg`;
-        const largeImageUrl = await storage.uploadSighting('large', 'image/jpeg', largeFileName, largeBuffer);
+        const largeImageStorageUrl = await storage.uploadSighting('large', 'image/jpeg', largeFileName, largeBuffer);
+        const largeImageUrl = new URL(largeImageStorageUrl);
+        largeImageUrl.hostname = cdnHost;
 
         // Parse location from EXIF data
         var submissionStatus;
@@ -73,8 +78,10 @@ app.serviceBusQueue('process-image', {
         item.submissionStatus = submissionStatus;
         item.thumbFileName = thumbFileName;
         item.thumbImageUrl = thumbImageUrl;
+        item.thumbImageStorageUrl = thumbImageStorageUrl;
         item.largeFileName = largeFileName;
         item.largeImageUrl = largeImageUrl;
+        item.largeImageStorageUrl = largeImageStorageUrl;
         item.visionData = visionData;
         item.processingLatency = Date.now() - item.createDate;
 
