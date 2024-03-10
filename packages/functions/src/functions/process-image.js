@@ -61,7 +61,7 @@ app.serviceBusQueue('process-image', {
         var submissionStatus;
         const locationData = await exifr.gps(originalSighting);
 
-        if (locationData == null) {
+        if (locationData == null || locationData.latitude == null || locationData.longitude == null) {
             submissionStatus = "locationRequest";
             item.imageLocation = null;
         } else {
