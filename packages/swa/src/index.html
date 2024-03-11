@@ -9,6 +9,17 @@
   <script src="https://unpkg.com/htmx.org@1.9.9"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
   <script src="./location.js"></script>
+  <script>
+    htmx.on("htmx:responseError", function(evt){ console.log(evt);displayError(evt.detail.error); });
+    htmx.on("htmx:sendError", function(evt){ console.log(evt);displayError("Error talking to vv.cr"); });
+    function displayError(err) {
+      var errDiv = document.createElement("div");
+      errDiv.classList.add("alert");
+      errDiv.classList.add("alert-error");
+      errDiv.innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' class='stroke-current shrink-0 h-6 w-6' fill='none' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' /></svg><span class="text-sm">${err}</span><button class="btn btn-sm bg-error-content" onclick="this.parentNode.outerHTML='';">Close</button>`;
+      htmx.find("#error-toast").appendChild(errDiv);
+    }
+  </script>
 </head>
 
 <body>
@@ -67,6 +78,8 @@
       </div>
 
     </div>
+
+    <div id="error-toast" class="toast toast-center w-full lg:w-1/2"></div>
   </main>
 </body>
 
