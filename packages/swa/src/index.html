@@ -50,7 +50,9 @@
         Send a message!
         </div>
         <div class="collapse-content">
-          <p>Loading...</p>
+          <div class="grid grid-cols-1 place-items-center px-1.5 md:px-4 lg:px-8 py-4">
+            <span class="htmx-indicator loading loading-dots loading-lg"></span>
+          </div>
         </div>
       </div>
 
@@ -66,7 +68,9 @@
         Submit a new sighting!
         </div>
         <div class="collapse-content">
-          <p>Loading...</p>
+          <div class="grid grid-cols-1 place-items-center px-1.5 md:px-4 lg:px-8 py-4">
+            <span class="htmx-indicator loading loading-dots loading-lg"></span>
+          </div>
         </div>
       </div>
 
@@ -74,7 +78,7 @@
 
       <div id="sightings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 xl:gap-8 place-items-center"
         hx-get="/api/sightings" hx-trigger="load">
-        <img alt="Sightings loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
+        <span class="htmx-indicator loading loading-dots loading-lg"></span>
       </div>
 
     </div>
