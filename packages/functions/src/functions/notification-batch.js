@@ -24,11 +24,12 @@ app.timer("notification-batch", {
     const sbClient = new ServiceBusClient(serviceBusConnectionString);
     const sbReceiver = sbClient.createReceiver("batch-notifications");
     const queuedItems = await sbReceiver.receiveMessages(5, {maxWaitTimeInMs: 100});
+    const environment = process.env.ENVIRONMENT_NAME.toLowerCase();
 
     if (queuedItems.length > 0) {
       const notificationId = crypto.randomUUID();
       try {
-        var emailTitle = "New vv.cr dev activity";
+        var emailTitle = `New vv.cr ${environment} activity`;
         var submittedMessages = [];
         var submittedSightings = [];
         for (const item of queuedItems) {

@@ -7,7 +7,8 @@ import {
 export class Storage {
     constructor() {
         const storageKey = process.env.STORAGE_KEY;
-        const storageAccount = process.env.STORAGE_ACCOUNT
+        const storageAccount = process.env.STORAGE_ACCOUNT;
+        const environment = process.env.ENVIRONMENT_NAME.toLowerCase();
         this.storageUrl = `https://${storageAccount}.blob.core.windows.net`;
 
         // Set auth credentials for upload
@@ -16,8 +17,8 @@ export class Storage {
 
         const blobServiceClient = new BlobServiceClient(this.storageUrl, pipeline);
         try {
-            this.privateContainerClient = blobServiceClient.getContainerClient("vvdotcr-sightings-private-dev");
-            this.publicContainerClient = blobServiceClient.getContainerClient("vvdotcr-sightings-public-dev");
+            this.privateContainerClient = blobServiceClient.getContainerClient(`vvdotcr-sightings-private-${environment}`);
+            this.publicContainerClient = blobServiceClient.getContainerClient(`vvdotcr-sightings-public-${environment}`);
         } catch {
             throw new Error("Error getting container clients for Azure storage.");
         }
