@@ -6,17 +6,21 @@
 <% } else { %>
 <div id="sighting-card-<%= it.sighting.id %>" class="card card-compact w-full min-w-48 max-w-96 bg-base-300 shadow-xl">
 <% } %>
-  <figure hx-get="/api/sightings/<%= it.sighting.id %>"
+  <figure>
+    <button hx-get="/api/sightings/<%= it.sighting.id %>"
+            hx-trigger="click" 
+            hx-target="body"
+            hx-swap="beforeend">
+    
+      <img class="sighting-img" src="<%= it.sighting.thumbImageUrl %>" />
+    </button>
+  </figure>
+  <button hx-get="/api/sightings/<%= it.sighting.id %>"
           hx-trigger="click" 
           hx-target="body"
           hx-swap="beforeend">
-    <img class="sighting-img" src="<%= it.sighting.thumbImageUrl %>" />
-  </figure>
-  <div class="card-body items-center text-center"
-       hx-get="/api/sightings/<%= it.sighting.id %>"
-       hx-trigger="click" 
-       hx-target="body"
-       hx-swap="beforeend">
-    <div class="badge badge-neutral"><%= it.sightingDate %></div>
-  </div>
+    <div class="card-body items-center text-center">
+      <div class="badge badge-neutral"><%= it.sightingDate %></div>
+    </div>
+  </button>
 </div>
