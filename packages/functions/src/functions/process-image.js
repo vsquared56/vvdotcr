@@ -47,10 +47,19 @@ app.serviceBusQueue('process-image', {
         thumbImageUrl.hostname = cdnHost;
 
         // Resize the image to a reasonable size
-        const largeBuffer = await sharp(originalSighting)
-            .rotate()
-            .jpeg()
-            .toBuffer();
+        var largeBuffer;
+        if (visionData.metadata.width >= 1600 || visionData.metadata.height >= 1600) {
+            largeBuffer = await sharp(originalSighting)
+                .rotate()
+                .resize(1200, 1200, {fit: "inside"})
+                .jpeg()
+                .toBuffer();
+        } else {
+            largeBuffer = await sharp(originalSighting)
+                .rotate()
+                .jpeg()
+                .toBuffer();
+        }
 
         const largeFileName = `${item.id}.jpeg`;
         const largeImageStorageUrl = await storage.uploadSighting('large', 'image/jpeg', largeFileName, largeBuffer);
