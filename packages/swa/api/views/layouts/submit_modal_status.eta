@@ -24,11 +24,11 @@
       <% } %>
     </div>
   </div>
-  <div class="p-4 overflow-auto">
+  <div class="px-2 py-4 overflow-auto">
     <%~ it.body %>
   </div>
   <% if (it.closable && it.closeButton) { %>
-  <div class="modal-action p-4">
+  <div class="modal-action px-2 py-4">
     <button class="btn btn-secondary"
             <% if (it.closeUrl) { %>
             hx-get="<%= it.closeUrl %>"
