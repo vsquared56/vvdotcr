@@ -21,6 +21,12 @@ export default async (context, req) => {
   if (req.params.sightingId) {
     const sightingId = req.params.sightingId.toString();
     const sighting = await db.getSighting(sightingId);
+    //Increment view count
+    const patchOps =
+      [
+        { op: "incr", path: "/viewCount", value: 1}
+      ];
+    await db.patchSighting(sightingId, patchOps);
     response = eta.render(
       "./sightings/item",
       {
