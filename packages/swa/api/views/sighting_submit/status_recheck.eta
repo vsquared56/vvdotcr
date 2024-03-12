@@ -13,7 +13,10 @@
       "Reducing sinusoidal depleneration...",
       "Starting JavaScript V8 engine...",
       "Verifying checkmarks...",
-      "Baking session cookies..."
+      "Using a bot to make sure you're not a bot...",
+      "Baking session cookies...",
+      "sleep(10); //optimize this later...",
+      "Waiting for license plate database..."
     ];
     var randomText = progressText[Math.floor(Math.random() * progressText.length)];
   } else if (it.sighting.submissionStatus === 'pendingAutomaticApproval') { 
@@ -25,7 +28,8 @@
       "Checking with Chat-GPT...",
       "Detecting non-human faces...",
       "Cold-starting Lambda functions...",
-      "Waiting for eventual consistency..."
+      "Waiting for eventual consistency...",
+      "Rebooting servers..."
     ];
     var randomText = progressText[Math.floor(Math.random() * progressText.length)];
   } %>
