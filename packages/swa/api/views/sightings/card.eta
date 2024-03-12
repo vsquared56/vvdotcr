@@ -1,10 +1,10 @@
 <% if (it.loadMore) { %>
-<div id="sighting-card-<%= it.sighting.id %>" class="card card-compact w-full min-w-48 max-w-96 bg-base-300 shadow-xl"
+<div id="sighting-card-<%= it.sighting.id %>" class="card card-compact bg-primary-content w-full min-w-48 max-w-96 bg-base-300 shadow-xl"
      hx-get="/api/sightings?page=<%= it.nextPage %>"
      hx-trigger="revealed"
      hx-swap="afterend">
 <% } else { %>
-<div id="sighting-card-<%= it.sighting.id %>" class="card card-compact w-full min-w-48 max-w-96 bg-base-300 shadow-xl">
+<div id="sighting-card-<%= it.sighting.id %>" class="card card-compact bg-primary-content w-full min-w-48 max-w-96 bg-base-300 shadow-xl">
 <% } %>
   <figure>
     <button hx-get="/api/sightings/<%= it.sighting.id %>"
