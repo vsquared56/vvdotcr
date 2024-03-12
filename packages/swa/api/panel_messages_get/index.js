@@ -38,17 +38,13 @@ export default async (context, req) => {
     else {
       const messageCount = await db.countMessages();
       const totalPages = Math.ceil(messageCount / messagesPerPage);
-      const dateOptions = {
-        timeStyle: "medium",
-        dateStyle: "short",
-      };
       response = eta.render(
         "./panel/messages_table",
         {
           messages: messages.items.map(item => (
             {
               ...item,
-              messageDate: new Date(item.createDate).toLocaleString('en-US', dateOptions)
+              messageDate: new Date(item.createDate).toLocaleString(utils.dateTimeLocale, utils.shortDateTimeOptions)
             })),
           currentPage: page,
           totalPages: totalPages
