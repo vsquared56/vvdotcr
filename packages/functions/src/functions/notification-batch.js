@@ -60,12 +60,12 @@ app.timer("notification-batch", {
             submittedMessages: submittedMessages.map(msg => (
               {
                 ...msg,
-                messageDate: new Date(msg.createDate).toLocaleString()
+                messageDate: new Date(msg.createDate).toLocaleString(utils.dateTimeLocale, utils.dateTimeOptions)
               })),
             submittedSightings: submittedSightings.map(s => (
               {
                 ...s,
-                sightingDate: new Date(s.createDate).toLocaleString()
+                sightingDate: new Date(s.createDate).toLocaleString(utils.dateTimeLocale, utils.dateTimeOptions)
               })),
           }
         );

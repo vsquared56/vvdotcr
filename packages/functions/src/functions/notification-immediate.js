@@ -62,7 +62,7 @@ app.serviceBusQueue('notification-immediate', {
           "./ntfy_message_notification",
           {
             message: targetItem,
-            messageDate: (new Date(targetItem.createDate)).toLocaleString()
+            messageDate: (new Date(targetItem.createDate)).toLocaleString(utils.dateTimeLocale, utils.dateTimeOptions)
           }
         );
         if (targetItem.messageLocation) {
@@ -84,7 +84,7 @@ app.serviceBusQueue('notification-immediate', {
           "./ntfy_sighting_notification",
           {
             sighting: targetItem,
-            sightingDate: (new Date(targetItem.createDate)).toLocaleString()
+            sightingDate: (new Date(targetItem.createDate)).toLocaleString(utils.dateTimeLocale, utils.dateTimeOptions)
           }
         );
         notificationActions = `view, See Image, '${targetItem.largeImageUrl}';`;

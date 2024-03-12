@@ -12,12 +12,6 @@ export default async (context, req) => {
 
   var response = "";
 
-  const dateOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  };
-
   if (req.params.sightingId) {
     const sightingId = req.params.sightingId.toString();
     const sighting = await db.getSighting(sightingId);
@@ -31,7 +25,7 @@ export default async (context, req) => {
       "./sightings/item",
       {
         sighting: sighting,
-        sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions)
+        sightingDate: new Date(sighting.createDate).toLocaleDateString(utils.dateTimeLocale, utils.dateOptions)
       }
     );
   } else {
@@ -49,7 +43,7 @@ export default async (context, req) => {
           "./sightings/card",
           {
             sighting: sighting,
-            sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions),
+            sightingDate: new Date(sighting.createDate).toLocaleDateString(utils.dateTimeLocale, utils.dateOptions),
             loadMore: (itemCount === sightings.items.length && sightings.continuationToken !== null),
             nextPage: page + 1
           }

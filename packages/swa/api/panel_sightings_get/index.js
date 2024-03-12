@@ -21,7 +21,7 @@ export default async (context, req) => {
       "./panel/sightings_item",
       {
         sighting: sighting,
-        sightingDate: (new Date(sighting.createDate)).toLocaleString(),
+        sightingDate: (new Date(sighting.createDate)).toLocaleString(utils.dateTimeLocale, utils.dateTimeOptions),
         minSightingScore: await db.getSetting("min_sighting_score")
       }
     );
@@ -43,7 +43,7 @@ export default async (context, req) => {
           "./panel/sightings_card",
           {
             sighting: sighting,
-            sightingDate: (new Date(sighting.createDate)).toLocaleString(),
+            sightingDate: (new Date(sighting.createDate)).toLocaleString(utils.dateTimeLocale, utils.dateTimeOptions),
             minSightingScore: minSightingScore,
             loadMore: (itemCount === sightings.items.length && sightings.continuationToken !== null),
             nextPage: page + 1,

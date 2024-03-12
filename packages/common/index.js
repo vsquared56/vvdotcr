@@ -5,5 +5,6 @@ export { getOrCreateSession, getSession, getResponseCookie, isActionRateLimited,
 export { sightingApproval } from './sighting-approval.js';
 export { renderSightingProperty } from './sighting-properties.js';
 export { Storage } from './storage.js';
+export { dateOptions, dateTimeOptions, dateTimeLocale } from './time.js'
 export { validateTurnstileResponse } from './turnstile.js';
 export { parseXff } from './xff.js';

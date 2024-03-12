@@ -23,7 +23,7 @@ export default async (context, req) => {
       "./panel/messages_edit",
       {
         message: message,
-        messageDate: (new Date(message.createDate)).toLocaleString()
+        messageDate: (new Date(message.createDate)).toLocaleString(utils.dateTimeLocale, utils.dateTimeOptions)
       }
     );
   } else {
