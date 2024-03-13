@@ -15,7 +15,6 @@
       "Verifying checkmarks...",
       "Using a bot to make sure you're not a bot...",
       "Baking session cookies...",
-      "sleep(10); //optimize this later...",
       "Waiting for license plate database..."
     ];
     var randomText = progressText[Math.floor(Math.random() * progressText.length)];
