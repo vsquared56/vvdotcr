@@ -2,7 +2,7 @@
 
 <div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start p-4 md:p-6 xl:p-8">
   <% if (it.message.notificationStatusReason === "validLocation" ) { %>
-    <div>Looks like you're near the vv.cr car, so we'll send a notification straight to the driver's phone!</div>
+    <div>Looks like you're nearby, so we'll send a notification straight to the driver's phone!</div>
   <% } %>
   <% if (it.message.messageData.locationEnable === "locationShared" && !it.message.messageLocation) { %>
     <div class="divider"></div>

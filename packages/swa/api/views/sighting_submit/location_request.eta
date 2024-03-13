@@ -1,16 +1,23 @@
 <% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Can we get your location?", closable: false}) %>
 
-<button id="submitLocation"
-        class="btn btn-primary"
-        hx-post="/api/sightings/<%= it.sighting.id %>/location"
-        hx-on::confirm="addLocationParams(event);"
-        hx-target="#sighting-submit-status"
-        hx-swap="outerHTML">
-  Submit my location
-</button>
-<button id="submitWithoutLocation"
-        class="btn btn-neutral"
-        hx-post="/api/sightings/<%= it.sighting.id %>/location"
-        hx-target="#sighting-submit-status">
-  Submit without a location.
-</button>
+<div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start px-1.5 py-4">
+  <div>To confirm that's a real photo, can we grab your location?</div>
+  <div>Sightings with a location can get approved automatically, so they'll get published in seconds!</div>
+  <div>Without a location, someone will have to review them, which could take a while.</div>
+  <button id="submitLocation"
+          class="btn btn-primary"
+          hx-post="/api/sightings/<%= it.sighting.id %>/location"
+          hx-on::confirm="addLocationParams(event);"
+          hx-target="#sighting-submit-status"
+          hx-swap="outerHTML">
+    Submit my location
+  </button>
+  <button id="submitWithoutLocation"
+          class="btn btn-neutral"
+          hx-post="/api/sightings/<%= it.sighting.id %>/location"
+          hx-on::confirm="addLocationPermissionParam(event);"
+          hx-target="#sighting-submit-status"
+          hx-swap="outerHTML">
+    Submit without a location.
+  </button>
+</div>

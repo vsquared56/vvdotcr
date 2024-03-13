@@ -26,7 +26,9 @@
           Settings
         </div>
         <div class="collapse-content bg-base-200">
-          <p>Loading...</p>
+          <div class="grid grid-cols-1 place-items-center px-1.5 md:px-4 lg:px-8 py-4">
+            <span class="htmx-indicator loading loading-dots loading-lg"></span>
+          </div>
         </div>
       </div>
 
@@ -42,7 +44,9 @@
           Messages
         </div>
         <div class="collapse-content bg-base-200">
-          <p>Loading...</p>
+          <div class="grid grid-cols-1 place-items-center px-1.5 md:px-4 lg:px-8 py-4">
+            <span class="htmx-indicator loading loading-dots loading-lg"></span>
+          </div>
         </div>
       </div>
 
@@ -59,7 +63,7 @@
                  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 2xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8 place-items-center"
                  hx-get="/api/panel/sightings"
                  hx-trigger="load">
-              <img alt="Sightings loading..." class="htmx-indicator" width="150" src="/images/three-dots.svg" />
+              <span class="htmx-indicator loading loading-dots loading-lg"></span>
             </div>
           </div>
         </div>

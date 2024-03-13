@@ -17,7 +17,7 @@
   </td>
   <td class="text-xs lg:text-sm">
     <% if (it.message.messageData.driving) { %>
-    <%= it.message.messageData.driving.speed %>
+    <%= it.message.messageData.driving.drivingQuality %>
     <% } %>
   </td>
   <td class="text-xs lg:text-sm">

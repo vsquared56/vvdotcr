@@ -1,16 +1,16 @@
 <div id="message-collapse"
-     class="collapse collapse-arrow bg-primary">
+     class="collapse collapse-arrow bg-primary border border-primary">
   <input type="checkbox" checked="true"/>
   <div class="collapse-title text-xl text-primary-content font-medium">
     Send a message!
   </div>
-  <div class="collapse-content bg-base-200 px-1.5">
+  <div class="collapse-content bg-base-200 px-1.5 md:px-4 lg:px-8">
     <form id="message-form"
           hx-post="/api/messages"
           hx-target="#message-submit-status"
           hx-swap="outerHTML"
           hx-on::confirm="console.log(event);addLocationParams(event, 'message-form', 'location-enable');">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 xl:gap-8 justify-items-center items-start px-1.5 py-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 xl:gap-8 justify-items-center items-start px-1.5 md:px-4 lg:px-8 py-4">
         <div id="message-driving-form" class="collapse collapse-plus bg-secondary border border-secondary" >
           <%~ include("./message_form_checkbox", { checkboxName: "driving", formEnabled: false, updateSubmit: false }) %>
           <div class="collapse-title text-xl text-secondary-content font-medium">
@@ -18,9 +18,11 @@
           </div>
           <div class="collapse-content bg-base-300">
             <div class="flex flex-col gap-4 px-1.5 py-4">
-              <div><input type="radio" name="speed" value="faster" class="radio" /> Speed it up!</div>
-              <div><input type="radio" name="speed" value="slower" class="radio" /> Slow down!</div>
-              <div><input type="radio" name="speed" value="ok" class="radio" checked /> Just right</div>
+              <div><input type="radio" name="drivingQuality" value="faster" class="radio" /> Speed it up!</div>
+              <div><input type="radio" name="drivingQuality" value="slower" class="radio" /> Slow down!</div>
+              <div><input type="radio" name="drivingQuality" value="turn-signals" class="radio" checked /> Nice turn signals!</div>
+              <div><input type="radio" name="drivingQuality" value="swearing" class="radio" checked /> $#*@&!!</div>
+              <div><input type="radio" name="drivingQuality" value="ok" class="radio" checked /> Just right</div>
             </div>
           </div>
         </div>
@@ -35,6 +37,7 @@
               <div><input type="radio" name="parkingQuality" value="bad" class="radio" /> Get a coloring book and practice staying within the lines!</div>
               <div><input type="radio" name="parkingQuality" value="too-close" class="radio" /> Parked too close, I had to climb in through the window!</div>
               <div><input type="radio" name="parkingQuality" value="too-far" class="radio" /> It's the city, don't waste so much space!</div>
+              <div><input type="radio" name="parkingQuality" value="swearing" class="radio" checked /> $#*@&!!</div>
               <div><input type="radio" name="parkingQuality" value="ok" class="radio" checked /> Just right</div>
             </div>
           </div>

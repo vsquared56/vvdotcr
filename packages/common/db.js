@@ -2,14 +2,15 @@ import { CosmosClient } from "@azure/cosmos";
 
 export class Database {
     constructor() {
+        const environment = process.env.ENVIRONMENT_NAME.toLowerCase();
         this.client = new CosmosClient(process.env.COSMOS_DB_CONNECTION_STRING);
         this.database = this.client.database(process.env.COSMOS_DB_DATABASE_NAME);
-        this.actionsContainer = this.database.container("vvdotcr-actions-dev");
-        this.messagesContainer = this.database.container("vvdotcr-messages-dev");
-        this.notificationsContainer = this.database.container("vvdotcr-notifications-dev");
-        this.sessionsContainer = this.database.container("vvdotcr-sessions-dev");
-        this.settingsContainer = this.database.container("vvdotcr-settings-dev");
-        this.sightingsContainer = this.database.container("vvdotcr-sightings-dev");
+        this.actionsContainer = this.database.container(`vvdotcr-actions-${environment}`);
+        this.messagesContainer = this.database.container(`vvdotcr-messages-${environment}`);
+        this.notificationsContainer = this.database.container(`vvdotcr-notifications-${environment}`);
+        this.sessionsContainer = this.database.container(`vvdotcr-sessions-${environment}`);
+        this.settingsContainer = this.database.container(`vvdotcr-settings-${environment}`);
+        this.sightingsContainer = this.database.container(`vvdotcr-sightings-${environment}`);
     }
 
     async saveAction(action) {

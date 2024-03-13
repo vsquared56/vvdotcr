@@ -25,8 +25,11 @@ module.exports = {
   daisyui: {
     themes: [
       {
-        night: {
-          ...require("daisyui/src/theming/themes")["night"],
+        dark: {
+          ...require("daisyui/src/theming/themes")["dark"],
+            "primary": "#38bdf8",
+            "secondary": "#818CF8",
+            "accent": "#F471B5"
         }
       }
     ],

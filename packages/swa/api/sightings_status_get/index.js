@@ -55,7 +55,7 @@ export default async (context, req) => {
       "./sighting_submit/approved",
       {
         sighting: sighting,
-        sightingDate: new Date(sighting.createDate).toLocaleDateString('en-US', dateOptions),
+        sightingDate: new Date(sighting.createDate).toLocaleDateString(utils.dateTimeLocale, utils.dateOptions),
         imageData: JSON.stringify(sighting)
       }
     );

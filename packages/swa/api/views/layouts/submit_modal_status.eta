@@ -11,7 +11,7 @@
      >
   <div class="navbar bg-base-100 min-h-8">
     <div class="navbar-start"></div>
-    <div class="navbar-center"><%= it.title %></div>
+    <div class="navbar-center text-lg"><%= it.title %></div>
     <div class="navbar-end">
       <% if (it.closable) { %>
       <button class="btn btn-sm btn-circle btn-ghost"
@@ -24,11 +24,11 @@
       <% } %>
     </div>
   </div>
-  <div class="p-4">
+  <div class="px-2 py-4 overflow-auto">
     <%~ it.body %>
   </div>
   <% if (it.closable && it.closeButton) { %>
-  <div class="modal-action p-4">
+  <div class="modal-action px-2 py-4">
     <button class="btn btn-secondary"
             <% if (it.closeUrl) { %>
             hx-get="<%= it.closeUrl %>"

@@ -27,10 +27,10 @@
     </td>
   </tr>
   <tr>
-    <td>Driving Speed</td>
+    <td>Driving Quality</td>
     <td>
       <% if (it.message.messageData.driving) { %>
-      <%= it.message.messageData.driving.speed %>
+      <%= it.message.messageData.driving.drivingQuality %>
       <% } else { %>
       Null
       <% } %>
