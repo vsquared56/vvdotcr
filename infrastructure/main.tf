@@ -5,4 +5,24 @@ terraform {
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
   }
+
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "=3.0.0"
+    }
+  }
+}
+
+provider "azurerm" {
+  features {}
+}
+
+locals {
+  environment = "${terraform.workspace == "default" ? "prod" : terraform.workspace}"
+}
+
+resource "azurerm_resource_group" "environment_rg" {
+  location = "centralus"
+  name     = "vvdotcr-${local.environment}"
 }
