@@ -36,3 +36,15 @@ resource "azurerm_cosmosdb_account" "db" {
         "hidden-cosmos-mmspecial" = ""
     }
 }
+
+resource "azurerm_cosmosdb_sql_database" "db" {
+    account_name        = azurerm_cosmosdb_account.db.name
+    name                = "vvdotcr-${local.environment}"
+    resource_group_name = azurerm_resource_group.environment_rg.name
+
+    autoscale_settings {
+        max_throughput = 1000
+    }
+
+    timeouts {}
+}
