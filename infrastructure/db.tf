@@ -48,3 +48,70 @@ resource "azurerm_cosmosdb_sql_database" "db" {
 
     timeouts {}
 }
+
+resource "azurerm_cosmosdb_sql_container" "actions" {
+    account_name          = azurerm_cosmosdb_account.db.name
+    database_name         = azurerm_cosmosdb_sql_database.db.name
+    default_ttl           = 2592000
+    name                  = "vvdotcr-actions-${local.environment}"
+    partition_key_path    = "/id"
+    partition_key_version = 2
+    resource_group_name   = azurerm_resource_group.environment_rg.name
+
+    timeouts {}
+}
+
+resource "azurerm_cosmosdb_sql_container" "messages" {
+    account_name          = azurerm_cosmosdb_account.db.name
+    database_name         = azurerm_cosmosdb_sql_database.db.name
+    name                  = "vvdotcr-messages-${local.environment}"
+    partition_key_path    = "/id"
+    partition_key_version = 2
+    resource_group_name   = azurerm_resource_group.environment_rg.name
+
+    timeouts {}
+}
+
+resource "azurerm_cosmosdb_sql_container" "notifications" {
+    account_name          = azurerm_cosmosdb_account.db.name
+    database_name         = azurerm_cosmosdb_sql_database.db.name
+    name                  = "vvdotcr-notifications-${local.environment}"
+    partition_key_path    = "/id"
+    partition_key_version = 2
+    resource_group_name   = azurerm_resource_group.environment_rg.name
+
+    timeouts {}
+}
+
+resource "azurerm_cosmosdb_sql_container" "sessions" {
+    account_name          = azurerm_cosmosdb_account.db.name
+    database_name         = azurerm_cosmosdb_sql_database.db.name
+    name                  = "vvdotcr-sessions-${local.environment}"
+    partition_key_path    = "/id"
+    partition_key_version = 2
+    resource_group_name   = azurerm_resource_group.environment_rg.name
+
+    timeouts {}
+}
+
+resource "azurerm_cosmosdb_sql_container" "settings" {
+    account_name          = azurerm_cosmosdb_account.db.name
+    database_name         = azurerm_cosmosdb_sql_database.db.name
+    name                  = "vvdotcr-settings-${local.environment}"
+    partition_key_path    = "/id"
+    partition_key_version = 2
+    resource_group_name   = azurerm_resource_group.environment_rg.name
+
+    timeouts {}
+}
+
+resource "azurerm_cosmosdb_sql_container" "sightings" {
+    account_name          = azurerm_cosmosdb_account.db.name
+    database_name         = azurerm_cosmosdb_sql_database.db.name
+    name                  = "vvdotcr-sightings-${local.environment}"
+    partition_key_path    = "/id"
+    partition_key_version = 2
+    resource_group_name   = azurerm_resource_group.environment_rg.name
+
+    timeouts {}
+}
