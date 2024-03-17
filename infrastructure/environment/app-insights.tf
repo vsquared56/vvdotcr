@@ -55,7 +55,7 @@ resource "azurerm_monitor_smart_detector_alert_rule" "failure_anomalies" {
 
     action_group {
         ids = [
-            "/subscriptions/de78e191-6db1-45c5-ae31-09587f52a2d0/resourcegroups/vvdotcr-dev/providers/microsoft.insights/actionGroups/application insights smart detection",
+            "/subscriptions/de78e191-6db1-45c5-ae31-09587f52a2d0/resourceGroups/vvdotcr-dev/providers/microsoft.insights/actionGroups/application insights smart detection",
         ]
     }
 
