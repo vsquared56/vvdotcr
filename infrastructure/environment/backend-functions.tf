@@ -61,5 +61,5 @@ resource "azurerm_linux_function_app" "backend_functions" {
             tags["hidden-link: /app-insights-instrumentation-key"],
             tags["hidden-link: /app-insights-resource-id"]
         ]
-  }
+    }
 }
