@@ -14,8 +14,8 @@ resource "azurerm_static_web_app" "swa" {
         "STORAGE_ACCOUNT"                          = azurerm_storage_account.app_storage.name
         "STORAGE_KEY"                              = azurerm_storage_account.app_storage.primary_access_key
         "TIME_ZONE"                                = "America/Chicago"
-        "TURNSTILE_SECRET_KEY"                     = var.turnstile_secret_key
-        "TURNSTILE_SITE_KEY"                       = var.turnstile_site_key
+        "TURNSTILE_SECRET_KEY"                     = cloudflare_turnstile_widget.turnstile.secret
+        "TURNSTILE_SITE_KEY"                       = cloudflare_turnstile_widget.turnstile.id
     }
 
     tags = {
@@ -29,6 +29,15 @@ resource "azurerm_static_web_app" "swa" {
             tags["hidden-link: /app-insights-resource-id"]
         ]
     }
+}
+
+resource "cloudflare_turnstile_widget" "turnstile" {
+    account_id     = data.terraform_remote_state.shared_rg.outputs.cloudflare_account_id
+    name           = "vv.cr"
+    domains        = ["localhost", "vv.cr"]
+    mode           = "managed"
+    region         = "world"
+    bot_fight_mode = false
 }
 
 resource "cloudflare_record" "swa_cname" {
