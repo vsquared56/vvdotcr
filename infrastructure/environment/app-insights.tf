@@ -1,7 +1,7 @@
 resource "azurerm_log_analytics_workspace" "log_analytics" {
-  name                = "DefaultWorkspace-de78e191-6db1-45c5-ae31-09587f52a2d0-CUS"
-  location            = "centralus"
-  resource_group_name = "DefaultResourceGroup-CUS"
+  name                = "vvdotcr-log-analytics-${local.environment}"
+  location            = azurerm_resource_group.environment_rg.location
+  resource_group_name = azurerm_resource_group.environment_rg.name
   sku                 = "PerGB2018"
   retention_in_days   = 30
 }
