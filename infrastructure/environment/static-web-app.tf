@@ -46,7 +46,7 @@ resource "cloudflare_turnstile_widget" "turnstile" {
 
 resource "cloudflare_record" "swa_cname" {
   zone_id = data.terraform_remote_state.shared_rg.outputs.cloudflare_zone_id
-  name    = local.swa_hostname
+  name    = local.swa_hostname == "" ? "@" : local.swa_hostname
   value   = azurerm_static_web_app.swa.default_host_name
   type    = "CNAME"
   proxied = true
@@ -61,7 +61,7 @@ resource "azurerm_static_web_app_custom_domain" "swa" {
 
 resource "cloudflare_record" "swa_validation" {
   zone_id = data.terraform_remote_state.shared_rg.outputs.cloudflare_zone_id
-  name    = local.swa_hostname
+  name    = local.swa_hostname == "" ? "@" : local.swa_hostname
   comment = "Azure Static Web App domain validation"
   value   = azurerm_static_web_app_custom_domain.swa.validation_token
   type    = "TXT"
