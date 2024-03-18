@@ -4,7 +4,16 @@ resource "azurerm_cosmosdb_account" "db" {
     resource_group_name = azurerm_resource_group.environment_rg.name
     offer_type          = "Standard"
     kind                = "GlobalDocumentDB"
-    enable_free_tier    = true
+    enable_free_tier    = local.environment == "dev" ? true : false
+
+    //Do not EnableServerless in the dev environment, as the free tier does not support this
+    dynamic "capabilities" {
+        for_each = local.environment == "dev" ? {} : {env = local.environment}
+
+        content {
+            name = "EnableServerless"
+        }
+    }
 
     backup {
         interval_in_minutes = 1440
