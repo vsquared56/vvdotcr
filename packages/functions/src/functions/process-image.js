@@ -13,7 +13,7 @@ const VISION_API_KEY = process.env.VISION_API_KEY;
 
 app.serviceBusQueue('process-image', {
     connection: 'SERVICE_BUS_CONNECTION_STRING',
-    queueName: 'new-file-uploads',
+    queueName: 'sightings-to-process',
     handler: async (message, context) => {
         const db = new utils.Database;
         const storage = new utils.Storage;
@@ -99,7 +99,7 @@ app.serviceBusQueue('process-image', {
         if (submissionStatus === "pendingAutomaticApproval") {
             // Send a Service Bus Message
             const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
-            const sbSender = sbClient.createSender('new-sightings-to-validate');
+            const sbSender = sbClient.createSender('sightings-to-validate');
             try {
                 await sbSender.sendMessages({ body: item.id });
             } finally {

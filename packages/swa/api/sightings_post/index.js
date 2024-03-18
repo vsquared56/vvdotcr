@@ -147,7 +147,7 @@ export default async (context, req) => {
 
       // Send a Service Bus Message
       const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
-      const sbSender = sbClient.createSender('new-file-uploads');
+      const sbSender = sbClient.createSender('sightings-to-process');
       try {
         await sbSender.sendMessages({ body: sightingId });
       } finally {
