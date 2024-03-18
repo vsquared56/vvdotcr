@@ -49,9 +49,12 @@ stages:
         SourceFolder: '$(System.DefaultWorkingDirectory)/packages/swa' 
         Contents: '@(api|public)/**'
         TargetFolder: $(Build.ArtifactStagingDirectory)/swa
-    
-    - publish: $(Build.ArtifactStagingDirectory)/swa
-      artifact: SWA
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish SWA Artifact'
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)/swa'
+        artifactName: SWA
 
     - task: ArchiveFiles@2
       displayName: 'Zip Azure functions'
@@ -62,8 +65,12 @@ stages:
         archiveFile: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
         replaceExistingArchive: true
     
-    - publish: $(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip
-      artifact: BackendFunctions
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Functions Artifact'
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
+        artifactName: BackendFunctions
+     
 
 #- stage: Dev
 #  variables:
