@@ -13,13 +13,14 @@ resource "azurerm_storage_account" "app_storage" {
     cross_tenant_replication_enabled = false
 
     custom_domain {
-        name = local.cdn_custom_domain
+        name          = local.cdn_custom_domain
+        use_subdomain = false # See https://github.com/hashicorp/terraform-provider-azurerm/issues/12737
     }
 
     timeouts {}
 
     depends_on = [
-      cloudflare_record.cdn_cname
+      cloudflare_record.cdn_validation
     ]
 
     tags = {}
@@ -28,10 +29,20 @@ resource "azurerm_storage_account" "app_storage" {
 resource "cloudflare_record" "cdn_cname" {
   zone_id = data.terraform_remote_state.shared_rg.outputs.cloudflare_zone_id
   name    = local.cdn_custom_hostname
-  value   = "${local.storage_account_name}.blob.core.windows.net"
+  value   = azurerm_storage_account.app_storage.primary_blob_host
   type    = "CNAME"
   proxied = true
   ttl     = 1
+}
+
+resource "cloudflare_record" "cdn_validation" {
+  zone_id = data.terraform_remote_state.shared_rg.outputs.cloudflare_zone_id
+  name    = "asverify.${local.cdn_custom_hostname}"
+  comment = "Azure Storage custom domain validation"
+  value   = "asverify.${local.storage_account_name}.blob.core.windows.net"
+  type    = "CNAME"
+  proxied = false
+  ttl     = 3600
 }
 
 resource "azurerm_storage_container" "sightings_private" {
