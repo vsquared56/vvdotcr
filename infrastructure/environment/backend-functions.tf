@@ -1,6 +1,6 @@
 resource "azurerm_service_plan" "backend_functions" {
     location                     = azurerm_resource_group.environment_rg.location
-    name                         = "ASP-vvdotcrdev-96c2"
+    name                         = "vvdotcr-backend-functions-asp-${local.environment}"
     os_type                      = "Linux"
     resource_group_name          = azurerm_resource_group.environment_rg.name
     sku_name                     = "Y1"
