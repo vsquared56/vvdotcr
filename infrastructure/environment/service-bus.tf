@@ -12,6 +12,8 @@ resource "azurerm_servicebus_queue" "batch_notifications" {
   name                                 = "batch-notifications"
   namespace_id                         = azurerm_servicebus_namespace.sb.id
   dead_lettering_on_message_expiration = true
+  max_delivery_count                   = 2
+  max_size_in_megabytes                = 1024
 
   timeouts {}
 }
@@ -21,24 +23,27 @@ resource "azurerm_servicebus_queue" "immediate_notifications" {
   namespace_id                         = azurerm_servicebus_namespace.sb.id
   dead_lettering_on_message_expiration = true
   max_delivery_count                   = 2
+  max_size_in_megabytes                = 1024
 
   timeouts {}
 }
 
 resource "azurerm_servicebus_queue" "sightings_to_process" {
-  name                                 = "new-file-uploads"
+  name                                 = "sightings-to-process"
   namespace_id                         = azurerm_servicebus_namespace.sb.id
   dead_lettering_on_message_expiration = true
   max_delivery_count                   = 2
+  max_size_in_megabytes                = 1024
 
   timeouts {}
 }
 
 resource "azurerm_servicebus_queue" "sightings_to_validate" {
-  name                                 = "new-sightings-to-validate"
+  name                                 = "sightings-to-validate"
   namespace_id                         = azurerm_servicebus_namespace.sb.id
   dead_lettering_on_message_expiration = true
   max_delivery_count                   = 2
+  max_size_in_megabytes                = 1024
 
   timeouts {}
 }

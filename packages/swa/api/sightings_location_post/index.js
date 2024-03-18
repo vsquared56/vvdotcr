@@ -57,7 +57,7 @@ export default async (context, req) => {
 
   // Send a Service Bus Message
   const sbClient = new ServiceBusClient(SERVICE_BUS_CONNECTION_STRING);
-  const sbSender = sbClient.createSender('new-sightings-to-validate');
+  const sbSender = sbClient.createSender('sightings-to-validate');
   try {
     await sbSender.sendMessages({ body: sighting.id });
   } finally {
