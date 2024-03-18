@@ -42,6 +42,8 @@ resource "azurerm_monitor_action_group" "smart_detection" {
     timeouts {}
 }
 
+
+
 resource "azurerm_monitor_smart_detector_alert_rule" "failure_anomalies" {
     description         = "Failure Anomalies notifies you of an unusual rise in the rate of failed HTTP requests or dependency calls."
     detector_type       = "FailureAnomaliesDetector"
@@ -54,9 +56,7 @@ resource "azurerm_monitor_smart_detector_alert_rule" "failure_anomalies" {
     tags                = {}
 
     action_group {
-        ids = [
-            "/subscriptions/de78e191-6db1-45c5-ae31-09587f52a2d0/resourceGroups/vvdotcr-dev/providers/microsoft.insights/actionGroups/application insights smart detection",
-        ]
+        ids = [azurerm_monitor_action_group.smart_detection.id]
     }
 
     timeouts {}
