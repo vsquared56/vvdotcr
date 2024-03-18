@@ -11,19 +11,73 @@ variables:
   value: 18
 
 stages:
-- stage: Dev
-  variables:
-  - group: azure_deployment_dev
+- stage: Build
   jobs:
-  - job: DeployDev
+  - job: Build
     steps:
-    - template: azure-pipelines-deploy.yml
+    - task: NodeTool@0
+      displayName: 'Use Node $(nodeVersion).x'
+      inputs:
+        versionSpec: '$(nodeVersion).x'
+    
+    - task: Bash@3
+      displayName: 'Corepack enable'
+      inputs:
+        targetType: 'inline'
+        script: 'corepack enable'
+    
+    - task: Bash@3
+      displayName: 'Install dependencies'
+      inputs:
+        targetType: 'inline'
+        script: 'yarn install'
+    
+    - task: Bash@3
+      displayName: 'Clean public folder'
+      inputs:
+        targetType: 'inline'
+        script: 'yarn clean'
+    
+    - task: Bash@3
+      displayName: 'yarn build'
+      inputs:
+        targetType: 'inline'
+        script: 'yarn build'
+    
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)/packages/swa' 
+        Contents: '@(api|public)/**'
+        TargetFolder: $(Build.ArtifactStagingDirectory)/swa
+    
+    - publish: $(Build.ArtifactStagingDirectory)/swa
+      artifact: SWA
 
-- stage: Prod
+    - task: ArchiveFiles@2
+      displayName: 'Zip Azure functions'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/packages/functions'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
+        replaceExistingArchive: true
+    
+    - publish: $(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip
+      artifact: BackendFunctions
+
+#- stage: Dev
+#  variables:
+#  - group: azure_deployment_dev
+#  jobs:
+#  - job: DeployDev
+#    steps:
+#    - template: azure-pipelines-deploy.yml
+
+#- stage: Prod
   #condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-  variables:
-  - group: azure_deployment_prod
-  jobs:
-  - job: DeployProd
-    steps:
-    - template: azure-pipelines-deploy.yml
+#  variables:
+#  - group: azure_deployment_prod
+#  jobs:
+#  - job: DeployProd
+#    steps:
+#    - template: azure-pipelines-deploy.yml
