@@ -28,7 +28,8 @@ provider "cloudflare" {
 }
 
 locals {
-  environment = "${terraform.workspace == "default" ? "prod" : terraform.workspace}"
+  environment    = "${terraform.workspace == "default" ? "prod" : terraform.workspace}"
+  primary_domain = "vv.cr"
 }
 
 resource "azurerm_resource_group" "environment_rg" {

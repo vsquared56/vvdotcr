@@ -1,3 +1,8 @@
+locals {
+    swa_hostname = local.environment == "prod" ? "prod" : local.environment
+    swa_domain_name = "${local.swa_hostname}.${local.primary_domain}"
+}
+
 resource "azurerm_static_web_app" "swa" {
     name                = "vvdotcr-app-${local.environment}"
     resource_group_name = azurerm_resource_group.environment_rg.name
@@ -33,16 +38,15 @@ resource "azurerm_static_web_app" "swa" {
 
 resource "cloudflare_turnstile_widget" "turnstile" {
     account_id     = data.terraform_remote_state.shared_rg.outputs.cloudflare_account_id
-    name           = "vv.cr"
-    domains        = ["localhost", "vv.cr"]
+    name           = local.swa_domain_name
+    domains        = local.environment == "dev" ? ["localhost", local.swa_domain_name] : [local.swa_domain_name]
     mode           = "managed"
-    region         = "world"
     bot_fight_mode = false
 }
 
 resource "cloudflare_record" "swa_cname" {
   zone_id = data.terraform_remote_state.shared_rg.outputs.cloudflare_zone_id
-  name    = "dev"
+  name    = local.swa_hostname
   value   = azurerm_static_web_app.swa.default_host_name
   type    = "CNAME"
   proxied = true
@@ -51,13 +55,13 @@ resource "cloudflare_record" "swa_cname" {
 
 resource "azurerm_static_web_app_custom_domain" "swa" {
   static_web_app_id = azurerm_static_web_app.swa.id
-  domain_name       = "dev.vv.cr"
+  domain_name       = local.swa_domain_name
   validation_type   = "dns-txt-token"
 }
 
 resource "cloudflare_record" "swa_validation" {
   zone_id = data.terraform_remote_state.shared_rg.outputs.cloudflare_zone_id
-  name    = "dev"
+  name    = local.swa_hostname
   comment = "Azure Static Web App domain validation"
   value   = azurerm_static_web_app_custom_domain.swa.validation_token
   type    = "TXT"

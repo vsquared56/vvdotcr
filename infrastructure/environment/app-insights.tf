@@ -24,7 +24,7 @@ resource "azurerm_application_insights" "app_insights" {
 resource "azurerm_monitor_action_group" "smart_detection" {
     enabled             = true
     name                = "application insights smart detection"
-    resource_group_name = "vvdotcr-dev"
+    resource_group_name = azurerm_resource_group.environment_rg.name
     short_name          = "SmartDetect"
     tags                = {}
 

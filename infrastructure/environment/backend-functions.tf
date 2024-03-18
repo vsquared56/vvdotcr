@@ -23,15 +23,15 @@ resource "azurerm_linux_function_app" "backend_functions" {
     public_network_access_enabled = false
 
     app_settings                                   = {
-        "CDN_HOST"                                 = "cdn-dev.vv.cr"
+        "CDN_HOST"                                 = local.cdn_custom_domain
         "COMMUNICATION_SERVICES_CONNECTION_STRING" = data.terraform_remote_state.shared_rg.outputs.communication_services_connection_string
         "COSMOS_DB_CONNECTION_STRING"              = azurerm_cosmosdb_account.db.primary_sql_connection_string
         "COSMOS_DB_DATABASE_NAME"                  = azurerm_cosmosdb_sql_database.db.name
-        "EMAIL_FROM_ADDRESS"                       = "noreply-dev@vv.cr"
+        "EMAIL_FROM_ADDRESS"                       = local.environment != "prod" ? "noreply-${local.environment}@${local.primary_domain}" : "noreply@${local.primary_domain}" 
         "EMAIL_NOTIFICATION_ADDRESS"               = var.email_notification_address
         "ENVIRONMENT_NAME"                         = local.environment
         "NTFY_ENDPOINT"                            = var.ntfy_endpoint        
-        "PING_URL"                                 = "https://dev.vv.cr/api/ping"
+        "PING_URL"                                 = "https://${local.swa_domain_name}/api/ping"
         "SERVICE_BUS_CONNECTION_STRING"            = azurerm_servicebus_namespace.sb.default_primary_connection_string
         "STORAGE_ACCOUNT"                          = azurerm_storage_account.app_storage.name
         "STORAGE_KEY"                              = azurerm_storage_account.app_storage.primary_access_key

@@ -1,5 +1,5 @@
 resource "azurerm_cognitive_account" "vision" {
-    custom_subdomain_name              = "vvdotcr-vision-dev"
+    custom_subdomain_name              = "vvdotcr-vision-${local.environment}"
     fqdns                              = []
     kind                               = "ComputerVision"
     location                           = azurerm_resource_group.environment_rg.location
