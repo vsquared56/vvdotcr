@@ -1,10 +1,11 @@
 locals {
   cdn_custom_hostname = "cdn-${local.environment}"
   cdn_custom_domain = "${local.cdn_custom_hostname}.${local.primary_domain}"
+  storage_account_name = local.environment == "dev" ? "vvdotcr${local.environment}storage" : "vvdotcrstorage${local.environment}"
 }
 
 resource "azurerm_storage_account" "app_storage" {
-    name                             = local.environment == "dev" ? "vvdotcr${local.environment}storage" : "vvdotcrstorage${local.environment}"
+    name                             = local.storage_account_name
     resource_group_name              = azurerm_resource_group.environment_rg.name
     location                         = azurerm_resource_group.environment_rg.location
     account_tier                     = "Standard"
@@ -17,13 +18,17 @@ resource "azurerm_storage_account" "app_storage" {
 
     timeouts {}
 
+    depends_on = [
+      cloudflare_record.cdn_cname
+    ]
+
     tags = {}
 }
 
 resource "cloudflare_record" "cdn_cname" {
   zone_id = data.terraform_remote_state.shared_rg.outputs.cloudflare_zone_id
   name    = local.cdn_custom_hostname
-  value   = azurerm_storage_account.app_storage.primary_blob_host
+  value   = "${local.storage_account_name}.blob.core.windows.net"
   type    = "CNAME"
   proxied = true
   ttl     = 1
