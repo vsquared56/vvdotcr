@@ -42,7 +42,7 @@ steps:
   inputs:
     azureSubscription: 'Azure Visual Studio Subscription'
     appType: 'functionAppLinux'
-    appName: 'vvdotcr-backend-functions-dev'
+    appName: '$(functions_app_name)'
     package: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
     runtimeStack: 'NODE|$(nodeVersion)'
 
