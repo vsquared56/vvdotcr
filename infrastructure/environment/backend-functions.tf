@@ -30,7 +30,7 @@ resource "azurerm_linux_function_app" "backend_functions" {
         "EMAIL_FROM_ADDRESS"                       = local.environment != "prod" ? "noreply-${local.environment}@${local.primary_domain}" : "noreply@${local.primary_domain}" 
         "EMAIL_NOTIFICATION_ADDRESS"               = var.email_notification_address
         "ENVIRONMENT_NAME"                         = local.environment
-        "NTFY_ENDPOINT"                            = var.ntfy_endpoint        
+        "NTFY_ENDPOINT"                            = var.ntfy_endpoint[local.environment]        
         "PING_URL"                                 = "https://${local.swa_domain_name}/api/ping"
         "SERVICE_BUS_CONNECTION_STRING"            = azurerm_servicebus_namespace.sb.default_primary_connection_string
         "STORAGE_ACCOUNT"                          = azurerm_storage_account.app_storage.name
