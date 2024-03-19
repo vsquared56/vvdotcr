@@ -21,7 +21,7 @@ steps:
   displayName: 'Unzip SWA artifact'
   inputs:
     archiveFilePatterns: '$(System.ArtifactsDirectory)/SWA/swa*.zip'
-    destinationFolder: '$(System.ArtifactsDirectory)/SWA' 
+    destinationFolder: '$(System.ArtifactsDirectory)/staticwebapp' 
 
 - task: AzureFunctionApp@1
   displayName: 'Deploy Azure functions'
@@ -39,5 +39,5 @@ steps:
     azure_static_web_apps_api_token: $(azure_deployment_token)
     skip_app_build: true
     skip_api_build: true
-    app_location: '$(System.ArtifactsDirectory)/SWA/public'
-    api_location: '$(System.ArtifactsDirectory)/SWA/api'
+    app_location: '$(System.ArtifactsDirectory)/staticwebapp/public'
+    api_location: '$(System.ArtifactsDirectory)/staticwebapp/api'
