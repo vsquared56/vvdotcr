@@ -83,7 +83,10 @@ stages:
      
 - stage: Dev
   variables:
+  - name: NODE_TLS_REJECT_UNAUTHORIZED
+    value: 0
   - group: azure_deployment_dev
+  
   jobs:
   - job: DeployDev
     steps:
