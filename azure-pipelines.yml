@@ -45,10 +45,20 @@ stages:
         script: 'yarn build'
     
     - task: CopyFiles@2
+      displayName: 'Stage SWA files'
       inputs:
         SourceFolder: '$(System.DefaultWorkingDirectory)/packages/swa' 
         Contents: '@(api|public)/**'
         TargetFolder: $(Build.ArtifactStagingDirectory)/swa
+    
+    - task: ArchiveFiles@2
+      displayName: 'Zip SWA files'
+      inputs:
+        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/swa'
+        includeRootFolder: true
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/swa_$(Build.BuildId).zip'
+        replaceExistingArchive: true
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish SWA Artifact'
@@ -71,14 +81,13 @@ stages:
         pathToPublish: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
         artifactName: BackendFunctions
      
-
-#- stage: Dev
-#  variables:
-#  - group: azure_deployment_dev
-#  jobs:
-#  - job: DeployDev
-#    steps:
-#    - template: azure-pipelines-deploy.yml
+- stage: Dev
+  variables:
+  - group: azure_deployment_dev
+  jobs:
+  - job: DeployDev
+    steps:
+    - template: azure-pipelines-deploy.yml
 
 #- stage: Prod
   #condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
