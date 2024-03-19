@@ -1,4 +1,6 @@
 steps:
+- checkout: none
+
 - task: DownloadBuildArtifacts@0
   displayName: 'Download Azure functions artifact'
   inputs:
