@@ -63,7 +63,7 @@ stages:
     - task: PublishBuildArtifacts@1
       displayName: 'Publish SWA Artifact'
       inputs:
-        pathToPublish: '$(Build.ArtifactStagingDirectory)/swa'
+        pathToPublish: '$(Build.ArtifactStagingDirectory)/swa_$(Build.BuildId).zip'
         artifactName: SWA
 
     - task: ArchiveFiles@2
