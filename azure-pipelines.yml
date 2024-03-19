@@ -55,7 +55,7 @@ stages:
       displayName: 'Zip SWA files'
       inputs:
         rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/swa'
-        includeRootFolder: true
+        includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/swa_$(Build.BuildId).zip'
         replaceExistingArchive: true
@@ -83,7 +83,7 @@ stages:
      
 - stage: Dev
   variables:
-  - name: NODE_TLS_REJECT_UNAUTHORIZED
+  - name: NODE_TLS_REJECT_UNAUTHORIZED #Prevent certificate errors from download artifacts task
     value: 0
   - group: azure_deployment_dev
   

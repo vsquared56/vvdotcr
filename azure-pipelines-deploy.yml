@@ -20,8 +20,8 @@ steps:
 - task: ExtractFiles@1
   displayName: 'Unzip SWA artifact'
   inputs:
-    archiveFilePatterns: '**/swa*.zip'
-    destinationFolder: '$(System.ArtifactsDirectory)' 
+    archiveFilePatterns: '$(System.ArtifactsDirectory)/SWA/swa*.zip'
+    destinationFolder: '$(System.ArtifactsDirectory)/SWA' 
 
 - task: AzureFunctionApp@1
   displayName: 'Deploy Azure functions'
@@ -29,7 +29,7 @@ steps:
     azureSubscription: 'Azure Visual Studio Subscription'
     appType: 'functionAppLinux'
     appName: '$(functions_app_name)'
-    package: '$(System.ArtifactsDirectory)/functions_$(Build.BuildId).zip'
+    package: '$(System.ArtifactsDirectory)/BackendFunctions/functions_$(Build.BuildId).zip'
     runtimeStack: 'NODE|$(nodeVersion)'
 
 - task: AzureStaticWebApp@0
@@ -39,5 +39,5 @@ steps:
     azure_static_web_apps_api_token: $(azure_deployment_token)
     skip_app_build: true
     skip_api_build: true
-    app_location: '$(System.ArtifactsDirectory)/swa/public'
-    api_location: '$(System.ArtifactsDirectory)/swa/api'
+    app_location: '$(System.ArtifactsDirectory)/SWA/public'
+    api_location: '$(System.ArtifactsDirectory)/SWA/api'
