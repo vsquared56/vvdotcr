@@ -92,11 +92,11 @@ stages:
     steps:
     - template: azure-pipelines-deploy.yml
 
-#- stage: Prod
-  #condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-#  variables:
-#  - group: azure_deployment_prod
-#  jobs:
-#  - job: DeployProd
-#    steps:
-#    - template: azure-pipelines-deploy.yml
+- stage: Prod
+ #condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  variables:
+  - group: azure_deployment_prod
+  jobs:
+  - job: DeployProd
+    steps:
+    - template: azure-pipelines-deploy.yml
