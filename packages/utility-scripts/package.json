@@ -7,6 +7,6 @@
   "dependencies": {
     "@azure/cosmos": "^4.0.0",
     "@azure/storage-blob": "^12.17.0",
-    "@vvdotcr/common": "^1.0.0"
+    "@vvdotcr/common": "workspace:^"
   }
 }
