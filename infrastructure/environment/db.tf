@@ -51,8 +51,13 @@ resource "azurerm_cosmosdb_sql_database" "db" {
     name                = "vvdotcr-${local.environment}"
     resource_group_name = azurerm_resource_group.environment_rg.name
 
-    autoscale_settings {
-        max_throughput = 1000
+    // Shared throughput and autoscaling is only supported in non-serverless DBs
+    dynamic "autoscale_settings" {
+        for_each = local.environment == "dev" ? {env = local.environment} : {}
+
+        content {
+            max_throughput = 1000
+        }
     }
 
     timeouts {}
