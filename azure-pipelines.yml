@@ -95,6 +95,8 @@ stages:
 - stage: Prod
  #condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
   variables:
+  - name: NODE_TLS_REJECT_UNAUTHORIZED #Prevent certificate errors from download artifacts task
+    value: 0
   - group: azure_deployment_prod
   jobs:
   - job: DeployProd
