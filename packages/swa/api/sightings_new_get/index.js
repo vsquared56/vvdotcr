@@ -41,27 +41,26 @@ export default async (context, req) => {
     } else if (req.params.submit && req.params.submit === "submit" ) {
       const browser = new BrowserDetector(req.headers["user-agent"]);
       const ua = browser.parseUserAgent();
-      console.log(ua);
+      var requireChromeAndroidBehavior = false;
+      //Do a file upload selector workaround for any version of Chrome on Android v14 and above
+      if (ua.isChrome && ua.isAndroid) {
+        const regex = /"(\d{1,3}).\d{1,5}.\d{1,5}"/;
+        const matches = req.headers["sec-ch-ua-platform-version"].match(regex);
+        if (matches && parseInt(matches[1]) >= 14) {
+          requireChromeAndroidBehavior = true;
+        }
+      }
       response = eta.render(
         "./sighting_submit/submit",
         {
           turnstileSiteKey: turnstileSiteKey,
-          platformVersion: req.headers["sec-ch-ua-platform-version"]
+          requireChromeAndroidBehavior: requireChromeAndroidBehavior
         }
       );
     } else {
-      const browser = new BrowserDetector(req.headers["user-agent"]);
-      const ua = browser.parseUserAgent();
-      if (ua.isChrome) {
-        console.log("Asking for client hints");
-        requireClientHints = true;
-      }
-      console.log(ua);
       response = eta.render(
         "./sighting_submit/new",
-        {
-          platformVersion: req.headers["sec-ch-ua-platform-version"]
-        }
+        null
       );
     }
 
@@ -69,11 +68,7 @@ export default async (context, req) => {
     context.res = {
       status: 200,
       body: response,
-      cookies: cookie ? [cookie] : null,
-      headers: requireClientHints ? {
-        "accept-ch": "Sec-CH-UA-Platform,Sec-CH-UA-Platform-Version",
-        "critical-ch": "Sec-CH-UA-Platform,Sec-CH-UA-Platform-Version"
-      } : null
+      cookies: cookie ? [cookie] : null
     };
   }
 };

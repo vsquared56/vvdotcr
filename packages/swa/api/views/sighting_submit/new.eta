@@ -9,9 +9,6 @@
       <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full">
         See a red car with a <span class="badge badge-outline font-mono">VV DOT CR</span> license plate?  Snap a photo, submit it here, and share it with others!  Or, take a look through the photos others sent below.
       </div>
-      <div>
-        Your platform version is <% it.platformVersion %>
-      </div>
       <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full">
         <button class="btn btn-secondary w-full"
                 hx-get="/api/sightings/new/submit"

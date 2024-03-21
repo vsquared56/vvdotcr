@@ -44,5 +44,8 @@
       "route": "/.auth/login/github",
       "statusCode": 404
     }
-  ]
+  ],
+  "globalHeaders": {
+    "accept-ch": "sec-ch-ua-platform,sec-ch-ua-platform-version"
+  }
 }
