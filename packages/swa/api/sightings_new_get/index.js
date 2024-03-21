@@ -52,7 +52,7 @@ export default async (context, req) => {
     } else {
       const browser = new BrowserDetector(req.headers["user-agent"]);
       const ua = browser.parseUserAgent();
-      if (ua.isChrome && !ua.isAndroid) {
+      if (ua.isChrome) {
         console.log("Asking for client hints");
         requireClientHints = true;
       }
