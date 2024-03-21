@@ -54,6 +54,9 @@
            type="file"
            accept="image/jpeg,image/png"
            class="file-input file-input-secondary w-[304px]">
+    <div>
+        Your platform version is <% it.platformVersion %>
+    </div>
     <div id="image-preview" class="skeleton w-[304px] h-56"></div>
     <div id="turnstile-sighting" class="w-[304px] h-[69px] rounded-btn overflow-clip border-2 border-secondary"></div>
     <div id="submit-progress" class="w-[304px] flex flex-row place-items-center gap-4 lg:gap-8">

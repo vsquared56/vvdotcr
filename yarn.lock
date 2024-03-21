@@ -1183,6 +1183,7 @@ __metadata:
     "@anzp/azure-function-multipart": "npm:^3.1.0"
     "@azure/service-bus": "npm:^7.9.4"
     "@vvdotcr/common": "workspace:^"
+    browser-dtector: "npm:^4.1.0"
     eta: "npm:^3.4.0"
     sharp: "npm:^0.33.2"
     streamifier: "npm:^0.1.1"
@@ -1490,6 +1491,13 @@ __metadata:
   dependencies:
     fill-range: "npm:^7.0.1"
   checksum: 321b4d675791479293264019156ca322163f02dc06e3c4cab33bb15cd43d80b51efef69b0930cfde3acd63d126ebca24cd0544fa6f261e093a0fb41ab9dda381
+  languageName: node
+  linkType: hard
+
+"browser-dtector@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "browser-dtector@npm:4.1.0"
+  checksum: b16efefb854178c3e5489219159a2b679858c2d302723dd2abddd32e8c583ab425a68e217abac471ed3ad3c77ea768cb7b9c8a7460d8fb8d8b2419899845c2c0
   languageName: node
   linkType: hard
 

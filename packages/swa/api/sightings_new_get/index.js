@@ -1,4 +1,5 @@
 import { Eta } from "eta";
+import BrowserDetector from 'browser-dtector';
 import * as path from "path";
 
 import * as utils from "@vvdotcr/common";
@@ -27,6 +28,7 @@ export default async (context, req) => {
     };
   } else {
     var response;
+    var requireClientHints;
     if (req.query.finished) {
       response = eta.render(
         "./sighting_submit/finished"
@@ -37,16 +39,29 @@ export default async (context, req) => {
         null
       );
     } else if (req.params.submit && req.params.submit === "submit" ) {
+      const browser = new BrowserDetector(req.headers["user-agent"]);
+      const ua = browser.parseUserAgent();
+      console.log(ua);
       response = eta.render(
         "./sighting_submit/submit",
         {
-          turnstileSiteKey: turnstileSiteKey
+          turnstileSiteKey: turnstileSiteKey,
+          platformVersion: req.headers["sec-ch-ua-platform-version"]
         }
       );
     } else {
+      const browser = new BrowserDetector(req.headers["user-agent"]);
+      const ua = browser.parseUserAgent();
+      if (ua.isChrome && !ua.isAndroid) {
+        console.log("Asking for client hints");
+        requireClientHints = true;
+      }
+      console.log(ua);
       response = eta.render(
         "./sighting_submit/new",
-        null
+        {
+          platformVersion: req.headers["sec-ch-ua-platform-version"]
+        }
       );
     }
 
@@ -54,7 +69,11 @@ export default async (context, req) => {
     context.res = {
       status: 200,
       body: response,
-      cookies: cookie ? [cookie] : null
+      cookies: cookie ? [cookie] : null,
+      headers: requireClientHints ? {
+        "accept-ch": "Sec-CH-UA-Platform,Sec-CH-UA-Platform-Version",
+        "critical-ch": "Sec-CH-UA-Platform,Sec-CH-UA-Platform-Version"
+      } : null
     };
   }
 };
