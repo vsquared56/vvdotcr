@@ -15,10 +15,10 @@
   "keywords": [],
   "author": "",
   "devDependencies": {
-    "@azure/static-web-apps-cli": "^1.1.6",
+    "@azure/static-web-apps-cli": "^1.1.7",
     "concurrently": "^8.2.2",
     "copyfiles": "^2.4.1",
-    "daisyui": "^4.6.1",
+    "daisyui": "^4.7.3",
     "rimraf": "^5.0.5",
     "tailwindcss": "^3.4.1"
   },

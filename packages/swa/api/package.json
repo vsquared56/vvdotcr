@@ -9,10 +9,10 @@
   },
   "dependencies": {
     "@anzp/azure-function-multipart": "^3.1.0",
-    "@azure/service-bus": "^7.9.3",
-    "@vvdotcr/common": "^1.0.0",
-    "eta": "^3.2.0",
-    "sharp": "^0.33.1",
+    "@azure/service-bus": "^7.9.4",
+    "@vvdotcr/common": "workspace:^",
+    "eta": "^3.4.0",
+    "sharp": "^0.33.2",
     "streamifier": "^0.1.1"
   }
 }
