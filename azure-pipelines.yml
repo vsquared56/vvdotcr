@@ -2,6 +2,7 @@ trigger:
 - main
 - develop
 - feature/*
+- fix/*
 
 pool:
   name: linux
