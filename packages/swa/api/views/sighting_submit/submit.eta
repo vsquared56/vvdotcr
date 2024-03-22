@@ -53,10 +53,34 @@
            name="file"
            type="file"
            accept="image/jpeg,image/png"
+           <% if (it.requireChromeAndroidBehavior) { %>
+           capture="environment"
+           <% } %>
            class="file-input file-input-secondary w-[304px]">
+    <% if (it.requireChromeAndroidBehavior) { %>
     <div>
-        requireChromeAndroidBehavior: <%= it.requireChromeAndroidBehavior %>
+      <script>
+        function toggleFileInput(event) {
+          var input = document.getElementById("sighting-file-input");
+          if (event.target.checked) {
+            input.removeAttribute("capture");
+          } else {
+            input.setAttribute("capture", "environment");
+          }
+        }
+      </script>
+      <div class="form-control">
+        <label class="label cursor-pointer flex flex-nowrap	justify-start gap-4">
+          <span class="label-text">Use camera</span> 
+          <input type="checkbox"
+                 name="ratingType"
+                 class="toggle toggle-secondary"
+                 hx-on:click="toggleFileInput(event);" />
+          <span class="label-text">Pick existing images</span> 
+        </label>
+      </div>
     </div>
+    <% } %>
     <div id="image-preview" class="skeleton w-[304px] h-56"></div>
     <div id="turnstile-sighting" class="w-[304px] h-[69px] rounded-btn overflow-clip border-2 border-secondary"></div>
     <div id="submit-progress" class="w-[304px] flex flex-row place-items-center gap-4 lg:gap-8">
