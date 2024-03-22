@@ -63,20 +63,21 @@
         function toggleFileInput(event) {
           var input = document.getElementById("sighting-file-input");
           if (event.target.checked) {
-            input.removeAttribute("capture");
-          } else {
             input.setAttribute("capture", "environment");
+          } else {
+            input.removeAttribute("capture");
           }
         }
       </script>
       <div class="form-control">
         <label class="label cursor-pointer flex flex-nowrap	justify-start gap-4">
-          <span class="label-text">Use camera</span> 
+          <span class="label-text">Pick existing images</span> 
           <input type="checkbox"
                  name="ratingType"
                  class="toggle toggle-secondary"
+                 checked="checked"
                  hx-on:click="toggleFileInput(event);" />
-          <span class="label-text">Pick existing images</span> 
+          <span class="label-text">Use camera</span> 
         </label>
       </div>
     </div>
