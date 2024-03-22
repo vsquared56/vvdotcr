@@ -28,7 +28,6 @@ export default async (context, req) => {
     };
   } else {
     var response;
-    var requireClientHints;
     if (req.query.finished) {
       response = eta.render(
         "./sighting_submit/finished"
