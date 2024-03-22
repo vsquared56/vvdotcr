@@ -1,4 +1,5 @@
 import { Eta } from "eta";
+import BrowserDetector from 'browser-dtector';
 import * as path from "path";
 
 import * as utils from "@vvdotcr/common";
@@ -37,10 +38,22 @@ export default async (context, req) => {
         null
       );
     } else if (req.params.submit && req.params.submit === "submit" ) {
+      const browser = new BrowserDetector(req.headers["user-agent"]);
+      const ua = browser.parseUserAgent();
+      var requireChromeAndroidBehavior = false;
+      //Do a file upload selector workaround for any version of Chrome on Android v14 and above
+      if (ua.isChrome && ua.isAndroid) {
+        const regex = /"(\d{1,3}).\d{1,5}.\d{1,5}"/;
+        const matches = req.headers["sec-ch-ua-platform-version"].match(regex);
+        if (matches && parseInt(matches[1]) >= 14) {
+          requireChromeAndroidBehavior = true;
+        }
+      }
       response = eta.render(
         "./sighting_submit/submit",
         {
-          turnstileSiteKey: turnstileSiteKey
+          turnstileSiteKey: turnstileSiteKey,
+          requireChromeAndroidBehavior: requireChromeAndroidBehavior
         }
       );
     } else {

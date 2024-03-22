@@ -65,19 +65,37 @@ export default async (context, req) => {
   }
 
   const { fields, files } = await parseMultipartFormData.default(req);
+
+  if (files.length === 0) {
+    response = eta.render(
+      "./sighting_submit/error",
+      { error: "No files were submitted." }
+    );
+    context.res = {
+      status: 200,
+      body: response
+    };
+    return;
+  }
+  else if (files.length !== 1) {
+    response = eta.render(
+      "./sighting_submit/error",
+      { error: "Only one file upload is allowed at a time." }
+    );
+    context.res = {
+      status: 200,
+      body: response
+    };
+    return;
+  }
+
   const sightingId = crypto.randomUUID();
   const contentType = files[0].mimeType;
   const sourceFileName = files[0].filename;
   const originalFileExtension = path.extname(sourceFileName).toLowerCase().replace(/^\./, '');
   const originalFileSize = files[0].bufferFile.length;
 
-  if (files.length != 1) {
-    response = eta.render(
-      "./sighting_submit/error",
-      { error: "Only one file upload is allowed at a time." }
-    );
-  }
-  else if (originalFileSize >= 20 * 1024 * 1024) {
+  if (originalFileSize >= 20 * 1024 * 1024) {
     response = eta.render(
       "./sighting_submit/error",
       { error: "Images must be below 20 MB." }
