@@ -18,11 +18,36 @@
           </div>
           <div class="collapse-content bg-base-300">
             <div class="flex flex-col gap-4 px-1.5 py-4">
-              <div><input type="radio" name="drivingQuality" value="faster" class="radio" /> Speed it up!</div>
-              <div><input type="radio" name="drivingQuality" value="slower" class="radio" /> Slow down!</div>
-              <div><input type="radio" name="drivingQuality" value="turn-signals" class="radio" checked /> Nice turn signals!</div>
-              <div><input type="radio" name="drivingQuality" value="swearing" class="radio" checked /> $#*@&!!</div>
-              <div><input type="radio" name="drivingQuality" value="ok" class="radio" checked /> Just right</div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="drivingQuality" value="faster" class="radio" />
+                  <span class="label-text">Speed it up!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="drivingQuality" value="slower" class="radio" />
+                  <span class="label-text">Slow down!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="drivingQuality" value="turn-signals" class="radio" checked />
+                  <span class="label-text">Nice turn signals!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="drivingQuality" value="swearing" class="radio" checked />
+                  <span class="label-text">$#*@&!!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="drivingQuality" value="ok" class="radio" checked />
+                  <span class="label-text">Just right</span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -34,11 +59,36 @@
           </div>
           <div class="collapse-content bg-base-300">
             <div class="flex flex-col gap-4 px-1.5 py-4">
-              <div><input type="radio" name="parkingQuality" value="bad" class="radio" /> Get a coloring book and practice staying within the lines!</div>
-              <div><input type="radio" name="parkingQuality" value="too-close" class="radio" /> Parked too close, I had to climb in through the window!</div>
-              <div><input type="radio" name="parkingQuality" value="too-far" class="radio" /> It's the city, don't waste so much space!</div>
-              <div><input type="radio" name="parkingQuality" value="swearing" class="radio" checked /> $#*@&!!</div>
-              <div><input type="radio" name="parkingQuality" value="ok" class="radio" checked /> Just right</div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="parkingQuality" value="bad" class="radio" />
+                  <span class="label-text">Get a coloring book and practice staying within the lines!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="parkingQuality" value="too-close" class="radio" />
+                  <span class="label-text">Parked too close, I had to climb in through the window!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="parkingQuality" value="too-far" class="radio" />
+                  <span class="label-text">It's the city, don't waste so much space!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="parkingQuality" value="swearing" class="radio" checked />
+                  <span class="label-text">$#*@&!!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="parkingQuality" value="ok" class="radio" checked />
+                  <span class="label-text">Just right</span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -66,7 +116,7 @@
               }
             </script>
             <div class="flex flex-col gap-4 px-1.5 py-4">
-              <div class="rating rating-lg">
+              <div class="rating rating-lg gap-2">
                 <input type="radio" name="ratingValue" value=1 class="mask mask-star bg-yellow-300" />
                 <input type="radio" name="ratingValue" value=2 class="mask mask-star bg-yellow-300" />
                 <input type="radio" name="ratingValue" value=3 class="mask mask-star bg-yellow-300" />
