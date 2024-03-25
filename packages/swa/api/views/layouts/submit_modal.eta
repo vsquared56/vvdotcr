@@ -3,7 +3,7 @@
         <% if (it.customModalRenderer) { %>
         hx-on::load="<%= it.customModalRenderer %>">
         <% } else { %>
-        hx-on::load="htmx.find('#<%= it.modalId %>').showModal();">
+        hx-on::load="htmx.find('#<%= it.modalId %>').showModal();htmx.find('#<%= it.modalId %>').focus();">
         <% } %>
   <%~ it.body %>
 </dialog>

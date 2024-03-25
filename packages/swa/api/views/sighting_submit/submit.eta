@@ -15,6 +15,7 @@
       const fileInput = document.getElementById("sighting-file-input");
       fileInput.addEventListener("change", fileChange);
       htmx.find('#sighting-submit').showModal();
+      htmx.find('#sighting-submit').focus();
     }
   }
 
