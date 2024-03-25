@@ -13,6 +13,7 @@
         }
       );
       htmx.find('#message-submit').showModal();
+      htmx.find('#message-submit').focus();
     }
   }
 
