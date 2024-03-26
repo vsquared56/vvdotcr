@@ -41,6 +41,20 @@ function renderSightingModal(event) {
     fileInput.addEventListener("change", sightingFileChange);
     htmx.find('#sighting-submit').showModal();
     htmx.find('#sighting-submit').focus();
+
+    htmx.on('#form', 'htmx:xhr:progress', function (evt) {
+      htmx.find('#progress-upload').setAttribute('value', evt.detail.loaded / evt.detail.total * 100);
+      if (evt.detail.loaded == evt.detail.total) {
+        htmx.remove(htmx.find("#progress-upload"));
+        var waitSpan = document.createElement("span");
+        waitSpan.classList.add("loading","loading-dots","loading-lg","shrink");
+        htmx.find("#submit-progress").appendChild(waitSpan);
+        htmx.off('#form', 'htmx:xhr:progress', this);
+      }
+    });
+    htmx.on('#form', 'htmx:confirm', function (evt) {
+      htmx.find('#sighting-send-button').setAttribute('disabled', true);
+    });
   }
 }
 
@@ -66,5 +80,14 @@ function sightingUpdateSubmit() {
   } else {
     button.disabled = false;
     button.innerHTML = "Send!";
+  }
+}
+
+function toggleFileInput(event) {
+  var input = document.getElementById("sighting-file-input");
+  if (event.target.checked) {
+    input.setAttribute("capture", "environment");
+  } else {
+    input.removeAttribute("capture");
   }
 }
