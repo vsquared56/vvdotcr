@@ -64,7 +64,7 @@ function sightingFileChange() {
   preview.src = URL.createObjectURL(fileInput.files[0]);
   preview.classList.add("object-contain", "w-[304px]", "h-56");
   htmx.find("#image-preview").replaceChildren(preview);
-  updateSubmit();
+  sightingUpdateSubmit();
 }
 
 function sightingUpdateSubmit() {
