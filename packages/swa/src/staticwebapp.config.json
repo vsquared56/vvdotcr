@@ -47,6 +47,7 @@
   ],
   "globalHeaders": {
     "accept-ch": "sec-ch-ua-platform,sec-ch-ua-platform-version",
-    "content-security-policy": "default-src 'none'; connect-src 'self'; frame-src https://challenges.cloudflare.com; img-src 'self' blob: data: https://cdn-dev.vv.cr; script-src 'unsafe-eval' 'self' https://challenges.cloudflare.com; style-src 'self';"
+    "content-security-policy": "default-src 'none'; connect-src 'self'; frame-src https://challenges.cloudflare.com; img-src 'self' blob: data: https://cdn-dev.vv.cr; script-src 'unsafe-eval' 'self' https://challenges.cloudflare.com; style-src 'self';",
+    "strict-transport-security": "max-age=63072000; includeSubDomains; preload"
   }
 }
