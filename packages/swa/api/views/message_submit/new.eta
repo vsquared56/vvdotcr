@@ -9,7 +9,7 @@
           hx-post="/api/messages"
           hx-target="#message-submit-status"
           hx-swap="outerHTML"
-          hx-on::confirm="console.log(event);addLocationParams(event, 'message-form', 'location-enable');">
+          hx-on::confirm="addLocationParams(event, 'message-form', 'location-enable');">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 xl:gap-8 justify-items-center items-start px-1.5 md:px-4 lg:px-8 py-4">
         <div id="message-driving-form" class="collapse collapse-plus bg-secondary border border-secondary" >
           <%~ include("./message_form_checkbox", { checkboxName: "driving", formEnabled: false, updateSubmit: false }) %>
