@@ -46,6 +46,7 @@
     }
   ],
   "globalHeaders": {
-    "accept-ch": "sec-ch-ua-platform,sec-ch-ua-platform-version"
+    "accept-ch": "sec-ch-ua-platform,sec-ch-ua-platform-version",
+    "content-security-policy": "default-src 'none';"
   }
 }
