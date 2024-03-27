@@ -87,7 +87,7 @@ stages:
   - name: NODE_TLS_REJECT_UNAUTHORIZED #Prevent certificate errors from download artifacts task
     value: 0
   - name: globalHeaders.content-security-policy
-    value: "default-src 'none'; connect-src 'self'; frame-src https://challenges.cloudflare.com; img-src 'self' blob: data: https://cdn-dev.vv.cr; script-src 'unsafe-eval' 'self' https://challenges.cloudflare.com; style-src 'self';"
+    value: "default-src 'none'; connect-src 'self'; frame-ancestors 'none'; frame-src https://challenges.cloudflare.com; img-src 'self' blob: data: https://cdn-dev.vv.cr; script-src 'unsafe-eval' 'self' https://challenges.cloudflare.com; style-src 'self';"
   - group: azure_deployment_dev
   
   jobs:
@@ -102,7 +102,7 @@ stages:
   - name: NODE_TLS_REJECT_UNAUTHORIZED #Prevent certificate errors from download artifacts task
     value: 0
   - name: globalHeaders.content-security-policy
-    value: "default-src 'none'; connect-src 'self'; frame-src https://challenges.cloudflare.com; img-src 'self' blob: data: https://cdn-prod.vv.cr; script-src 'unsafe-eval' 'self' https://challenges.cloudflare.com; style-src 'self';"
+    value: "default-src 'none'; connect-src 'self'; frame-ancestors 'none'; frame-src https://challenges.cloudflare.com; img-src 'self' blob: data: https://cdn-prod.vv.cr; script-src 'unsafe-eval' 'self' https://challenges.cloudflare.com; style-src 'self';"
   - group: azure_deployment_prod
   jobs:
   - job: DeployProd
