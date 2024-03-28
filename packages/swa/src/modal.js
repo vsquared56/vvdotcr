@@ -43,13 +43,17 @@ function renderSightingModal(event) {
     htmx.find('#sighting-submit').focus();
 
     htmx.on('#form', 'htmx:xhr:progress', function (evt) {
-      htmx.find('#progress-upload').setAttribute('value', evt.detail.loaded / evt.detail.total * 100);
-      if (evt.detail.loaded == evt.detail.total) {
-        htmx.remove(htmx.find("#progress-upload"));
-        var waitSpan = document.createElement("span");
-        waitSpan.classList.add("loading","loading-dots","loading-lg","shrink");
-        htmx.find("#submit-progress").appendChild(waitSpan);
-        htmx.off('#form', 'htmx:xhr:progress', this);
+      //Clicking submit also fires off a GET request to Cloudflare Turnstile
+      //Prevent any actions on the progress of that request by checking if it's lengthComputable
+      if (evt.detail.lengthComputable) {
+        htmx.find('#progress-upload').setAttribute('value', evt.detail.loaded / evt.detail.total * 100);
+        if (evt.detail.loaded == evt.detail.total) {
+          htmx.remove(htmx.find("#progress-upload"));
+          var waitSpan = document.createElement("span");
+          waitSpan.classList.add("loading","loading-dots","loading-lg","shrink");
+          htmx.find("#submit-progress").appendChild(waitSpan);
+          htmx.off('#form', 'htmx:xhr:progress', this);
+        }
       }
     });
     htmx.on('#form', 'htmx:confirm', function (evt) {
