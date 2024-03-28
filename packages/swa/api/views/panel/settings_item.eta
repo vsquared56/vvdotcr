@@ -2,7 +2,7 @@
   <td class="text-xs lg:text-sm truncate"><%= it.setting.id %></td>
   <td class="text-xs lg:text-sm truncate"><%~ it.setting.value %></td>
   <td>
-    <button class="btn btn-primary btn-sm" hx-get="/api/settings/<%= it.setting.id %>/edit" hx-trigger="edit" onClick="htmx.trigger(this, 'edit')">
+    <button class="btn btn-primary btn-sm" hx-get="/api/settings/<%= it.setting.id %>/edit" hx-trigger="edit" hx-on:click="htmx.trigger(this, 'edit')">
       Edit
     </button>
   </td>
