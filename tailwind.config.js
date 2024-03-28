@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 const colors = require('tailwindcss/colors');
 module.exports = {
-  content: ["./packages/swa/src/*.{html,css}","./packages/swa/api/views/**"],
+  content: ["./packages/swa/src/*.{html,css,js}","./packages/swa/api/views/**"],
   theme: {
     extend: {},
     colors: {

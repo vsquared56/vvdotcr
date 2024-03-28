@@ -4,28 +4,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="htmx-config" content='{"allowScriptTags":false,"includeIndicatorStyles":false}'>
   <link rel="stylesheet" href="styles.css" />
   <title>vv.cr</title>
   <script src="./htmx.1.9.11.min.js"></script>
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+  <script src="./error.js"></script>
   <script src="./location.js"></script>
-  <script>
-    htmx.on("htmx:responseError", function(evt){ console.log(evt);displayError(evt.detail.error); });
-    htmx.on("htmx:sendError", function(evt){ console.log(evt);displayError("Error talking to vv.cr"); });
-    function displayError(err) {
-      var errDiv = document.createElement("div");
-      errDiv.classList.add("alert");
-      errDiv.classList.add("alert-error");
-      errDiv.innerHTML = `<svg xmlns='http://www.w3.org/2000/svg' class='stroke-current shrink-0 h-6 w-6' fill='none' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z' /></svg><span class="text-sm">${err}</span><button class="btn btn-sm bg-error-content" onclick="this.parentNode.outerHTML='';">Close</button>`;
-      htmx.find("#error-toast").appendChild(errDiv);
-    }
-  </script>
+  <script src="./modal.js"></script>
+  <script src="./stars.js"></script>
 </head>
 
 <body>
   <main>
-    <div class="hero min-h-screen grid-rows-2"
-         style="background-image: url(/images/hero.jpg);">
+    <div class="hero min-h-screen grid-rows-2 bg-[url('/images/hero.jpg')]">
       <div class="hero-overlay bg-opacity-80 row-start-1 row-span-2"></div>
       <div class="hero-content text-center row-start-2">
         <div class="max-w-md">

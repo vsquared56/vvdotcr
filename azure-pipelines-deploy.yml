@@ -23,6 +23,13 @@ steps:
     archiveFilePatterns: '$(System.ArtifactsDirectory)/SWA/swa*.zip'
     destinationFolder: '$(System.DefaultWorkingDirectory)/staticwebapp' 
 
+- task: FileTransform@1
+  displayName: 'File transformation: staticwebapp.config.json'
+  inputs:
+    folderPath: '$(System.DefaultWorkingDirectory)/staticwebapp'
+    targetFiles: '**/staticwebapp.config.json'
+    fileType: json
+
 - task: AzureFunctionApp@1
   displayName: 'Deploy Azure functions'
   inputs:

@@ -1,54 +1,10 @@
-<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Submit a new sighting", closable: true, fullModal: true, customModalRenderer: 'renderModal(event);'}) %>
-
-<script>
-  function renderModal(event) {
-    if (event.target.id==='sighting-submit') {
-      turnstile.render(
-        '#turnstile-sighting',
-        {
-          sitekey: '<%= it.turnstileSiteKey %>',
-          theme: 'dark',
-          callback: updateSubmit,
-          'expired-callback': updateSubmit
-        }
-      );
-      const fileInput = document.getElementById("sighting-file-input");
-      fileInput.addEventListener("change", fileChange);
-      htmx.find('#sighting-submit').showModal();
-      htmx.find('#sighting-submit').focus();
-    }
-  }
-
-  function fileChange() {
-    const fileInput = document.getElementById("sighting-file-input");
-    const preview = document.createElement("img");
-    preview.src = URL.createObjectURL(fileInput.files[0]);
-    preview.classList.add("object-contain", "w-[304px]", "h-56");
-    htmx.find("#image-preview").replaceChildren(preview);
-    updateSubmit();
-  }
-
-  function updateSubmit() {
-    const button = document.getElementById("sighting-send-button");
-    const fileInput = document.getElementById("sighting-file-input");
-    const turnstileResponse = document.querySelector("input[name='cf-turnstile-response']");
-    if (fileInput.files.length === 0) {
-      button.disabled = true;
-      button.innerHTML = "Choose a photo first";
-    } else if (!turnstileResponse.value) {
-      button.disabled = true;
-      button.innerHTML = "Please verify you're not a bot";
-    } else {
-      button.disabled = false;
-      button.innerHTML = "Send!";
-    }
-  }
-</script>
+<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Submit a new sighting", closable: true, fullModal: true, customModalRenderer: 'renderSightingModal(event);'}) %>
 <form id="form"
       hx-encoding="multipart/form-data"
       hx-post="/api/sightings"
       hx-target="#sighting-submit-status"
       hx-swap="outerHTML">
+  <input id="turnstile-site-key" type="hidden" name="turnstileSiteKey" value="<%= it.turnstileSiteKey %>" />
   <div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start px-1.5 py-1.5">
     <input id="sighting-file-input"
            name="file"
@@ -60,16 +16,6 @@
            class="file-input file-input-secondary w-[304px]">
     <% if (it.requireChromeAndroidBehavior) { %>
     <div>
-      <script>
-        function toggleFileInput(event) {
-          var input = document.getElementById("sighting-file-input");
-          if (event.target.checked) {
-            input.setAttribute("capture", "environment");
-          } else {
-            input.removeAttribute("capture");
-          }
-        }
-      </script>
       <div class="form-control">
         <label class="label cursor-pointer flex flex-nowrap	justify-start gap-4">
           <span class="label-text">Pick existing images</span> 
@@ -96,18 +42,3 @@
     </div>
   </div>
 </form>
-<script>
-  htmx.on('#form', 'htmx:xhr:progress', function (evt) {
-    htmx.find('#progress-upload').setAttribute('value', evt.detail.loaded / evt.detail.total * 100);
-    if (evt.detail.loaded == evt.detail.total) {
-      htmx.remove(htmx.find("#progress-upload"));
-      var waitSpan = document.createElement("span");
-      waitSpan.classList.add("loading","loading-dots","loading-lg","shrink");
-      htmx.find("#submit-progress").appendChild(waitSpan);
-      htmx.off('#form', 'htmx:xhr:progress', this);
-    }
-  });
-  htmx.on('#form', 'htmx:confirm', function (evt) {
-    htmx.find('#sighting-send-button').setAttribute('disabled', true);
-  });
-</script>
