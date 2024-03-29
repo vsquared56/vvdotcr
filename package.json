@@ -27,6 +27,7 @@
       "./packages/common",
       "./packages/functions",
       "./packages/swa/api",
+      "./packages/swa/src",
       "./packages/utility-scripts"
     ]
   },
