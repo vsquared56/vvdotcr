@@ -20,8 +20,6 @@ var locationRequestInFlight = false;
 
 document.addEventListener("addLocationPermissionParam", addLocationPermissionParam);
 function addLocationPermissionParam(customEvent) {
-  console.log("addLocationPermissionParam");
-  console.log(customEvent);
   customEvent.detail.sourceEvent.preventDefault();
   navigator.permissions.query({ name: "geolocation" }).then(function (result) { finishPermissionsQuery(customEvent.detail.sourceEvent, result) });
 }
@@ -44,8 +42,6 @@ function finishPermissionsQuery(htmxEvent, result) {
 
 document.addEventListener("addLocationParams", addLocationParams);
 function addLocationParams(customEvent) {
-  console.log("addLocationParams");
-  console.log(customEvent);
   // Optionally filter events by their target
   // Targets are checked against the original HTMX event
   if (!customEvent.detail.targetId || customEvent.detail.sourceEvent.target.id === customEvent.detail.targetId) {
