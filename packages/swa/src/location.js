@@ -64,6 +64,13 @@ function addLocationParams(customEvent) {
 function locationError(htmxEvent, err) {
   console.log(err);
   locationRequestInFlight = false;
+  htmx.on(htmxEvent.target, "htmx:configRequest", (e)=> {
+    e.detail.parameters["latitude"] = null;
+    e.detail.parameters["longitude"] = null;
+    e.detail.parameters["accuracy"] = null;
+    e.detail.parameters["timestamp"] = null;
+    e.detail.parameters["locationError"] = err.message;
+  });
   htmxEvent.detail.issueRequest();
 }
 
@@ -75,6 +82,7 @@ function locationSuccess(htmxEvent, position) {
     e.detail.parameters["longitude"] = position.coords.longitude;
     e.detail.parameters["accuracy"] = position.coords.accuracy;
     e.detail.parameters["timestamp"] = position.timestamp;
-  })
+    e.detail.parameters["locationError"] = null;
+  });
   htmxEvent.detail.issueRequest();
 }
