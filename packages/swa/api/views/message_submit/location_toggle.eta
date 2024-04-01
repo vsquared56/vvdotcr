@@ -10,7 +10,7 @@
            hx-target="#location-toggle"
            hx-swap="outerHTML"
            hx-trigger="click, locationPermissionsChange from:body"
-           hx-on::confirm="addLocationPermissionParam(event);"
+           hx-on::confirm="const evt = new CustomEvent('addLocationPermissionParam', { bubbles: true, detail: {sourceEvent: event} });this.dispatchEvent(evt);"
            <% if (it.locationEnabled && (it.locationPermission === "prompt" || it.locationPermission === "granted")) { %>
            checked="checked"
            <% } else if (it.locationPermission === "denied") { %>

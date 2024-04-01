@@ -18,14 +18,17 @@ var currentLocation;
  */
 var locationRequestInFlight = false;
 
-function addLocationPermissionParam(event) {
-  event.preventDefault();
-  navigator.permissions.query({ name: "geolocation" }).then(function (result) { finishPermissionsQuery(event, result) });
+document.addEventListener("addLocationPermissionParam", addLocationPermissionParam);
+function addLocationPermissionParam(customEvent) {
+  console.log("addLocationPermissionParam");
+  console.log(customEvent);
+  customEvent.detail.sourceEvent.preventDefault();
+  navigator.permissions.query({ name: "geolocation" }).then(function (result) { finishPermissionsQuery(customEvent.detail.sourceEvent, result) });
 }
 
-function finishPermissionsQuery(event, result) {
+function finishPermissionsQuery(htmxEvent, result) {
   locationPermission = result.state;
-  htmx.on(event.target, "htmx:configRequest", (e) => {
+  htmx.on(htmxEvent.target, "htmx:configRequest", (e) => {
     if (e.detail.triggeringEvent && e.detail.triggeringEvent.type === "locationPermissionsChange" && locationPermission != "denied") {
       e.detail.parameters["locationEnable"] = "on";
     }
@@ -36,38 +39,42 @@ function finishPermissionsQuery(event, result) {
       document.body.dispatchEvent(new Event('locationPermissionsChange'));
     }
   }
-  event.detail.issueRequest();
+  htmxEvent.detail.issueRequest();
 }
 
-function addLocationParams(event, targetId, toggleId) {
+document.addEventListener("addLocationParams", addLocationParams);
+function addLocationParams(customEvent) {
+  console.log("addLocationParams");
+  console.log(customEvent);
   // Optionally filter events by their target
-  if (!targetId || event.target.id === targetId) {
+  // Targets are checked against the original HTMX event
+  if (!customEvent.detail.targetId || customEvent.detail.sourceEvent.target.id === customEvent.detail.targetId) {
     // Optionally enable or disable location sending with a checkbox ID
-    if (!toggleId || htmx.find(`#${toggleId}`).checked) {
-      event.preventDefault();
+    if (!customEvent.detail.toggleId || htmx.find(`#${customEvent.detail.toggleId}`).checked) {
+      customEvent.detail.sourceEvent.preventDefault();
       locationRequestInFlight = true;
       navigator.geolocation.getCurrentPosition(
-        function (position) {locationSuccess(event, position);},
-        function (err) {locationError(event, err);}
+        function (position) {locationSuccess(customEvent.detail.sourceEvent, position);},
+        function (err) {locationError(customEvent.detail.sourceEvent, err);}
       );
     }
   }
 }
 
-function locationError(event, err) {
+function locationError(htmxEvent, err) {
   console.log(err);
   locationRequestInFlight = false;
-  event.detail.issueRequest();
+  htmxEvent.detail.issueRequest();
 }
 
-function locationSuccess(event, position) {
+function locationSuccess(htmxEvent, position) {
   currentLocation = position;
   locationRequestInFlight = false;
-  htmx.on(event.target, "htmx:configRequest", (e)=> {
+  htmx.on(htmxEvent.target, "htmx:configRequest", (e)=> {
     e.detail.parameters["latitude"] = position.coords.latitude;
     e.detail.parameters["longitude"] = position.coords.longitude;
     e.detail.parameters["accuracy"] = position.coords.accuracy;
     e.detail.parameters["timestamp"] = position.timestamp;
   })
-  event.detail.issueRequest();
+  htmxEvent.detail.issueRequest();
 }
