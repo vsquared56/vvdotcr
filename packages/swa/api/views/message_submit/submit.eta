@@ -1,4 +1,4 @@
-<% layout("../layouts/submit_modal_status", {modalId: "message-submit", statusId: "message-submit-status", title: "Send messages", closable: true, fullModal: true, customModalRenderer: 'renderMessageModal(event);'}) %>
+<% layout("../layouts/submit_modal_status", {modalId: "message-submit", statusId: "message-submit-status", title: "Send messages", closable: true, fullModal: true}) %>
 <input id="turnstile-site-key" type="hidden" name="turnstileSiteKey" value="<%= it.turnstileSiteKey %>" />
 <div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start px-1.5 py-4">
   <div class="min-w-[304px] row-span-2">
