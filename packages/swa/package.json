@@ -4,7 +4,8 @@
   "type": "module",
   "description": "",
   "scripts": {
-    "build": "esbuild src/index.js --bundle --outfile=public/index.js"
+    "build-dev": "esbuild src/index.js --bundle --outfile=public/index.js",
+    "build": "esbuild src/index.js --bundle --minify --sourcemap --outfile=public/index.js"
   },
   "dependencies": {
     "htmx.org": "^1.9.11"
