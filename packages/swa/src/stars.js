@@ -2,7 +2,7 @@ document.addEventListener("starToggle", toggleStarColor)
 
 function toggleStarColor(event) {
   const stars = document.getElementsByClassName("mask-star");
-  if (event.detail.target.checked) {
+  if (event.target.checked) {
     for (const star of stars) {
       star.classList.add("bg-blue-700");
       star.classList.remove("bg-yellow-300");
