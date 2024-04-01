@@ -54,10 +54,22 @@ export default async (context, req) => {
           );
         } else if (formName === "location") {
           var locationPermission;
-          if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
+          if (!req.query.locationPermission) {
+            console.log(`Missing locationPermission parameter`);
+            context.res = {
+              status: 400,
+              body: "Missing locationPermission parameter."
+            };
+            return;
+          } else if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
             locationPermission = req.query.locationPermission;
           } else {
-            throw new Error("Invalid locationPermission query parameter.");
+            console.log(`Invalid locationPermission query parameter.`);
+            context.res = {
+              status: 400,
+              body: "Invalid locationPermission query parameter."
+            };
+            return;
           }
           response = eta.render(
             "./message_submit/location_toggle",
@@ -68,10 +80,22 @@ export default async (context, req) => {
           );
         } else if (formName === "submit") {
           var locationPermission;
-          if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
+          if (!req.query.locationPermission) {
+            console.log(`Missing locationPermission parameter`);
+            context.res = {
+              status: 400,
+              body: "Missing locationPermission parameter."
+            };
+            return;
+          } else if (req.query.locationPermission.match(/^(prompt|granted|denied)$/)) {
             locationPermission = req.query.locationPermission;
           } else {
-            throw new Error("Invalid locationPermission query parameter.");
+            console.log(`Invalid locationPermission query parameter.`);
+            context.res = {
+              status: 400,
+              body: "Invalid locationPermission query parameter."
+            };
+            return;
           }
           response = eta.render(
             "./message_submit/submit",
