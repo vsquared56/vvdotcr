@@ -6,11 +6,12 @@
   "scripts": {
     "clean": "rimraf ./packages/swa/public",
     "build-css": "tailwindcss -i ./packages/swa/src/input.css -o ./packages/swa/public/styles.css",
-    "copy": "copyfiles --up 3 ./packages/swa/src/**/*.html ./packages/swa/src/**/*.js ./packages/swa/src/**/*.json ./packages/swa/src/images/* ./packages/swa/public",
-    "build": "yarn run copy && yarn run build-css",
+    "copy": "copyfiles --up 3 ./packages/swa/src/**/*.html ./packages/swa/src/**/*.json ./packages/swa/src/images/* ./packages/swa/public",
+    "build-dev": "yarn run clean && yarn run copy && yarn run build-css && yarn workspaces foreach -A run build-dev",
+    "build": "yarn run clean && yarn run copy && yarn run build-css && yarn workspaces foreach -A run build",
     "start-swa": "swa start packages/swa/public --api-location packages/swa/api",
     "start-functions": "func host start --script-root packages/functions",
-    "start": "yarn run build && concurrently \"yarn run start-swa\" \"yarn run start-functions\""
+    "start": "yarn run build-dev && concurrently \"yarn run start-swa\" \"yarn run start-functions\""
   },
   "keywords": [],
   "author": "",
@@ -27,6 +28,7 @@
       "./packages/common",
       "./packages/functions",
       "./packages/swa/api",
+      "./packages/swa",
       "./packages/utility-scripts"
     ]
   },

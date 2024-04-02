@@ -1,4 +1,4 @@
-<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Submit a new sighting", closable: true, fullModal: true, customModalRenderer: 'renderSightingModal(event);'}) %>
+<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Submit a new sighting", closable: true, fullModal: true}) %>
 <form id="form"
       hx-encoding="multipart/form-data"
       hx-post="/api/sightings"

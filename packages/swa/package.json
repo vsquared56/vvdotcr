@@ -1,0 +1,16 @@
+{
+  "name": "@vvdotcr/swa",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "scripts": {
+    "build-dev": "esbuild src/index.js --bundle --outfile=public/index.js",
+    "build": "esbuild src/index.js --bundle --minify --sourcemap --outfile=public/index.js"
+  },
+  "dependencies": {
+    "htmx.org": "^1.9.11"
+  },
+  "devDependencies": {
+    "esbuild": "^0.20.2"
+  }
+}

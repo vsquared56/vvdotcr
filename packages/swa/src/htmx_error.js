@@ -1,5 +1,5 @@
-htmx.on("htmx:responseError", function(evt){ console.log(evt);displayError(evt.detail.error); });
-htmx.on("htmx:sendError", function(evt){ console.log(evt);displayError("Error talking to vv.cr"); });
+htmx.on("htmx:responseError", function(evt){ displayError(evt.detail.error); });
+htmx.on("htmx:sendError", function(evt){ displayError("Error talking to vv.cr"); });
 function displayError(err) {
   var errDiv = document.createElement("div");
   errDiv.classList.add("alert");

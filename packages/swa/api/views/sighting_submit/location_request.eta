@@ -7,7 +7,7 @@
   <button id="submitLocation"
           class="btn btn-primary"
           hx-post="/api/sightings/<%= it.sighting.id %>/location"
-          hx-on::confirm="addLocationParams(event);"
+          hx-on::confirm="const evt = new CustomEvent('addLocationParams', { bubbles: true, detail: {sourceEvent: event} });this.dispatchEvent(evt);"
           hx-target="#sighting-submit-status"
           hx-swap="outerHTML">
     Submit my location
@@ -15,7 +15,7 @@
   <button id="submitWithoutLocation"
           class="btn btn-neutral"
           hx-post="/api/sightings/<%= it.sighting.id %>/location"
-          hx-on::confirm="addLocationPermissionParam(event);"
+          hx-on::confirm="const evt = new CustomEvent('addLocationPermissionParam', { bubbles: true, detail: {sourceEvent: event} });this.dispatchEvent(evt);"
           hx-target="#sighting-submit-status"
           hx-swap="outerHTML">
     Submit without a location.
