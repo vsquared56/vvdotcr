@@ -18,8 +18,9 @@ export function parseLocationForm(form) {
 
             if (isNaN(location[attribute])) {
                 isValid = false;
+                console.log(`Invalid location attribute ${attribute}`);
             }
-        } else {
+        } else if (attribute !== 'locationError') {
             isValid = false;
         }
     }

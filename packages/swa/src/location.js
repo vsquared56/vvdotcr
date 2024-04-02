@@ -78,7 +78,6 @@ function locationSuccess(htmxEvent, position) {
     e.detail.parameters["longitude"] = position.coords.longitude;
     e.detail.parameters["accuracy"] = position.coords.accuracy;
     e.detail.parameters["timestamp"] = position.timestamp;
-    e.detail.parameters["locationError"] = null;
   });
   htmxEvent.detail.issueRequest();
 }
