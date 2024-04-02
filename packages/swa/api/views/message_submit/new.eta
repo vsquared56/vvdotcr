@@ -7,7 +7,7 @@
   <div class="collapse-content bg-base-200 px-1.5 md:px-4 lg:px-8">
     <form id="message-form"
           hx-post="/api/messages"
-          hx-target="#message-submit-status"
+          hx-target="#message-form"
           hx-swap="outerHTML"
           hx-on::confirm="const evt = new CustomEvent('addLocationParams', { bubbles: true, detail: {sourceEvent: event, targetId: 'message-form', toggleId: 'location-enable'} });this.dispatchEvent(evt);">
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 xl:gap-8 justify-items-center items-start px-1.5 md:px-4 lg:px-8 py-4">
