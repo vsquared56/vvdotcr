@@ -27,7 +27,7 @@ resource "azurerm_linux_function_app" "backend_functions" {
         "COMMUNICATION_SERVICES_CONNECTION_STRING" = data.terraform_remote_state.shared_rg.outputs.communication_services_connection_string
         "COSMOS_DB_CONNECTION_STRING"              = azurerm_cosmosdb_account.db.primary_sql_connection_string
         "COSMOS_DB_DATABASE_NAME"                  = azurerm_cosmosdb_sql_database.db.name
-        "EMAIL_FROM_ADDRESS"                       = local.environment != "prod" ? "noreply-${local.environment}@${local.primary_domain}" : "noreply@${local.primary_domain}" 
+        "EMAIL_FROM_ADDRESS"                       = local.environment != "prod" ? "noreply-${local.environment}@${local.primary_domain}" : "DoNotReply@${local.primary_domain}" 
         "EMAIL_NOTIFICATION_ADDRESS"               = var.email_notification_address
         "ENVIRONMENT_NAME"                         = local.environment
         "NTFY_ENDPOINT"                            = var.ntfy_endpoint[local.environment]        
