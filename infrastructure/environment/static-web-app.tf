@@ -1,6 +1,6 @@
 locals {
-    swa_hostname = local.environment == "prod" ? "prod" : local.environment
-    swa_domain_name = "${local.swa_hostname}.${local.primary_domain}"
+    swa_hostname = local.environment == "prod" ? "" : local.environment
+    swa_domain_name = local.swa_hostname == "" ? local.primary_domain : "${local.swa_hostname}.${local.primary_domain}"
 }
 
 resource "azurerm_static_web_app" "swa" {
