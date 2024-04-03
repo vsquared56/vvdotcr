@@ -23,7 +23,7 @@
                  name="ratingType"
                  class="toggle toggle-secondary"
                  checked="checked"
-                 hx-on:click="toggleFileInput(event);" />
+                 hx-on:click="const evt = new CustomEvent('toggleFileInput', { bubbles: true });this.dispatchEvent(evt);" />
           <span class="label-text">Use camera</span> 
         </label>
       </div>
