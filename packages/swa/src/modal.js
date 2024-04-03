@@ -87,12 +87,3 @@ function sightingUpdateSubmit() {
     button.innerHTML = "Send!";
   }
 }
-
-function toggleFileInput(event) {
-  var input = document.getElementById("sighting-file-input");
-  if (event.target.checked) {
-    input.setAttribute("capture", "environment");
-  } else {
-    input.removeAttribute("capture");
-  }
-}
