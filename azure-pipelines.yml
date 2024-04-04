@@ -96,8 +96,7 @@ stages:
     - template: azure-pipelines-deploy.yml
 
 - stage: Prod
- #condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-  condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
   variables:
   - name: NODE_TLS_REJECT_UNAUTHORIZED #Prevent certificate errors from download artifacts task
     value: 0
