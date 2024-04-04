@@ -1,0 +1,34 @@
+<% if (it.loadMore) { %>
+<div id="sighting-card-<%= it.sighting.id %>" class="card bg-primary-content w-full min-w-80 max-w-120 bg-base-300 shadow-xl"
+     hx-get="/api/panel/sightings?page=<%= it.nextPage %>"
+     hx-trigger="revealed"
+     hx-swap="afterend">
+<% } else if (it.replace) { %>
+<div id="sighting-card-<%= it.sighting.id %>" class="card bg-primary-content w-full min-w-80 max-w-120 bg-base-300 shadow-xl" hx-swap-oob="true">
+<% } else { %>
+<div id="sighting-card-<%= it.sighting.id %>" class="card bg-primary-content w-full min-w-80 max-w-120 bg-base-300 shadow-xl">
+<% } %>
+  <figure hx-get="/api/panel/sightings/<%= it.sighting.id %>/edit"
+          hx-trigger="click" 
+          hx-target="body"
+          hx-swap="beforeend">
+    <img class="sighting-img" src="<%= it.sighting.thumbImageUrl %>" />
+  </figure>
+  
+  <div class="card-body items-center text-center"
+       hx-get="/api/panel/sightings/<%= it.sighting.id %>/edit"
+       hx-trigger="click" 
+       hx-target="body"
+       hx-swap="beforeend">
+    <% if (it.sighting.isPublished) { %>
+    <span class="badge badge-success">Published</span><span class="badge badge-success"><%= it.sightingDate %></span>
+    <% } else { %>
+    <span class="badge badge-warning">Not published</span><span class="badge badge-warning"><%= it.sightingDate %></span>
+    <% } %>
+    <% if (it.sighting.sightingScore >= it.minSightingScore) { %>
+    <span class="badge badge-success">Score: <%= it.sighting.sightingScore %></span>
+    <% } else { %>
+    <span class="badge badge-warning">Score: <%= it.sighting.sightingScore %></span>
+    <% } %>
+  </div>
+</div>

@@ -1,0 +1,5 @@
+<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Check back soon!", closable: true, closeButton: "OK", closeUrl: "/api/sightings/new?finished=true"}) %>
+
+Your sighting was saved, but an actual human will have to take a look.  It'll need manual approval, but check back soon to see if it's posted!
+
+Your score: <%= it.sighting.sightingScore %>

@@ -1,0 +1,41 @@
+<div id="location-toggle" class="w-[304px] flex flex-col flex-nowrap items-center form-control rounded-btn border-2 border-secondary p-4 bg-neutral-800">
+  Can we grab your location?
+  <label class="label cursor-pointer flex flex-nowrap	justify-start gap-4">
+    <span class="label-text">Deny location</span> 
+    <input type="checkbox"
+           id="location-enable"
+           name="locationEnable"
+           class="toggle toggle-success"
+           hx-get="/api/messages/new/location"
+           hx-target="#location-toggle"
+           hx-swap="outerHTML"
+           hx-trigger="click, locationPermissionsChange from:body"
+           hx-on::confirm="const evt = new CustomEvent('addLocationPermissionParam', { bubbles: true, detail: {sourceEvent: event} });this.dispatchEvent(evt);"
+           <% if (it.locationEnabled && (it.locationPermission === "prompt" || it.locationPermission === "granted")) { %>
+           checked="checked"
+           <% } else if (it.locationPermission === "denied") { %>
+           disabled="disabled"
+           <% } %>
+    />
+    <% if (it.locationPermission === "prompt" || it.locationPermission === "granted") { %>
+    <span class="label-text">Include my location</span>
+    <% } else if (it.locationPermission === "denied") { %>
+    <span class="label-text">Location permission is denied</span>
+    <% } %>
+  </label>
+  
+  <div class="grid">
+    <% if (it.locationPermission === "denied") { %>
+    <div class="col-start-1 row-start-1">
+    You have location permissions denied in your browser.  For full functionality, please grant or reset the locations permission for this site.
+    </div>
+    <% } %>
+    <% if (it.locationPermission !== "denied" && it.locationEnabled) { %>
+    <div class="col-start-1 row-start-2">Messages with a location usually send notifications to the owner right away!</div>
+    <div class="col-start-1 row-start-2 invisible">Messages without a location get seen ... eventually.  They get compiled into a report that's snail-mailed quarterly...</div>
+    <% } else { %>
+    <div class="col-start-1 row-start-2 invisible">Messages with a location usually send notifications to the owner right away!</div>
+    <div class="col-start-1 row-start-2">Messages without a location get seen ... eventually.  They get compiled into a report that's snail-mailed quarterly...</div>
+    <% } %>
+  </div>
+</div>

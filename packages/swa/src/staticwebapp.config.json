@@ -1,0 +1,55 @@
+{
+  "platform": {
+    "apiRuntime": "node:18"
+  },
+  "routes": [
+    {
+      "route": "/admin",
+      "rewrite": "/admin.html",
+      "allowedRoles": [
+        "administrator"
+      ]
+    },
+    {
+      "route": "/admin.html",
+      "allowedRoles": [
+        "administrator"
+      ]
+    },
+    {
+      "route": "/admin-sightings.html",
+      "allowedRoles": [
+        "administrator"
+      ]
+    },
+    {
+      "route": "/api/settings*",
+      "methods": ["GET", "PUT", "POST", "DELETE"],
+      "allowedRoles": [
+        "administrator"
+      ]
+    },
+    {
+      "route": "/api/panel*",
+      "methods": ["GET", "PUT", "POST", "DELETE"],
+      "allowedRoles": [
+        "administrator"
+      ]
+    },
+    {
+      "route": "/login",
+      "redirect": "/.auth/login/aad"
+    },
+    {
+      "route": "/.auth/login/github",
+      "statusCode": 404
+    }
+  ],
+  "globalHeaders": {
+    "accept-ch": "sec-ch-ua-platform,sec-ch-ua-platform-version",
+    "content-security-policy": "default-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-ancestors 'none'; frame-src https://challenges.cloudflare.com; img-src 'self' blob: data: https://cdn-dev.vv.cr https://*.google-analytics.com https://*.googletagmanager.com; script-src 'unsafe-eval' 'self' https://challenges.cloudflare.com https://*.googletagmanager.com 'sha256-gMKmcDtL+VRp8iLS4u3h/T2uOn5KR2roQZBs8IN3RNA='; style-src 'self';",
+    "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY"
+  }
+}

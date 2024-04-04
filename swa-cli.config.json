@@ -1,0 +1,13 @@
+{
+  "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
+  "configurations": {
+    "vvdotcr": {
+      "appLocation": "public",
+      "apiLocation": "api",
+      "outputLocation": ".",
+      "apiLanguage": "node",
+      "apiVersion": "18",
+      "apiBuildCommand": "npm run build --if-present"
+    }
+  }
+}

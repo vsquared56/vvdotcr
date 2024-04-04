@@ -1,0 +1,15 @@
+<div id="message-collapse"
+     class="collapse bg-primary"
+     hx-get="/api/messages/new"
+     hx-trigger="click"
+     hx-swap="outerHTML"
+     hx-swap-oob="true"
+     hx-on::confirm="const evt = new CustomEvent('addLocationPermissionParam', { bubbles: true, detail: {sourceEvent: event} });this.dispatchEvent(evt);">
+  <input type="checkbox" />
+  <div class="collapse-title text-xl text-primary-content font-medium">
+    Send a message!
+  </div>
+  <div class="collapse-content">
+    <p>Loading...</p>
+  </div>
+</div>

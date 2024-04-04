@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="htmx-config" content='{"allowScriptTags":false,"includeIndicatorStyles":false}'>
+  <link rel="stylesheet" href="styles.css" />
+  <title>vv.cr</title>
+  <script type="module" src="./index.js"></script>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MEQEX49J8J"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-MEQEX49J8J');
+  </script>
+</head>
+
+<body>
+  <main>
+    <div class="hero min-h-screen grid-rows-2 bg-[url('/images/hero.jpg')]">
+      <div class="hero-overlay bg-opacity-40 row-start-1 row-span-2"></div>
+      <div class="hero-content text-center row-start-2">
+        <div class="max-w-md">
+          <h1 class="text-7xl font-bold text-green-100">vv.cr</h1>
+          <p class="text-3xl py-6 text-green-100">Hi, I'm a website for a car.</p>
+          <p class="py-6">Ever wished you could send fellow drivers messages online?</p>
+          <p class="py-6">Try it below, or snap a picture to show you were here.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="mx-1.5 md:mx-8 lg:mx-16 xl:mx-40 2xl:mx-64">
+      <div id="message-collapse"
+           class="collapse collapse-arrow bg-primary border border-primary"
+           hx-get="/api/messages/new"
+           hx-trigger="click"
+           hx-swap="outerHTML">
+        <input type="checkbox" />
+        <div class="collapse-title text-xl text-primary-content font-medium">
+        Send a message!
+        </div>
+        <div class="collapse-content">
+          <div class="grid grid-cols-1 place-items-center px-1.5 md:px-4 lg:px-8 py-4">
+            <span class="htmx-indicator loading loading-dots loading-lg"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div id="sighting-collapse"
+           class="collapse collapse-arrow bg-primary border border-primary"
+           hx-get="/api/sightings/new"
+           hx-trigger="click"
+           hx-swap="outerHTML">
+        <input type="checkbox" />
+        <div class="collapse-title text-xl text-primary-content font-medium">
+        Submit a new sighting!
+        </div>
+        <div class="collapse-content">
+          <div class="grid grid-cols-1 place-items-center px-1.5 md:px-4 lg:px-8 py-4">
+            <span class="htmx-indicator loading loading-dots loading-lg"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider divider-primary">Or, check out the sightings below!</div>
+
+      <div id="sightings-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 md:gap-6 xl:gap-8 place-items-center"
+        hx-get="/api/sightings" hx-trigger="load">
+        <span class="htmx-indicator loading loading-dots loading-lg"></span>
+      </div>
+
+    </div>
+
+    <div id="error-toast" class="toast toast-center w-full lg:w-1/2"></div>
+  </main>
+</body>
+
+</html>

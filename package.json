@@ -1,24 +1,36 @@
 {
-  "name": "vanilla-api",
+  "name": "vvdotcr",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "swa start src --api-location api",
-    "playwright_test": "playwright test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/HannahZhuSWE/vanilla-api.git"
+    "clean": "rimraf ./packages/swa/public",
+    "build-css": "tailwindcss -i ./packages/swa/src/input.css -o ./packages/swa/public/styles.css",
+    "copy": "copyfiles --up 3 ./packages/swa/src/**/*.html ./packages/swa/src/**/*.json ./packages/swa/src/images/* ./packages/swa/public",
+    "build-dev": "yarn run clean && yarn run copy && yarn run build-css && yarn workspaces foreach -A run build-dev",
+    "build": "yarn run clean && yarn run copy && yarn run build-css && yarn workspaces foreach -A run build",
+    "start-swa": "swa start packages/swa/public --api-location packages/swa/api",
+    "start-functions": "func host start --script-root packages/functions",
+    "start": "yarn run build-dev && concurrently \"yarn run start-swa\" \"yarn run start-functions\""
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/HannahZhuSWE/vanilla-api/issues"
-  },
-  "homepage": "https://github.com/HannahZhuSWE/vanilla-api#readme",
   "devDependencies": {
-    "@playwright/test": "^1.23.2"
-  }
+    "@azure/static-web-apps-cli": "^1.1.7",
+    "concurrently": "^8.2.2",
+    "copyfiles": "^2.4.1",
+    "daisyui": "^4.7.3",
+    "rimraf": "^5.0.5",
+    "tailwindcss": "^3.4.1"
+  },
+  "workspaces": {
+    "packages": [
+      "./packages/common",
+      "./packages/functions",
+      "./packages/swa/api",
+      "./packages/swa",
+      "./packages/utility-scripts"
+    ]
+  },
+  "packageManager": "yarn@4.0.2"
 }

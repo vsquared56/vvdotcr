@@ -1,0 +1,130 @@
+<div id="message-collapse"
+     class="collapse collapse-arrow bg-primary border border-primary">
+  <input type="checkbox" checked="true"/>
+  <div class="collapse-title text-xl text-primary-content font-medium">
+    Send a message!
+  </div>
+  <div class="collapse-content bg-base-200 px-1.5 md:px-4 lg:px-8">
+    <form id="message-form"
+          hx-post="/api/messages"
+          hx-target="#message-form"
+          hx-swap="outerHTML"
+          hx-on::confirm="const evt = new CustomEvent('addLocationParams', { bubbles: true, detail: {sourceEvent: event, targetId: 'message-form', toggleId: 'location-enable'} });this.dispatchEvent(evt);">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 xl:gap-8 justify-items-center items-start px-1.5 md:px-4 lg:px-8 py-4">
+        <div id="message-driving-form" class="collapse collapse-plus bg-secondary border border-secondary" >
+          <%~ include("./message_form_checkbox", { checkboxName: "driving", formEnabled: false, updateSubmit: false }) %>
+          <div class="collapse-title text-xl text-secondary-content font-medium">
+            How am I driving?
+          </div>
+          <div class="collapse-content bg-base-300">
+            <div class="flex flex-col gap-4 px-1.5 py-4">
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="drivingQuality" value="faster" class="radio" />
+                  <span class="label-text">Speed it up!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="drivingQuality" value="slower" class="radio" />
+                  <span class="label-text">Slow down!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="drivingQuality" value="turn-signals" class="radio" checked />
+                  <span class="label-text">Nice turn signals!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="drivingQuality" value="swearing" class="radio" checked />
+                  <span class="label-text">$#*@&!!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="drivingQuality" value="ok" class="radio" checked />
+                  <span class="label-text">Just right</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="message-parking-form" class="collapse collapse-plus bg-secondary border border-secondary" >
+          <%~ include("./message_form_checkbox", { checkboxName: "parking", formEnabled: false, updateSubmit: false }) %>
+          <div class="collapse-title text-xl text-secondary-content font-medium">
+            Parking problems?
+          </div>
+          <div class="collapse-content bg-base-300">
+            <div class="flex flex-col gap-4 px-1.5 py-4">
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="parkingQuality" value="bad" class="radio" />
+                  <span class="label-text">Get a coloring book and practice staying within the lines!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="parkingQuality" value="too-close" class="radio" />
+                  <span class="label-text">Parked too close, I had to climb in through the window!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="parkingQuality" value="too-far" class="radio" />
+                  <span class="label-text">It's the city, don't waste so much space!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="parkingQuality" value="swearing" class="radio" checked />
+                  <span class="label-text">$#*@&!!</span>
+                </label>
+              </div>
+              <div class="form-control">
+                <label class="label cursor-pointer max-w-fit gap-4">
+                  <input type="radio" name="parkingQuality" value="ok" class="radio" checked />
+                  <span class="label-text">Just right</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="message-rating-form" class="collapse collapse-plus bg-secondary border border-secondary">
+          <%~ include("./message_form_checkbox", { checkboxName: "rating", formEnabled: false, updateSubmit: false }) %>
+          <div class="collapse-title text-xl text-secondary-content font-medium">
+            Leave some stars!
+          </div>
+          <div class="collapse-content bg-base-300 ">
+            <div class="flex flex-col gap-4 px-1.5 py-4">
+              <div class="rating rating-lg gap-2">
+                <input type="radio" name="ratingValue" value=1 class="mask mask-star bg-yellow-300" />
+                <input type="radio" name="ratingValue" value=2 class="mask mask-star bg-yellow-300" />
+                <input type="radio" name="ratingValue" value=3 class="mask mask-star bg-yellow-300" />
+                <input type="radio" name="ratingValue" value=4 class="mask mask-star bg-yellow-300" />
+                <input type="radio" name="ratingValue" value=5 class="mask mask-star bg-yellow-300" checked/>
+              </div>
+              <div>Are those stars for...</div>
+              <div class="form-control">
+                <label class="label cursor-pointer flex flex-nowrap	justify-start gap-4">
+                  <span class="label-text">a star rating</span> 
+                  <input type="checkbox"
+                         name="ratingType"
+                         class="toggle [--tglbg:gray] bg-yellow-300 hover:bg-yellow-300 checked:bg-blue-700 hover:checked:bg-blue-700 border-neutral-800"
+                         hx-on:click="const evt = new CustomEvent('starToggle', { bubbles: true });this.dispatchEvent(evt);" />
+                  <span class="label-text">a GTA wanted level</span> 
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full">
+          <%~ include("./message_submit_button", { submitEnabled: false, numMessages: 0, replace: false }) %>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

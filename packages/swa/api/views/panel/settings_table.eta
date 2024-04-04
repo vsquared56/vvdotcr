@@ -1,0 +1,25 @@
+<div id="settings-collapse" class="collapse bg-primary">
+  <input type="checkbox" checked="true" />
+  <div class="collapse-title text-xl text-primary-content font-medium">
+    Settings
+  </div>
+  <div class="collapse-content bg-base-200">
+    <div class="px-1 py-4">
+      <table id="panel-settings-table" class="table table-fixed">
+        <thead>
+          <tr>
+            <th class="w-3/8">Setting Name</th>
+            <th class="w-1/2">Value</th>
+            <th class="w-1/8"></th>
+          </tr>
+        </thead>
+        <tbody hx-target="closest tr" hx-swap="outerHTML">
+          <% it.settings.forEach(function(setting){ %>
+          <%~ include("./settings_item", { setting: setting }) %>
+          <% }) %>
+          <%~ include("./settings_item_add") %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

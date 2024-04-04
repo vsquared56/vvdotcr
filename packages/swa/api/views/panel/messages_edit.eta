@@ -1,0 +1,155 @@
+<dialog id="message-details" class="modal bg-transparent-black-700" hx-on::load="htmx.find('#message-details').showModal();htmx.find('#message-details').focus();">
+  <div class="flex flex-col justify-normal modal-box max-w-screen-xl max-h-5/6 p-0 overflow-hidden bg-gray-600"
+    hx-target="this" hx-swap="outerHTML">
+    <div class="navbar bg-base-100 min-h-8">
+      <div class="navbar-start">
+        <details id="message-modal-menu" class="dropdown">
+          <summary class="m-1 btn btn-square btn-ghost btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            class="inline-block w-5 h-5 stroke-current">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </summary>
+          <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+            <form>
+              <li><button hx-delete="/api/panel/messages/<%= it.message.id %>" hx-target="#message-details" hx-confirm="Permanently delete this message?">Delete message</button></li>
+            </form>
+          </ul>
+        </details>
+      </div>
+      <div class="navbar-center badge badge-success">Message</div>
+      <div class="navbar-end">
+        <button class="btn btn-sm btn-circle btn-ghost"
+          hx-on:click="htmx.find('#message-details').close();htmx.find('#message-details').outerHTML='';">✕</button>
+      </div>
+    </div>
+    <div class="flex-1"></div>
+    <div class="flex flex-col overflow-y-auto">
+      <table class="table table-sm">
+        <thead>
+          <tr>
+            <th>Message Property</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tr>
+          <td>Date</td>
+          <td><%= it.messageDate %></td>
+        </tr>
+        <tr>
+          <td>Location</td>
+          <td>
+            <% if (it.message.messageLocation) { %>
+            <a class="link link-primary"
+               href="https://maps.google.com/?q=<%~ it.message.messageLocation.latitude %>,<%~ it.message.messageLocation.longitude %>"
+               target="_blank">
+               link
+            </a>
+            <% } else if (it.message.messageData.locationEnable === "locationShared") { %>
+            <span class="badge badge-error">Null</span>
+            <% } else if (it.message.messageData.locationEnable === "locationNotShared") { %>
+            <span class="badge badge-warning">NotShared</span>
+            <% } %>
+          </td>
+        </tr>
+        <tr>
+          <td>Driving Quality</td>
+          <td>
+            <% if (it.message.messageData.driving) { %>
+            <%= it.message.messageData.driving.drivingQuality %>
+            <% } %>
+          </td>
+        </tr>
+        <tr>
+          <td>Parking Quality</td>
+          <td>
+            <% if (it.message.messageData.parking) { %>
+            <%= it.message.messageData.parking.parkingQuality %>
+            <% } %>
+          </td>
+        </tr>
+        <tr>
+          <td>Rating</td>
+          <td>
+            <% if (it.message.messageData.rating) { %>
+              <% if (it.message.messageData.rating.ratingType === "starRating") { %>
+                <span class="badge bg-yellow-300 text-black"><%= it.message.messageData.rating.ratingValue %></span>
+              <% } else { %>
+                <span class="badge bg-blue-700"><%= it.message.messageData.rating.ratingValue %></span>
+              <% } %>
+            <% } %>
+          </td>
+        </tr>
+        <tr>
+          <td>submissionStatus</td>
+          <td>
+            <% if (it.message.submissionStatus === "saved") { %>
+              <span class="badge badge-warning">
+            <% } else { %>
+              <span class="badge badge-success">
+            <% } %>
+              <%= it.message.submissionStatus %>
+              </span>
+          </td>
+        </tr>
+        <tr>
+          <td>notificationStatus</td>
+          <td><%~ JSON.stringify(it.message.notificationStatus) %></td>
+        </tr>
+        <tr>
+          <td>notificationReason</td>
+          <td>
+            <% if (it.message.notificationStatusReason) { %>
+              <span class="badge badge-warning">
+            <% } else { %>
+              <span class="badge badge-success">
+            <% } %>
+              <%= it.message.notificationStatusReason %>
+              </span>
+          </td>
+        </tr>
+        <tr>
+          <td>Session ID</td>
+          <td><%= it.message.sessionId %></td>
+        </tr>
+        <tr>
+          <td>originalUserAgent</td>
+          <td><%= it.message.originalUserAgent %></td>
+        </tr>
+        <tr>
+          <td>originalIP</td>
+          <td><%= it.message.originalIP %></td>
+        </tr>
+        <tr>
+          <td>ID</td>
+          <td><%= it.message.id %></td>
+        </tr>
+      </table>
+    </div>
+    <div class="flex-1"></div>
+    <div class="navbar bg-base-100 min-h-8">
+      <div class="navbar-start">
+      </div>
+      <div class="navbar-center"><%= it.messageDate %></div>
+      <div class="navbar-end">
+        <details class="dropdown dropdown-top dropdown-end">
+          <summary class="btn btn-square btn-ghost btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            class="inline-block w-5 h-5 stroke-current">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z">
+              </path>
+            </svg>
+          </summary>
+          <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+            <li><a>Some action</a></li>
+            <li><a>Another action</a></li>
+          </ul>
+        </details>
+      </div>
+    </div>
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button hx-on:click="htmx.find('#message-details').close();htmx.find('#message-details').outerHTML='';">Close</button>
+  </form>
+</dialog>

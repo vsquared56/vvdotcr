@@ -1,0 +1,24 @@
+{
+  "name": "@vvdotcr/common",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@azure/cosmos": "^4.0.0",
+    "@azure/service-bus": "^7.9.4",
+    "@azure/storage-blob": "^12.17.0",
+    "@turf/boolean-intersects": "^6.5.0",
+    "@turf/circle": "^6.5.0",
+    "cookie": "^0.6.0",
+    "ip-range-check": "^0.2.0",
+    "node-fetch": "^3.3.2",
+    "uuid": "^9.0.1"
+  }
+}

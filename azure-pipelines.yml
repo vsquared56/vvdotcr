@@ -1,23 +1,110 @@
-# Starter pipeline
-
-
 trigger:
 - main
+- develop
+- feature/*
+- fix/*
 
 pool:
   name: linux
 
 variables:
-- group: azure_deployment
+- name: nodeVersion
+  value: 18
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+stages:
+- stage: Build
+  jobs:
+  - job: Build
+    steps:
+    - task: NodeTool@0
+      displayName: 'Use Node $(nodeVersion).x'
+      inputs:
+        versionSpec: '$(nodeVersion).x'
+    
+    - task: Bash@3
+      displayName: 'Corepack enable'
+      inputs:
+        targetType: 'inline'
+        script: 'corepack enable'
+    
+    - task: Bash@3
+      displayName: 'Install dependencies'
+      inputs:
+        targetType: 'inline'
+        script: 'yarn install'
+    
+    - task: Bash@3
+      displayName: 'Clean public folder'
+      inputs:
+        targetType: 'inline'
+        script: 'yarn clean'
+    
+    - task: Bash@3
+      displayName: 'yarn build'
+      inputs:
+        targetType: 'inline'
+        script: 'yarn build'
+    
+    - task: CopyFiles@2
+      displayName: 'Stage SWA files'
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)/packages/swa' 
+        Contents: '@(api|public)/**'
+        TargetFolder: $(Build.ArtifactStagingDirectory)/swa
+    
+    - task: ArchiveFiles@2
+      displayName: 'Zip SWA files'
+      inputs:
+        rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/swa'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/swa_$(Build.BuildId).zip'
+        replaceExistingArchive: true
 
-- task: AzureStaticWebApp@0
-  inputs:
-    verbose: true
-    azure_static_web_apps_api_token: $(azure_deployment_token)
-    skip_app_build: true
-    app_location: 'src'
-    api_location: 'api'
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish SWA Artifact'
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)/swa_$(Build.BuildId).zip'
+        artifactName: SWA
+
+    - task: ArchiveFiles@2
+      displayName: 'Zip Azure functions'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)/packages/functions'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
+        replaceExistingArchive: true
+    
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Functions Artifact'
+      inputs:
+        pathToPublish: '$(Build.ArtifactStagingDirectory)/functions_$(Build.BuildId).zip'
+        artifactName: BackendFunctions
+     
+- stage: Dev
+  variables:
+  - name: NODE_TLS_REJECT_UNAUTHORIZED #Prevent certificate errors from download artifacts task
+    value: 0
+  - name: globalHeaders.content-security-policy
+    value: "default-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-ancestors 'none'; frame-src https://challenges.cloudflare.com; img-src 'self' blob: data: https://cdn-dev.vv.cr https://*.google-analytics.com https://*.googletagmanager.com; script-src 'unsafe-eval' 'self' https://challenges.cloudflare.com https://*.googletagmanager.com 'sha256-gMKmcDtL+VRp8iLS4u3h/T2uOn5KR2roQZBs8IN3RNA='; style-src 'self';"
+  - group: azure_deployment_dev
+  
+  jobs:
+  - job: DeployDev
+    steps:
+    - template: azure-pipelines-deploy.yml
+
+- stage: Prod
+ #condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  condition: or(eq(variables['Build.SourceBranch'], 'refs/heads/main'),eq(variables['Build.SourceBranch'], 'refs/heads/develop'))
+  variables:
+  - name: NODE_TLS_REJECT_UNAUTHORIZED #Prevent certificate errors from download artifacts task
+    value: 0
+  - name: globalHeaders.content-security-policy
+    value: "default-src 'none'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; frame-ancestors 'none'; frame-src https://challenges.cloudflare.com; img-src 'self' blob: data: https://cdn-prod.vv.cr https://*.google-analytics.com https://*.googletagmanager.com; script-src 'unsafe-eval' 'self' https://challenges.cloudflare.com https://*.googletagmanager.com 'sha256-gMKmcDtL+VRp8iLS4u3h/T2uOn5KR2roQZBs8IN3RNA='; style-src 'self';"
+  - group: azure_deployment_prod
+  jobs:
+  - job: DeployProd
+    steps:
+    - template: azure-pipelines-deploy.yml

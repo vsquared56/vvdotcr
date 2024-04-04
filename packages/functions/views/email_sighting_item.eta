@@ -1,0 +1,91 @@
+<hr />
+<table class="table table-sm">
+  <thead>
+    <tr>
+      <th>Sighting Property</th>
+      <th>Value</th>
+    </tr>
+  </thead>
+  <tr>
+    <td>Date</td>
+    <td><%= it.sighting.sightingDate %></td>
+  </tr>
+  <tr>
+    <td>Location</td>
+    <td>
+      <% if (it.sighting.imageLocation) { %>
+      <a class="link link-primary"
+          href="https://maps.google.com/?q=<%~ it.sighting.imageLocation.latitude %>,<%~ it.sighting.imageLocation.longitude %>"
+          target="_blank">
+          link
+      </a>
+      <% } else { %>
+      <span class="badge badge-error">Null</span>
+      <% } %>
+    </td>
+  </tr>
+  <tr>
+    <td>Submission Status</td>
+    <td><%= it.sighting.submissionStatus %></td>
+  </tr>
+  <tr>
+    <td>Automatic Approval Denied</td>
+    <td><%= it.sighting.automaticApprovalDenied %></td>
+  </tr>
+  <tr>
+    <td>Is Published?</td>
+    <td><%= it.sighting.isPublished %></td>
+  </tr>
+  <tr>
+    <td>Thumbnail image</td>
+    <td><%= it.sighting.thumbImageUrl %></td>
+  </tr>
+  <tr>
+    <td>Large image</td>
+    <td><%= it.sighting.largeImageUrl %></td>
+  </tr>
+  <tr>
+    <td>Source filename</td>
+    <td><%= it.sighting.sourceFileName %></td>
+  </tr>
+  <tr>
+    <td>Processing Latency</td>
+    <td><%= it.sighting.processingLatency %></td>
+  </tr>
+  <tr>
+    <td>Vision Data</td>
+    <td><%~ JSON.stringify(it.sighting.visionData) %></td>
+  </tr>
+  <tr>
+    <td>notificationStatus</td>
+    <td><%~ JSON.stringify(it.sighting.notificationStatus) %></td>
+  </tr>
+  <tr>
+    <td>notificationReason</td>
+    <td>
+      <% if (it.sighting.notificationStatusReason !== "validLocation") { %>
+        <span class="badge badge-warning">
+      <% } else { %>
+        <span class="badge badge-sucess">
+      <% } %>
+        <%= it.sighting.notificationStatusReason %>
+        </span>
+    </td>
+  </tr>
+  <tr>
+    <td>Session ID</td>
+    <td><%= it.sighting.sessionId %></td>
+  </tr>
+  <tr>
+    <td>originalUserAgent</td>
+    <td><%= it.sighting.originalUserAgent %></td>
+  </tr>
+  <tr>
+    <td>originalIP</td>
+    <td><%= it.sighting.originalIP %></td>
+  </tr>
+  <tr>
+    <td>ID</td>
+    <td><%= it.sighting.id %></td>
+  </tr>
+</table>

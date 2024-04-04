@@ -1,0 +1,19 @@
+{
+  "name": "@vvdotcr/api",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "scripts": {
+    "start": "func start",
+    "test": "echo \"No tests yet...\""
+  },
+  "dependencies": {
+    "@anzp/azure-function-multipart": "^3.1.0",
+    "@azure/service-bus": "^7.9.4",
+    "@vvdotcr/common": "workspace:^",
+    "browser-dtector": "^4.1.0",
+    "eta": "^3.4.0",
+    "sharp": "^0.33.2",
+    "streamifier": "^0.1.1"
+  }
+}

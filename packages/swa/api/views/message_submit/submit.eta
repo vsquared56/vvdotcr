@@ -1,0 +1,17 @@
+<% layout("../layouts/submit_modal_status", {modalId: "message-submit", statusId: "message-submit-status", title: "Send messages", closable: true, fullModal: true}) %>
+<input id="turnstile-site-key" type="hidden" name="turnstileSiteKey" value="<%= it.turnstileSiteKey %>" />
+<div class="grid grid-cols-1 gap-4 md:gap-6 xl:gap-8 justify-center justify-items-center items-start px-1.5 py-4">
+  <div class="min-w-[304px] row-span-2">
+    <%~ include("./location_toggle", { locationEnabled: it.locationEnabled, locationPermission: it.locationPermission }) %>
+  </div>
+  <div class="min-w-[304px] row-span-1">
+    <div id="turnstile-message" class="w-[304px] h-[69px] rounded-btn overflow-clip border-2 border-secondary"></div>
+  </div>
+  <div class="min-w-[304px] row-span-1">
+    <button id="message-send-button"
+            class="btn btn-primary min-w-[300px] h-[69px] border-2 border-primary disabled:bg-neutral disabled:border-primary disabled:text-neutral-content"
+            disabled="disabled">
+      Please verify you're not a bot
+    </button>
+  </div>
+</div>

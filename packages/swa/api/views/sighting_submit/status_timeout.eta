@@ -1,0 +1,3 @@
+<% layout("../layouts/submit_modal_status", {modalId: "sighting-submit", statusId: "sighting-submit-status", title: "Something went wrong!", closable: true, closeButton: "OK"}) %>
+
+Your submission timed out.  This is a problem on our end, please try again later!

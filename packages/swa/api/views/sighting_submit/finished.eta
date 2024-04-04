@@ -1,0 +1,14 @@
+<div id="sighting-collapse"
+     class="collapse bg-primary"
+     hx-get="/api/sightings/new"
+     hx-trigger="click"
+     hx-swap="outerHTML"
+     hx-swap-oob="true">
+  <input type="checkbox" />
+  <div class="collapse-title text-xl text-primary-content font-medium">
+    Submit a new sighting!
+  </div>
+  <div class="collapse-content">
+    <p>Loading...</p>
+  </div>
+</div>

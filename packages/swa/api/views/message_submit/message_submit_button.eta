@@ -1,0 +1,19 @@
+<button id="message-submit-button"
+        class="btn btn-secondary min-w-[300px] w-full h-[69px] border-2 border-secondary disabled:bg-neutral disabled:border-secondary disabled:text-neutral-content"
+        hx-on::confirm="const evt = new CustomEvent('addLocationPermissionParam', { bubbles: true, detail: {sourceEvent: event} });this.dispatchEvent(evt);"
+        hx-get="/api/messages/new/submit"
+        hx-target="#message-form"
+        hx-swap="beforeend"
+        <% if (!it.submitEnabled) { %>
+        disabled="disabled"
+        <% } %>
+        <% if (it.replace) { %>
+        hx-swap-oob="true"
+        <% } %>
+        >
+  <% if (it.submitEnabled) { %>
+  Send <%= it.numMessages %> message<% if (it.numMessages > 1) { %>s<% } %>!
+  <% } else { %>
+  Pick something to send above!
+  <% } %>
+</button>

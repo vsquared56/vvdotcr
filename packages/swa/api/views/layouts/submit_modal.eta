@@ -1,0 +1,5 @@
+<dialog id="<%= it.modalId %>"
+        class="modal bg-transparent-black-700"
+        hx-on::load="const evt = new CustomEvent('modalRender', { bubbles: true, detail: {modalId: '<%= it.modalId %>', sourceEvent: event} });this.dispatchEvent(evt);">
+  <%~ it.body %>
+</dialog>

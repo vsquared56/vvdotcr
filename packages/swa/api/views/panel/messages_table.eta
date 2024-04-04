@@ -1,0 +1,50 @@
+<div id="messages-collapse"
+     class="collapse bg-primary">
+  <input type="checkbox" checked="true" />
+  <div class="collapse-title text-xl text-primary-content font-medium">
+      Messages
+  </div>
+  <div class="collapse-content bg-base-200">
+    <div class="px-1 py-4">
+      <table id="panel-messages-table" class="table table-xs max-w-md">
+        <thead>
+          <tr class="border-secondary">
+            <th class="">Date</th>
+            <th class="">📍</th>
+            <th class="">🚗</th>
+            <th class="">🅿</th>
+            <th class="">⭐</th>
+            <th class="">Edit</th>
+          </tr>
+        </thead>
+        <tbody id="panel-messages-table" hx-target="closest tr" hx-swap="outerHTML">
+          <% it.messages.forEach(function(message){ %>
+          <%~ include("./messages_table_item", { message: message }) %>
+          <% }) %>
+        </tbody>
+      </table>
+      <div class="divider"></div>
+      <div class="badge badge-primary">Page: </div>
+      <div class="join">
+        <% var skipRendered = false; %>
+        <% for (var i=1; i <= it.totalPages; i++) { %>
+          <% if (i < 3 || i == it.currentPage || ((it.currentPage - i < 2) && (it.currentPage - i > 0)) || ((i - it.currentPage < 2) && (i - it.currentPage > 0)) || (it.totalPages - i < 2)) { %>
+            <% skipRendered = false; %>
+            <% if (i == it.currentPage) { %>
+            <button class="join-item btn btn-sm btn-primary [pointer-events:none]"
+            <% } else { %>
+            <button class="join-item btn btn-sm"
+            <% } %>
+                    hx-get="/api/panel/messages?page=<%= i %>"
+                    hx-target="#messages-collapse">
+              <%= i %>
+            </button>
+          <% } else if (!skipRendered) { %>
+            <% skipRendered = true; %>
+            <button class="join-item btn btn-sm btn-disabled">...</button>
+          <% } %>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
